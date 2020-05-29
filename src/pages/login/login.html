@@ -1,0 +1,90 @@
+<!-- -->
+<ion-content padding class="animated fadeIn login auth-page">
+  <div class="login-content">
+
+    <!-- Logo -->
+    <div padding-horizontal text-center class="animated fadeInDown"> <br> <br>
+      <div class="logo"></div>
+      <!--<h4 class="titulo">Secretaria de trabajo y seguridad
+      </h4>-->
+
+    </div>
+
+    <!-- Login form -->
+    <form class="list-form" [formGroup]="dataService._formLogin">
+     <!-- <ion-item>
+        <button (click)="showModal(dataService.dataRegistrarExp)">Iniciar</button>
+      </ion-item>-->
+      <ion-item>
+        <ion-label floating>
+          <ion-icon name="person" item-start class="text-primary-login"></ion-icon>
+          <span class="text-danger">*</span> 
+          Usuario
+          
+        </ion-label>
+        <ion-input type="text" class="text-primary-login letrasandnum" maxLength="25" formControlName="Usuario"
+          [(ngModel)]="dataService._dataLogin.Usuario"></ion-input>
+          <div align="center"
+          *ngIf="dataService._formLogin.get('Usuario')?.touched && (dataService._formLogin.get('Usuario').errors || dataService._formLogin.get('Usuario').dirty)">
+          <p class="text-danger animated fadeIn" *ngIf="dataService._formLogin.get('Usuario').hasError('required')">
+            ¡Campo Usuario de acceso requerido!
+          </p>
+        </div>
+      </ion-item>
+     
+
+      <ion-item>
+        <ion-label floating>
+          <ion-icon name="lock" item-start class="text-primary-login"></ion-icon>
+          <span class="text-danger">*</span> 
+          Contraseña
+        </ion-label>
+        
+        <ion-input type="password" type="{{type}}" formControlName="Contrasena" 
+          [(ngModel)]="dataService._dataLogin.Contrasena" [attr.maxlength]="30"></ion-input>
+         
+          <div align="center"
+          *ngIf="dataService._formLogin.get('Contrasena')?.touched && (dataService._formLogin.get('Contrasena').errors || dataService._formLogin.get('Contrasena').dirty)">
+          <p class="text-danger animated fadeIn" *ngIf="dataService._formLogin.get('Contrasena').hasError('required')">
+            ¡Campo Contraseña de acceso requerido!
+          </p>
+        </div>
+        
+        
+     
+      </ion-item>
+      <ion-item no-lines> 
+        <ion-label>Mostrar Contraseña</ion-label>
+        <ion-checkbox style="margin-right: 10px;" color="dark" checked="false" (ionChange)="showPassword()"></ion-checkbox>
+      
+      </ion-item>
+    
+    </form>
+ 
+
+    <p align="center" class="text-danger ">{{dataService.message}}</p>
+    <br><br>
+    <button ion-button icon-start block color="dark" class="buttontn" [disabled]="dataService._formLogin.invalid"
+      tappable (click)="login(dataService._dataLogin)">
+      <ion-icon name="log-in"></ion-icon>
+      Iniciar Sesión 
+    </button>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col col-12>
+          <p text-center ion-text class="text-primary-login" tappable (click)="recuperarCredenciales()"><strong>¿Olvidaste tu
+              clave?</strong></p>
+        </ion-col>
+        <!--<ion-col col-6>
+          <p text-left ion-text class="text-primary-login" tappable (click)="register()"><strong>¿Nuevo
+              Usuario?</strong></p>
+
+        </ion-col>-->
+
+      </ion-row>
+    </ion-grid>
+
+
+  </div>
+</ion-content>

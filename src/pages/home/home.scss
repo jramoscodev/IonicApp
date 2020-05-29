@@ -1,0 +1,39 @@
+page-home{
+/*.home {
+  ion-list {
+    border-radius: 1rem;
+    overflow: hidden;
+
+    ion-item,
+    .item:first-child,
+    .item:last-child {
+      border: none;
+    }
+
+    ion-datetime {
+      padding-left: 0;
+    }
+  }*/
+
+  .buttontn {
+    padding: 18px 20px 20px 20px;
+    border-radius: 25px;
+    /* background: #1161ee;*/
+    background: rgba(255, 107, 107, .9);
+    color: white;
+  }
+  .btnPadd{
+    padding: 40px
+  }
+  .imgFooter{
+    //padding: 50px;
+    //height: 90px;
+   
+    height: 100%;
+    width: 150px;
+  }
+  h3{
+    color: black!important;
+  }
+}
+

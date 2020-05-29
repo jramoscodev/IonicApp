@@ -1,0 +1,170 @@
+<!-- -->
+<ion-content class="auth-page-register">
+  <div class="register-content">
+
+    <!-- Logo -->
+    <div padding text-center style="padding-bottom: 0%;!important" >
+      <div class="logo"></div>
+
+      <h5 class="titulo" text-center>Recuperar Contraseña</h5>
+
+      <h5 class="titulo" text-center>Paso {{dataService._pasoRecuperar.numberStep}}/2</h5>
+
+    </div>
+
+    <!-- Inicio formulario de recuperacion de credenciales -->
+    <form class="list-form" style="padding-top: 0%;" [formGroup]="dataService._form" *ngIf="dataService._pasoRecuperar.numberStep==1">
+
+      <ion-item>
+        <ion-label floating>
+          <ion-icon name="person" item-start class="text-primary" maxLength="15"></ion-icon>
+          <span class="text-danger">*</span> Nombre Usuario
+        </ion-label>
+        <ion-input type="text" formControlName="NombreUsuario"
+          [(ngModel)]="dataService._dataRecuperarCrendenciales.NombreUsuario">
+        </ion-input>
+
+        <div text-center
+          *ngIf="!dataService._form.controls['NombreUsuario'].valid && dataService._form.controls['NombreUsuario'].touched">
+
+          <p class="text-danger animated fadeIn" *ngIf="dataService._form.controls['NombreUsuario'].errors.required">
+            Nombre de usuario es
+            requerido!</p>
+          <p class="text-danger animated fadeIn" *ngIf="dataService._form.controls['NombreUsuario'].errors.minlength">
+            Debe ser de al menos
+            {{dataService._form.controls['NombreUsuario'].errors.minlength.requiredLength}} caracteres.</p>
+
+        </div>
+      </ion-item>
+
+
+      <ion-item>
+        <ion-label floating>
+          <ion-icon name="mail" item-start class="text-primary"></ion-icon>
+          <span class="text-danger">*</span> Correo Electrónico 
+        </ion-label>
+        <ion-input type="email" maxLength="100" formControlName="CorreoElectronico"
+          [(ngModel)]="dataService._dataRecuperarCrendenciales.CorreoElectronico">
+        </ion-input>
+
+
+        <div text-center
+          *ngIf="!dataService._form.controls['CorreoElectronico'].valid && dataService._form.controls['CorreoElectronico'].touched">
+
+          <p class="text-danger animated fadeIn"
+            *ngIf="dataService._form.controls['CorreoElectronico'].errors.required">Correo electrónico es
+            requerido!</p>
+          <p class="text-danger animated fadeIn"
+            *ngIf="dataService._form.controls['CorreoElectronico'].errors.minlength">Debe ser de al menos
+            {{dataService._form.controls['CorreoElectronico'].errors.minlength.requiredLength}} caracteres.</p>
+
+        </div>
+      </ion-item>
+
+
+      <ion-item>
+        <ion-label floating>
+          <ion-icon name="lock" item-start class="text-primary"></ion-icon>
+          <span class="text-danger">*</span> Numero Identidad
+        </ion-label>
+        <ion-input type="text" maxLength="13" formControlName="NumeroIdentificacion"
+          [(ngModel)]="dataService._dataRecuperarCrendenciales.NumeroIdentificacion"></ion-input>
+        <div text-center
+          *ngIf="!dataService._form.controls['NumeroIdentificacion'].valid && dataService._form.controls['NumeroIdentificacion'].touched">
+
+          <p class="text-danger animated fadeIn"
+            *ngIf="dataService._form.controls['NumeroIdentificacion'].errors.required">Número de identidad es
+            requerido!</p>
+          <p class="text-danger animated fadeIn"
+            *ngIf="dataService._form.controls['NumeroIdentificacion'].errors.minlength">Debe ser de al menos
+            {{dataService._form.controls['NumeroIdentificacion'].errors.minlength.requiredLength}} caracteres.</p>
+
+        </div>
+      </ion-item>
+      <ion-item no-lines>
+        <div margin-top align="center">
+          <p class="text-danger"><strong>{{dataService.message}}</strong> </p>
+          <button [disabled]="!dataService._form.valid" ion-button block color="dark" class="buttontn" tappable
+            (click)="RecuperarCredenciales(dataService._dataRecuperarCrendenciales)">
+            <ion-icon name="send"></ion-icon>
+            Enviar
+          </button>
+        </div>
+    
+      </ion-item>
+
+    </form>
+    <!-- Fin formulario de recuperacion de credenciales -->
+
+
+    <!-- Inicio verificacion de pin -->
+    <form class="list-form" [formGroup]="dataService._formPin" *ngIf="dataService._pasoRecuperar.numberStep==2">
+      <ion-item>
+        <ion-label floating>
+          <ion-icon name="lock" item-start class="text-primary"></ion-icon>
+          <span class="text-danger">*</span> Pin
+        </ion-label>
+        <ion-input type="{{type}}" maxLength="10" formControlName="pin"
+          [(ngModel)]="dataService._dataRecuperarCrendenciales.pin"></ion-input>
+          <!--<button  ion-button clear color="dark" type="button" item-right (click)="showPassword()"> 
+            <ion-icon name="eye-off" style="font-size:25px;"></ion-icon>
+         </button>-->
+        <div text-center
+          *ngIf="!dataService._formPin.controls['pin'].valid && dataService._formPin.controls['pin'].touched">
+
+          <p class="text-danger animated fadeIn" *ngIf="dataService._formPin.controls['pin'].errors.required">El pin
+            requerido!</p>
+          <p class="text-danger animated fadeIn" *ngIf="dataService._formPin.controls['pin'].errors.minlength">Debe ser
+            de
+            al menos
+            {{dataService._formPin.controls['pin'].errors.minlength.requiredLength}} caracteres.</p>
+
+        </div>
+      </ion-item>
+      <ion-item no-lines> 
+        <ion-label>Mostrar Pin</ion-label>
+        <ion-checkbox  style="margin-right: 10px;" color="dark" checked="false" (ionChange)="showPassword()"></ion-checkbox>
+      
+      </ion-item>
+
+      <ion-item no-lines>
+
+        <ion-grid>
+          <ion-row>
+            <ion-col col-6>
+              <div margin-top align="center">
+                <p class="text-danger"><strong>{{dataService.message}}</strong> </p>
+                <button ion-button block color="dark" class="buttontn" tappable (click)="ControlPasos(2)">
+                  <ion-icon name="back"></ion-icon>
+                  Atras
+                </button>
+              </div>
+            </ion-col>
+        
+            <ion-col col-6>
+              <div margin-top align="center">
+                <p class="text-danger"><strong>{{dataService.message}}</strong> </p>
+                <button ion-button block color="dark" class="buttontn" tappable
+                  (click)="VerificarPin(dataService._dataRecuperarCrendenciales)">
+                  <ion-icon name="send"></ion-icon>
+                  Verificar Pin
+                </button>
+
+              </div>
+            </ion-col>
+
+          </ion-row>
+        </ion-grid>
+
+
+      </ion-item>
+
+    </form>
+    <!-- Fin verificacion de pin -->
+
+    <div text-center margin-top>
+      <span ion-text class="text-primary-login" tappable (click)="login()"><strong>Volver al inicio</strong></span>
+    </div>
+
+  </div>
+</ion-content>

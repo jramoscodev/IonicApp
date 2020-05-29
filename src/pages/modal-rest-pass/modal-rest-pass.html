@@ -1,0 +1,105 @@
+<ion-header>
+
+  <ion-navbar color="miTema">
+    <ion-title>
+      <strong>Cambiar Contraseña
+      </strong>
+    </ion-title>
+    <!--<ion-buttons end>
+        <button ion-button (click)="closeModal()">Cerrar</button>
+      </ion-buttons>-->
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content no-padding>
+
+
+
+  <ion-content #popoverContent padding class="popover-page">
+
+    <!-- Inicio formulario cambio de credenciales -->
+    <form class="list-form" [formGroup]="dataService._formContrasena">
+      <ion-item>
+        <ion-label floating>
+          <ion-icon name="lock" item-start class="text-primary"></ion-icon>
+          <span class="text-danger">*</span> Contraseña Actual
+        </ion-label>
+        <ion-input type="{{type}}" maxLength="20" formControlName="actualContrasenia"
+          [(ngModel)]="dataService._dataRecuperarCrendenciales.actualContrasenia"></ion-input>
+        <!--<button ion-button clear color="dark" type="button" item-right (click)="showPassword()">
+          <ion-icon name="eye-off" style="font-size:25px;"></ion-icon>
+        </button>-->
+          <div align="center"
+            *ngIf="dataService._formContrasena.get('actualContrasenia')?.touched && (dataService._formContrasena.get('actualContrasenia').errors || dataService._formContrasena.get('actualContrasenia').dirty)">
+            <p class="text-danger animated fadeIn"
+              *ngIf="dataService._formContrasena.get('actualContrasenia').hasError('required')">
+              <span class="text-danger">*</span> ¡Campo contraseña actual es requerido!
+            </p>
+          </div>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>
+          <ion-icon name="lock" item-start class="text-primary"></ion-icon>
+          <span class="text-danger">*</span> Nueva Contraseña
+        </ion-label>
+        <ion-input type="{{type}}" maxLength="20" formControlName="nuevaContrasenia"
+          [(ngModel)]="dataService._dataRecuperarCrendenciales.nuevaContrasenia"></ion-input>
+        <div align="center"
+          *ngIf="dataService._formContrasena.get('nuevaContrasenia')?.touched && (dataService._formContrasena.get('nuevaContrasenia').errors || dataService._formContrasena.get('nuevaContrasenia').dirty)">
+          <p class="text-danger animated fadeIn"
+            *ngIf="dataService._formContrasena.get('nuevaContrasenia').hasError('required')">
+            <span class="text-danger">*</span> ¡Campo nueva contraseña de acceso requerido!
+          </p>
+        </div>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>
+          <ion-icon name="lock" item-start class="text-primary"></ion-icon>
+          <span class="text-danger">*</span>Confirmar Contraseña
+        </ion-label>
+        <ion-input type="{{type}}" maxLength="20" formControlName="confirmarContrasenia"
+          [(ngModel)]="dataService._dataRecuperarCrendenciales.confirmarContrasenia"></ion-input>
+        <div align="center"
+          *ngIf="dataService._formContrasena.get('confirmarContrasenia')?.touched && (dataService._formContrasena.get('confirmarContrasenia').errors || dataService._formContrasena.get('confirmarContrasenia').dirty)">
+          <p class="text-danger animated fadeIn"
+            *ngIf="dataService._formContrasena.get('confirmarContrasenia').hasError('required')">
+            ¡Campo verificar Contraseña de acceso requerido!
+          </p>
+        </div>
+      </ion-item> 
+      <ion-item no-lines> 
+        <ion-label>Mostrar Contraseña</ion-label>
+        <ion-checkbox style="margin-right: 10px;" color="dark" checked="false" (ionChange)="showPassword()"></ion-checkbox>
+      
+      </ion-item>
+      <br>
+
+
+      <div text-center class="text-danger"
+        *ngIf="dataService._dataRecuperarCrendenciales.confirmarContrasenia!='' && 
+              dataService._dataRecuperarCrendenciales.confirmarContrasenia!='' &&
+               dataService._dataRecuperarCrendenciales.nuevaContrasenia!='' && 
+               dataService._dataRecuperarCrendenciales.nuevaContrasenia!=null &&
+                dataService._dataRecuperarCrendenciales.nuevaContrasenia!=dataService._dataRecuperarCrendenciales.confirmarContrasenia">
+        La nueva contraseña no coinciden</div> <br>
+
+      <button ion-button icon-start block color="info" class="buttontn" tappable
+        (click)="cambioContrasena(dataService._dataRecuperarCrendenciales)"
+        [disabled]="dataService._formContrasena.invalid || (dataService._dataRecuperarCrendenciales.nuevaContrasenia!=dataService._dataRecuperarCrendenciales.confirmarContrasenia)">
+        <ion-icon name="md-checkmark-circle-outline"></ion-icon>
+        Guardar
+      </button>
+
+
+
+    </form>
+    <!-- Fin formulario cambio de credenciales -->
+
+  </ion-content>
+
+
+
+
+
+</ion-content>

@@ -1,0 +1,16 @@
+{
+  "name": "CargoApp",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular",
+  "proxies": [
+    {
+      "path": "/api/seguridad/iniciosesion",
+      "proxyUrl": "https://localhost:44306/api/seguridad/iniciosesion"
+      
+    }
+  ]
+  
+}
+

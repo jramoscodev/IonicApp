@@ -1,0 +1,187 @@
+<!--
+  Generated template for the ModalPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="miTema">
+    <ion-title>
+      <strong>Detalle Expediente
+      </strong>
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">Cerrar</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content no-padding>
+
+
+
+  <ion-content #popoverContent padding class="popover-page">
+
+    <form class="list-form-home">
+
+      <ion-grid>
+        <ion-row>
+          <ion-col col-12>
+            <ion-item>
+              <ion-label floating>
+                <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>
+                Razón Social
+              </ion-label>
+              <ion-input type="text" class="text-primary-login" maxLength="200"
+                [(ngModel)]="dataService.dataDetailsExpe.NombreRazon" [ngModelOptions]="{standalone: true}"
+                [readonly]="true"></ion-input>
+
+            </ion-item>
+          </ion-col>
+          <ion-col col-12>
+            <ion-item>
+              <ion-label floating>
+                <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>
+                Número de expediente
+              </ion-label>
+              <ion-input type="text" class="text-primary-login" maxLength="25"
+                [(ngModel)]="dataService.dataDetailsExpe.NroExpedienteIntegral" [ngModelOptions]="{standalone: true}"
+                [readonly]="true"></ion-input>
+
+            </ion-item>
+          </ion-col>
+          <ion-col col-12>
+            <ion-item>
+              <ion-label floating>
+                <ion-icon name="md-calendar" item-start class="text-primary-login"></ion-icon>
+                Fecha Registro
+              </ion-label>
+              <ion-input type="text" class="text-primary-login" maxLength="25"
+                [(ngModel)]="dataService.dataDetailsExpe.FechaInicio" [ngModelOptions]="{standalone: true}"
+                [readonly]="true"></ion-input>
+
+            </ion-item>
+          </ion-col>
+          <ion-col col-12>
+            <ion-item>
+              <ion-label floating>
+                <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>
+                Motivo o Asunto
+              </ion-label>
+              <ion-input type="text" class="text-primary-login" maxLength="25"
+                [(ngModel)]="dataService.dataDetailsExpe.CausaMotivo" [ngModelOptions]="{standalone: true}" [readonly]="true">
+              </ion-input>
+
+            </ion-item>
+          </ion-col>
+          <ion-col col-12>
+            <ion-item>
+              <ion-label floating>
+                <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>
+                Área/Unidad Correspondiente
+              </ion-label>
+              <ion-input type="text" class="text-primary-login" maxLength="25"
+                [(ngModel)]="dataService.dataDetailsExpe.area" [ngModelOptions]="{standalone: true}" [readonly]="true">
+              </ion-input>
+
+            </ion-item>
+          </ion-col>
+
+          <ion-col col-12 *ngIf="listUsuario.length>0" class="text-primary-login">
+            <ion-item no-lines class="input-cover">
+
+              <div for="" class="label label-md" style="color: #999;">
+                <ion-icon name="md-grid" style="font-size: 15px;" item-start class="text-primary-login"></ion-icon>
+
+                <span style="font-size: 14px;">Inspector</span> </div>
+              <ion-grid>
+                <ion-row>
+                  <ion-col col-12 *ngFor="let x of listUsuario">
+                    <div>
+
+                      {{x.NombreEmpleado}}
+
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+
+
+            </ion-item>
+          </ion-col>
+         
+          <ion-col col-12>
+            <ion-item>
+              <ion-label floating>
+                <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>
+                Estado del proceso
+              </ion-label>
+              <ion-input type="text" class="text-primary-login" maxLength="25"
+                [(ngModel)]="dataService.dataDetailsExpe.Actividad" [ngModelOptions]="{standalone: true}"
+                [readonly]="true"></ion-input>
+
+            </ion-item>
+          </ion-col>
+          <ion-col col-12>
+            <ion-item>
+              <ion-label floating>
+                <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>
+                Observación
+              </ion-label>
+              <ion-textarea rows="3" maxLength="500" class="text-primary-login" [(ngModel)]="dataService.dataDetailsExpe.Observacion" [ngModelOptions]="{standalone: true}"
+              [readonly]="true"></ion-textarea>
+              <!-- <ion-input type="text" class="text-primary-login" maxLength="25"
+                [(ngModel)]="dataService.dataDetailsExpe.Observacion" [ngModelOptions]="{standalone: true}"
+                [readonly]="true"></ion-input> -->
+
+            </ion-item>
+          </ion-col>
+          <ion-col col-12>
+            <ion-item>
+              <ion-label floating>
+                <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>
+               <span style="font-size: 14px;">Porcentaje de avance del proceso:</span>    <br>
+               <div text-center>{{dataService.dataDetailsExpe.Porcentaje}}%</div> 
+              </ion-label> <br> <br>
+              <ion-input type="text" style="display: none;" class="text-primary-login" maxLength="25"
+                [(ngModel)]="dataService.dataDetailsExpe.observacion" [ngModelOptions]="{standalone: true}"
+                [readonly]="true"></ion-input> 
+
+              <ion-range style="pointer-events: none!important;padding-top: 10px;"  [disabled]='true'  min="0" max="100" pin="true" 
+                name="Porcentaje" id="Porcentaje" [(ngModel)]="dataService.dataDetailsExpe.Porcentaje"
+                color="secondary">
+                <ion-icon range-left small name="ios-remove-circle-outline"></ion-icon>
+                <ion-icon range-right name="md-checkbox"></ion-icon>
+              </ion-range>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col col-6 ></ion-col>
+        <ion-col col-6 >
+          <button  text-right ion-button icon-start block color="danger" class="buttontn" (click)="closeModal()">
+            <ion-icon name="md-close"></ion-icon>
+            Cancelar
+          </button> <br><br>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+      
+
+    </form>
+
+
+
+
+
+  </ion-content>
+
+
+
+
+</ion-content>

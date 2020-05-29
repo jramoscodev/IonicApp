@@ -1,0 +1,138 @@
+<!-- -->
+<ion-header>
+  <ion-navbar color="miTema">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      <strong>Consulta de Expediente
+      </strong>
+    </ion-title>
+    <ion-buttons end>
+
+      <button ion-button tappable (click)="logout()">
+        <ion-icon name="log-out" style="zoom: 130%"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content no-padding class="animated fadeIn  common-bg page-consulta">
+
+
+  <form class="list-form-home" [formGroup]="dataService._form" *ngIf="!colapse">
+
+    <ion-grid>
+      <ion-row>
+        <ion-col col-6>
+          <ion-item>
+            <ion-label floating>
+              <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>
+              Nro. Exp. Integral
+            </ion-label>
+            <ion-input type="text" class="text-primary-login sinespacio" maxLength="30" name="numeroExpedienteIntegral"
+              id="numeroExpedienteIntegral" formControlName="numeroExpedienteIntegral"
+              [(ngModel)]="dataService.dataExpediente.numeroExpedienteIntegral"></ion-input>
+
+          </ion-item>
+        </ion-col>
+        <ion-col col-6>
+          <ion-item>
+            <ion-label floating>
+              <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>
+              Nro. Exp. Interno
+            </ion-label>
+            <ion-input type="text" class="text-primary-login sinespacio" maxLength="30" name="numeroExpedienteInterno"
+              id="numeroExpedienteInterno" formControlName="numeroExpedienteInterno"
+              [(ngModel)]="dataService.dataExpediente.numeroExpedienteInterno"></ion-input>
+
+          </ion-item>
+        </ion-col>
+        <ion-col col-6>
+          <ion-item>
+            <ion-label floating>
+              <ion-icon item-start class="text-primary-login"></ion-icon>
+              Fecha Desde
+            </ion-label>
+            <ion-datetime cancelText ="Cancelar" doneText="Guardar" max ="{{myDate | date:'yyyy-MM-dd'}}" displayFormat="YYYY-MM-DD" name="fechaDesde" id="fechaDesde" formControlName="fechaDesde"
+              [(ngModel)]="dataService.dataExpediente.fechaDesde"></ion-datetime>
+
+          </ion-item>
+        </ion-col>
+        <ion-col col-6>
+          <ion-item>
+            <ion-label floating>
+              <ion-icon item-start class="text-primary-login"></ion-icon>
+              Fecha Hasta
+            </ion-label>
+            <ion-datetime cancelText ="Cancelar" doneText="Guardar" max ="{{myDate | date:'yyyy-MM-dd'}}" displayFormat="YYYY-MM-DD" name="fechaHasta" id="fechaHasta" formControlName="fechaHasta"
+              [(ngModel)]="dataService.dataExpediente.fechaHasta"></ion-datetime>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <button ion-button icon-start block color="dark" class="buttontn" tappable
+      (click)="loadDataExpedientes(dataService.dataExpediente)">
+      <ion-icon name="md-search"></ion-icon>
+      Buscar
+    </button>
+
+  </form>
+
+  <div text-center *ngIf="dataService.ReportExpediente.length==0">
+    <h4 class="img">Sin registros para mostrar</h4>
+  </div>
+  <ion-list no-border *ngIf="dataService.ReportExpediente.length>0">
+    <ion-list-header>
+      <h2><strong>Resultados</strong> </h2>
+    </ion-list-header>
+    <ion-item-sliding *ngFor="let item of dataService.ReportExpediente">
+      <ion-item>
+        <!--<ion-avatar item-start>
+          <img src="assets/imgs/report.png">
+        </ion-avatar>-->
+        <ion-icon name="md-document" color="primary" item-start></ion-icon>
+        <h4><strong>{{item.NroExpedienteIntegral}}</strong>
+        </h4>
+        <ion-note item-top>
+          <p>{{item.Actividad}}</p>
+        </ion-note>
+        <ion-note item-end>
+          <h4>  {{item.FechaInicio}} </h4>
+        </ion-note>
+
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button color="miTema" (click)="showModal(item)">
+          <ion-icon name="md-eye"></ion-icon>
+          Visualizar
+        </button>
+
+      </ion-item-options>
+    </ion-item-sliding>
+
+
+  </ion-list>
+
+
+
+
+</ion-content>
+
+<ion-footer no-border>
+
+  <!--<div align="center"> <br><br>
+    <ion-fab right bottom>
+      <button ion-fab (click)="colapse=!colapse" *ngIf="!colapse" color="danger">
+        <ion-icon name="md-search"></ion-icon>
+      </button>
+
+      <button ion-fab (click)="colapse=!colapse;" *ngIf="colapse">
+        <ion-icon name="md-search"></ion-icon>
+      </button>
+
+    </ion-fab>
+
+  </div>-->
+
+</ion-footer>

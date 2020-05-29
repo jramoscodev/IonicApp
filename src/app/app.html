@@ -1,0 +1,40 @@
+<ion-menu [content]="content" type="overlay">
+
+  <ion-header>
+    <ion-toolbar style="padding: 0px!important;">
+      <!---<ion-grid>
+        <ion-row>
+          <ion-col col-12>
+              <div align="center">
+                <img src="assets/imgs/secretaria-logo.png" style="height: 100%;width: 100%;background-size: cover;
+                background-position: center center;
+                background-repeat: no-repeat;">
+             
+              </div>
+          </ion-col>
+          <ion-col padding-top col-8>
+            
+          </ion-col>
+        </ion-row>
+
+
+      </ion-grid>-->
+      <img object-fit: cover src="assets/imgs/stss-logo2.png" style="height: 100%;width: 100%;background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;">
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+ 
+    <ion-list class="user-list">
+      <button ion-item menuClose class="text-1x" *ngFor="let menuItem of pages" (click)="openPage(menuItem)">
+        <ion-icon item-left [name]="menuItem.icon" color="miTema"></ion-icon>
+        <span ion-text color="letraNegra">{{menuItem.title}}</span>
+      </button>
+    </ion-list>
+  </ion-content>
+
+</ion-menu>
+
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
