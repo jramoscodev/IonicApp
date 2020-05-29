@@ -176,7 +176,7 @@ export class ServiceGlobals {
   
 
 
-   return this.http.post('https://192.168.0.11:45455/api/riesgoprofesional/insertarregistroacta2',data,{
+   return this.http.post('https://ecms-backend.conveyor.cloud/api/riesgoprofesional/insertarregistroacta2',data,{
       headers: new HttpHeaders().set('enctype', 'multipart/form-data').set('XAuthToken', localStorage.getItem('tokenSTS'))
    }).toPromise();
    
