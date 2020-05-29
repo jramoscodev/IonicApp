@@ -35,7 +35,6 @@ import {
 import { InsertActaModel } from '../Models/InsertActaModel';
 import { ServiceGlobals } from '../services/ServiceGlobals';
 import { LocalNotifications } from '@ionic-native/local-notifications';
-import { NetworkInterface } from '@ionic-native/network-interface';
 
 
 

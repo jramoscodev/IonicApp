@@ -136,7 +136,7 @@ export class ServiceGlobals {
  private async ping()
  {
    return new Promise((resolve, reject) => {
-     this.http.get('https://192.168.0.11:45455/api/ping')
+     this.http.get('https://ecms-backend.conveyor.cloud/api/ping')
        .subscribe(() => {
          resolve(true);
        }, () => {
