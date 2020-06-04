@@ -126,7 +126,7 @@ export class MyApp {
             // //if(this.isRunning) return; //salir si ya se esta ejecutando 
             console.log('internet y no se esta ejecutando ')
             this.isRunning = true;
-            let data = JSON.parse(localStorage.getItem('backgroud')) as InsertActaModel[];
+            let data = JSON.parse(localStorage.getItem('background')) as InsertActaModel[];
             let errorData: InsertActaModel[] = new Array<InsertActaModel>();
             console.log(data);
             if (data ==null) { return; }// salimos si no hay nada que procesar
@@ -138,7 +138,7 @@ export class MyApp {
                  await this.service.UpdateActa(item);
   
                  count++;
-              } catch (e) { console.error(e); errorData.push(item); }
+              } catch (e) { console.error(e); errorData.push(tmp); }
             }//en loop elements
             if(count > 0) {
               //set notification
@@ -152,7 +152,7 @@ export class MyApp {
           
 
              // check if array has elements
-            errorData.length > 0 ? localStorage.setItem('backgroud', JSON.stringify(errorData)) : localStorage.removeItem('backgroud');
+            errorData.length > 0 ? localStorage.setItem('background', JSON.stringify(errorData)) : localStorage.removeItem('background');
              console.log('setting is running to false')
              this.isRunning = false;
 

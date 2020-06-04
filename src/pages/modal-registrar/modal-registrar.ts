@@ -607,10 +607,10 @@ export class ModalRegistrarComponent implements OnInit {
 
 
   private setToLocalStorage(data: InsertActaModel){
-    var hasData = JSON.parse(localStorage.getItem('backgroud')) as InsertActaModel[];
+    var hasData = JSON.parse(localStorage.getItem('background')) as InsertActaModel[];
     if(hasData == null) hasData = Array<InsertActaModel>();
     hasData.push(data);
-    localStorage.setItem('backgroud', JSON.stringify(hasData));
+    localStorage.setItem('background', JSON.stringify(hasData));
   }
 
 

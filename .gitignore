@@ -23,16 +23,13 @@ dist/
 node_modules/
 tmp/
 temp/
+platforms/
+plugins/
+plugins/android.json
+plugins/ios.json
+www/
 $RECYCLE.BIN/
 
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
-www/build/main.js
-www/build/vendor.js.map
-www/build/main.js.map
-www/build/vendor.js
-www/build/main.js
-www/build/main.js.map
-www/build/vendor.js
-www/build/vendor.js.map
