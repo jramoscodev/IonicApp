@@ -12,4 +12,5 @@ export class InsertActaModel {
     rutasActas:any[];
     rutasAttch:any[];
     IdAccionSeguimiento:any;
+    ArregloPago:any;
 }

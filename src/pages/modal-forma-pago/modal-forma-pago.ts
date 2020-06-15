@@ -24,10 +24,7 @@ import {
   FormControl
 } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
-
-
-
-
+import { ArregloPagoModel,Pagos } from '../../Models/ArregloPagoModel';
 
 
 @Component({
@@ -37,9 +34,18 @@ import { CurrencyPipe } from '@angular/common';
   providers: [DataService, ServiceAlert, ServiceGlobals, Menssages,CurrencyPipe]
 })
 export class ModalFormaPagoComponent {
-
+  value:Number;
+  hasFee:boolean=false;
+  listaPagos: Pagos[];
+  today:String = new Date().toISOString();
+  model: ArregloPagoModel;
+  messageErrorFee:String[];
+  messageErrorPayments:String[];
+  messageErrors:String[];
   public arregloPagos = []
   public pagos={}
+
+
   ComForm: FormGroup;
 
   constructor(public viewCtrl: ViewController,
@@ -49,6 +55,12 @@ export class ModalFormaPagoComponent {
     private ServiceGlobal: ServiceGlobals,
     private _mensajes: Menssages,
     private currencyPipe:CurrencyPipe) {
+
+     //init
+    var data = this.navParams.get("datapass");
+    this.model = new ArregloPagoModel(); 
+    this.model.NroExpedienteIntegral = data['NroExpedienteIntegral']
+    console.log(data)
 
     this.dataService.dataRegistrarPago = {
       NroExpedienteIntegral: "",
@@ -97,9 +109,11 @@ export class ModalFormaPagoComponent {
   });
    
     this.ServiceGlobal.validationNumeros()
-
+    this.ServiceGlobal.FormatCurrency()
     this.loadFormaPago()
-
+    this.messageErrorPayments = new Array<String>();
+    this.messageErrorFee = new Array<String>();
+    this.messageErrors = new Array<String>();
   }
 
   ionViewDidLoad() {
@@ -131,7 +145,7 @@ export class ModalFormaPagoComponent {
     this.dataService.dataRegistrarPago['CantidadPago']=0;
     this.dataService.dataRegistrarPago['NumeroPago']=0;
 
-    console.log(this.dataService.dataRegistrarPago)
+    //console.log(this.dataService.dataRegistrarPago)
 
 
 
@@ -352,7 +366,188 @@ export class ModalFormaPagoComponent {
   getCurrency(amount: number) {
     return this.currencyPipe.transform(amount, 'L');
   }
-  public closeModal() {
-    this.viewCtrl.dismiss();
+  closeModal() {
+    let data = { 'isSave': false };
+    this.viewCtrl.dismiss(data);
   }
+
+  savePayment(){
+
+    if (!this.Validate()){
+      return;
+    }
+
+    this.model.Pagos = this.listaPagos;
+    let data = { 'isSave': true,'data':this.model };
+    console.log('save data in dismiss')
+    this.viewCtrl.dismiss(data);
+  }
+
+  onKeyPress(e:any, value:any){
+    if (e.code == "Space") e.preventDefault();
+    if (e.key == "." && (value == undefined || value =="")) e.preventDefault();
+    if (e.key == "." && String(value).includes('.')) e.preventDefault();
+    if (e.key == "0" && (value == undefined || value == "")) e.preventDefault();
+    if (String(value).length > 8) {
+      e.preventDefault();
+    }
+    if(this.hasDecimal(value)){
+       
+      let precision = value.toString().split('.')[1].length;
+      if (precision >= 2) e.preventDefault();
+    }
+    
+  }
+  onFeeKeyPress(e: any, value: any){
+    if (e.code == "Space") e.preventDefault();
+    if (e.key == ".") e.preventDefault();
+    if (e.key == "0" && (value == undefined || value == "")) e.preventDefault();
+    if (this.hasDecimal(value)) {
+      e.preventDefault();
+    }
+    if (String(value).length > 1){ e.preventDefault();}
+    this.hasFee = true;
+  }
+
+
+  private hasDecimal(n:number){
+    return (n - Math.floor(n)) !== 0; 
+  }
+
+
+  async addFee(){
+    console.log(this.model)
+    if(this.model.NumPagos == undefined 
+      || this.model.NumPagos == null
+      || this.model.TotalPago == undefined || this.model.TotalPago == null){
+      return;
+    }
+
+    //naive
+    let nextPay = new Date();
+    this.listaPagos = new Array<Pagos>();
+    let cuota = Number.parseFloat((this.model.TotalPago / this.model.NumPagos).toFixed(2));
+    for(let i = 0; i< this.model.NumPagos; i++){
+      let pago = new Pagos();
+      nextPay.setMonth(nextPay.getMonth() + 1); //add one month in each loop
+      
+      pago.FechaPago = new Date(nextPay);
+      pago.FechaPagoText =pago.FechaPago.toISOString();
+      pago.MinDate = this.itemDateMinDate(i);
+      pago.ValorPago = cuota;
+      pago.CuotaNum = i+1; 
+      this.listaPagos.push(pago);
+    }
+
+  }
+
+  private itemDateMinDate(index:number) {
+     let today = new Date();
+     if(index == 0 ) return today.toISOString();
+     let itemBefore = this.listaPagos[index-1].FechaPago;
+     return itemBefore.toISOString();
+  }
+
+ private itemDateIsValid(){
+   this.messageErrorPayments = new Array<String>();
+
+   for (let i = 0; i <= this.listaPagos.length - 1; i++)
+   {
+     let currentDate = this.listaPagos[i].FechaPago;
+     if (i == 0){
+       let dAf = this.listaPagos[i + 1].FechaPago;
+       if (currentDate > dAf )
+         this.messageErrorPayments.push(`Fecha de Pago ${i+1} debe ser menor a Pago ${i +2}`);
+      continue;
+    }
+     if (i == this.listaPagos.length - 1) {
+       let dBf = this.listaPagos[i - 1].FechaPago;
+       if(dBf >= currentDate)
+         this.messageErrorPayments.push(`Fecha de Pago ${i+1} debe ser mayor a Pago ${i}`);
+      continue;
+     }
+     
+     let beforeCurrent = this.listaPagos[i - 1].FechaPago;
+     let afterCurrent = this.listaPagos[i + 1].FechaPago;
+     if (beforeCurrent >= currentDate) this.messageErrorPayments.push(`Fecha de Pago ${i + 1} debe ser mayor a cuota ${i}`);
+     if (currentDate > afterCurrent) this.messageErrorPayments.push(`Fecha de Pago ${i + 1} debe ser menor a cuota ${i + 2}`);
+
+   }
+    
+  
+  }
+
+  onItemValueKeyPress(e:any,value:any,index:any){
+
+    if (e.key == "." && (value == undefined || value == "")){ e.preventDefault(); return;}
+    if (e.key == "." && String(value).includes('.')){e.preventDefault(); return;}
+    if (e.key == "0" && (value == undefined || value == "")){ e.preventDefault(); return;}
+    if (String(value).length > 8) {
+      e.preventDefault();
+      return;
+    }
+    if (this.hasDecimal(value)) {
+
+      let precision = value.toString().split('.')[1].length;
+      if (precision >= 2) e.preventDefault();
+      return;
+    }
+   
+  }
+
+  onItemBlur(e:any){
+    this.messageErrorFee = new Array<String>();
+    var sumTotal = this.listaPagos.reduce(function (prev, cur) {
+      return prev + (cur.ValorPago * 1);
+    }, 0);
+    console.log(sumTotal)
+    
+    if (Number.parseFloat(sumTotal.toFixed(2)) > this.model.TotalPago){ this.messageErrorFee.push('Suma de Pagos es mayor a Pago Total');}
+    
+    if (this.model.TotalPago > Number.parseFloat(sumTotal.toFixed(2))){ this.messageErrorFee.push('Suma de Pagos es menor a Pago Total');}
+
+    if (this.hasEmptyVules()){ this.messageErrorFee.push('Pago no puede ser vacio o cero');}
+
+    console.log(this.messageErrorFee)
+  }
+  
+  private hasEmptyVules() {
+    for(let i = 0; i<= this.listaPagos.length -1; i++){
+      if (this.listaPagos[i].ValorPago == null || this.listaPagos[i].ValorPago == "")
+       return true;
+    }
+    return false;
+  }
+
+  onItemDateChange(e:any,index:any){
+
+    let dateString = `${e.month}/${e.day}/${e.year}`;
+    let date = new Date(dateString);
+    this.listaPagos[index].FechaPago = date;
+    this.listaPagos[index].FechaPagoText = date.toISOString();
+    let len = this.listaPagos.length -1;
+    if(index != len)
+    {
+      this.listaPagos[index + 1].MinDate = date.toISOString();
+    }else{
+      this.listaPagos[index].MinDate = this.itemDateMinDate(index);
+    }
+    this.itemDateIsValid()
+  }
+
+  private Validate()
+  {
+    this.messageErrors = new Array<String>();
+
+
+    if (this.model.ConceptoPago == undefined || this.model.ConceptoPago == null) this.messageErrors.push('Concepto Pago es requerido');
+    if (this.model.Nombre == undefined || this.model.Nombre == null) this.messageErrors.push('Nombre Pago es requerido');
+    if (this.model.DescripcionActa == undefined || this.model.DescripcionActa == null) this.messageErrors.push('Descripcion Pago es requerido');
+    if (this.model.TotalPago == undefined || this.model.TotalPago == null) this.messageErrors.push('Total Pago no valido');
+    if (this.model.NumPagos == undefined || this.model.NumPagos == null) this.messageErrors.push('Numero de pagos no valido');
+ 
+ 
+    return this.messageErrors.length > 0 ? false : true;
+  }
+
 }

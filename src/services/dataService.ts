@@ -5,7 +5,6 @@ import { FormGroup } from '@angular/forms';
 @Injectable()
 export class DataService {
 
- 
   _form: FormGroup;
   _formLogin:FormGroup;
   _formPin: FormGroup;

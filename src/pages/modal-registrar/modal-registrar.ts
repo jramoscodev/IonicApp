@@ -37,6 +37,7 @@ import { PhotoService, FilesResponsePhoto, FileType } from '../../services/Photo
 
 import { ListFiles } from '../../Models/ListFiles';
 import { InsertActaModel } from '../../Models/InsertActaModel';
+import { ArregloPagoModel } from '../../Models/ArregloPagoModel';
 
 
 @Component({
@@ -46,10 +47,13 @@ import { InsertActaModel } from '../../Models/InsertActaModel';
   providers: [ServiceGlobals, ServiceAlert, DataService, Menssages, PhotoService]
 })
 export class ModalRegistrarComponent implements OnInit {
-
+  hasPayment: any;
+  hasInfraction:boolean= false;
   actaFiles: ListFiles[] = new Array();
   attchFiles: ListFiles[] = new Array();
   dataToStorage: InsertActaModel[] = new Array();
+  payment: ArregloPagoModel;
+  
   files;
   public img;
 
@@ -152,7 +156,13 @@ export class ModalRegistrarComponent implements OnInit {
 
 
   public closeModal() {
-    this.viewCtrl.dismiss();
+    let data = { 'foo': 'bar' };
+    this.viewCtrl.dismiss(data);
+  }
+
+  dismiss() {
+    let data = { 'foo': 'bar' };
+    this.viewCtrl.dismiss(data);
   }
 
   async TakePicture(e)
@@ -634,7 +644,7 @@ export class ModalRegistrarComponent implements OnInit {
     insert.rutasActas = this.actaFiles;
     insert.rutasAttch = this.attchFiles;
     insert.IdAccionSeguimiento= comp.ListaAcciones[0].IdAccionSeguimientoFlujo;
-
+    insert.ArregloPago = this.payment;
     this._serviceAlert.showLoading()
    try{
      
@@ -747,6 +757,24 @@ export class ModalRegistrarComponent implements OnInit {
     var modal = this.myModal.create(ModalFormaPagoComponent, dataMo);
     modal.present();
 
+  }
+
+  addPayment(e:any){
+   // console.log(this.dataService.dataRegistrarExp);
+    //this.mostrarModalFormaPago(this.dataService.dataRegistrarExp);
+    let payment = this.myModal.create(ModalFormaPagoComponent, { datapass: this.dataService.dataRegistrarExp});
+    payment.onDidDismiss(data => {
+      if(data['isSave']){
+        this.hasPayment = true;
+        this.payment = data['data'] as ArregloPagoModel;
+      }
+    });
+    payment.present();
+  }
+
+  deletePayment()
+  {
+    this.hasPayment = undefined;
   }
 
 }

@@ -34,7 +34,7 @@ export class ServiceGlobals {
   ) {
 
   }
-
+  
   private apiUrl = this._url.ServerLocal_Security;
   private api_flujo = this._url.serverLocalFlujo;
   private api_recuperarClaves = this._url.serverCambio;
@@ -90,7 +90,7 @@ export class ServiceGlobals {
 
   public login(body)
   {
-    let url = this.apiUrl+'iniciosesion'
+    let url = this._url.BaseUrl + '/seguridad/iniciosesionappmovil'
 
     return new Promise((resolve, reject) => {
       this.http.post(url, body, {
@@ -136,7 +136,7 @@ export class ServiceGlobals {
  private async ping()
  {
    return new Promise((resolve, reject) => {
-     this.http.get('https://ecms-backend.conveyor.cloud/api/ping')
+     this.http.get(`${this._url.BaseUrl}/ping`)
        .subscribe(() => {
          resolve(true);
        }, () => {
@@ -176,7 +176,7 @@ export class ServiceGlobals {
   
 
 
-   return this.http.post('https://ecms-backend.conveyor.cloud/api/riesgoprofesional/insertarregistroacta2',data,{
+    return this.http.post(`${this._url.BaseUrl}/riesgoprofesional/insertarregistroactaappmovil`,data,{
       headers: new HttpHeaders().set('enctype', 'multipart/form-data').set('XAuthToken', localStorage.getItem('tokenSTS'))
    }).toPromise();
    
@@ -407,6 +407,18 @@ export class ServiceGlobals {
       var text = $(this).val();
       text = text.replace(/\s+/gi, ' ');
       $(this).val(text);
+    });
+  }
+
+  public FormatCurrency()
+  {
+    $('input.CurrencyInput').on('blur', function () {
+      const value = this.value.replace(/,/g, '');
+      this.value = parseFloat(value).toLocaleString('es-HN', {
+        style: 'decimal',
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2
+      });
     });
   }
 

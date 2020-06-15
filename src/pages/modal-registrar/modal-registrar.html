@@ -124,34 +124,47 @@
           </ion-col> -->
           <ion-col col-12>
             <ion-item>
-              <ion-label><span class="text-danger">*</span> Tiene Infracción</ion-label>
+               <ion-label><span class="text-danger">*</span>Tiene Infracción </ion-label>
+               <ion-toggle (ionChange)="hasInfraction = !hasInfraction"></ion-toggle>
+              
+              <!-- <ion-label><span class="text-danger">*</span> Tiene Infracción</ion-label>
 
               <ion-select okText="Guardar" cancelText="Cancelar" placeholder="Seleccione" id="TieneInfraccion"
                 name="TieneInfraccion" formControlName="TieneInfraccion"
                 [(ngModel)]="dataService.dataRegistrarExp.TieneInfraccion">
                 <ion-option value=1>Si</ion-option>
                 <ion-option value=0>No</ion-option>
-              </ion-select>
+              </ion-select> -->
             </ion-item>
           </ion-col>
 
-          <ion-col col-12>
+          <ion-col col-12 *ngIf="hasInfraction">
+              <ion-item *ngIf="hasPayment == undefined || hasPayment == null;else showPayment">
+                <ion-label col-9><span class="text-danger">*</span>Agregar arreglo de pago</ion-label>
+                <ion-label col-2>
+                  <button ion-button icon-start icon-only [clear]="true" (click)="addPayment($event)">
+                    <ion-icon name="add-circle"></ion-icon>
+                  </button>
+                </ion-label>
+              </ion-item>
+          </ion-col>
+
+          <ng-template #showPayment>
             <ion-item>
-              <ion-label>
-                <span class="text-danger">*</span>
-                Tiene arreglo de pago
+              <ion-label text-wrap col-9>
+                <h3>{{payment.Nombre}}</h3>
+                <p>Monto: {{payment.TotalPago | currency:'L. '}} cuotas: {{payment.NumPagos}}</p>
+            
               </ion-label>
-
-              <ion-select okText="Guardar" cancelText="Cancelar" placeholder="Seleccione" id="TieneArregloPago"
-                name="TieneArregloPago" formControlName="TieneArregloPago" 
-                [(ngModel)]="dataService.dataRegistrarExp.TieneArregloPago" (click)="dataService.dataRegistrarExp.TieneArregloPago=''"
-                (ionChange)="onAplicaPago(dataService.dataRegistrarExp)">
-                <ion-option value=1>Si</ion-option>
-                <ion-option value=0>No</ion-option>
-              </ion-select>
+              <ion-label col-2>
+                 <button ion-button icon-only [clear]="true" color="danger" (click)="deletePayment()">
+                   <ion-icon name="trash"></ion-icon>
+                 </button>
+              </ion-label>
             </ion-item>
-          </ion-col>
-
+                
+          </ng-template>
+         
 
           <ion-col col-12>
             <ion-item>

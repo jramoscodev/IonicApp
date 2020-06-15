@@ -35,6 +35,7 @@ import { NetworkInterface } from '@ionic-native/network-interface';
 import { File } from '@ionic-native/file';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 
+import { TextMaskModule } from 'angular2-text-mask';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
     ModalFormaPagoComponent
   ],
   imports: [
+    TextMaskModule,
     BrowserModule,
     HttpClientModule, 
     FormsModule,

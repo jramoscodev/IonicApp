@@ -47,5 +47,28 @@ export class ServiceAlert {
       this.loading = null;
     }
   }
+
+  async showConfirm(titleAlert:any,messageAlert:any) {
+    const confirm = this.alertCtrl.create({
+      title: titleAlert,
+      message: messageAlert,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            return false;
+          }
+        },
+        {
+          text: 'Aceptar',
+          handler: () => {
+           return true;
+          }
+        }
+      ]
+    });
+     return await confirm.present();
+  }
   
 }

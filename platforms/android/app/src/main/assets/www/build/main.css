@@ -40766,6 +40766,10 @@ page-home .imgFooter {
   width: 150px;
 }
 
+page-home .lableFont {
+  font-size: 3vw !important;
+}
+
 page-home {
   /*.home {
   ion-list {
@@ -40805,6 +40809,10 @@ page-home .imgFooter {
   opacity: 0.1;
 }
 
+.lableFont {
+  font-size: 3vw !important;
+}
+
 .colorLetra {
   color: white;
 }
@@ -40829,6 +40837,15 @@ page-nosotros {
 
 page-nosotros .text-align {
   text-align: justify;
+}
+
+page-nosotros .labelFont {
+  font-size: 3.5vw !important;
+}
+
+page-nosotros .wrap-dateTime {
+  font-size: 2.3vw;
+  margin-top: 0;
 }
 
 page-home {

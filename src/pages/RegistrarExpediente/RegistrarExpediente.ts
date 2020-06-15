@@ -223,14 +223,17 @@ export class RegistrarExpedienteComponent implements OnInit {
     actionSheet.present();
   }
 
-  showModal(datafront) {
+   showModal(datafront:any) {
     var dataMo = {
       datapass: datafront
     };
 
-    var modal = this.myModal.create(ModalRegistrarComponent, dataMo);
+    let modal = this.myModal.create(ModalRegistrarComponent, dataMo);
+    modal.onDidDismiss(data=>{
+      console.log(data);
+    });
     modal.present();
-
+ 
   }
 
   logout() {
