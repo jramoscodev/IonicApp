@@ -285,7 +285,7 @@ var ServiceGlobals = /** @class */ (function () {
     };
     ServiceGlobals.prototype.login = function (body) {
         var _this = this;
-        var url = this.apiUrl + 'iniciosesion';
+        var url = this._url.BaseUrl + '/seguridad/iniciosesionappmovil';
         return new Promise(function (resolve, reject) {
             _this.http.post(url, body, {
                 headers: new __WEBPACK_IMPORTED_MODULE_4__angular_common_http__["c" /* HttpHeaders */]().set('Content-Type', 'application/json; charset=utf-8'),
@@ -334,7 +334,7 @@ var ServiceGlobals = /** @class */ (function () {
             var _this = this;
             return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve, reject) {
-                        _this.http.get('https://ecms-backend.conveyor.cloud/api/ping')
+                        _this.http.get(_this._url.BaseUrl + "/ping")
                             .subscribe(function () {
                             resolve(true);
                         }, function () {
@@ -391,7 +391,7 @@ var ServiceGlobals = /** @class */ (function () {
                             }
                             data.append("" + key, request[key]);
                         }
-                        return [2 /*return*/, this.http.post('https://ecms-backend.conveyor.cloud/api/riesgoprofesional/insertarregistroacta2', data, {
+                        return [2 /*return*/, this.http.post(this._url.BaseUrl + "/riesgoprofesional/insertarregistroactaappmovil", data, {
                                 headers: new __WEBPACK_IMPORTED_MODULE_4__angular_common_http__["c" /* HttpHeaders */]().set('enctype', 'multipart/form-data').set('XAuthToken', localStorage.getItem('tokenSTS'))
                             }).toPromise()];
                 }
@@ -576,6 +576,16 @@ var ServiceGlobals = /** @class */ (function () {
             __WEBPACK_IMPORTED_MODULE_6_jquery__(this).val(text);
         });
     };
+    ServiceGlobals.prototype.FormatCurrency = function () {
+        __WEBPACK_IMPORTED_MODULE_6_jquery__('input.CurrencyInput').on('blur', function () {
+            var value = this.value.replace(/,/g, '');
+            this.value = parseFloat(value).toLocaleString('es-HN', {
+                style: 'decimal',
+                maximumFractionDigits: 2,
+                minimumFractionDigits: 2
+            });
+        });
+    };
     ServiceGlobals = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__angular_common_http__["a" /* HttpClient */],
@@ -611,6 +621,7 @@ var Configuration = /** @class */ (function () {
         // public uriServer="https://172.16.1.116:444/";
         // public uriServer = "https://192.168.0.11:45455/";
         this.uriServer = "https://ecms-backend.conveyor.cloud/";
+        this.BaseUrl = "https://ecms-backend.conveyor.cloud/api";
         this.ServerLocal_Security = this.uriServer + 'api/seguridad/';
         this.serverLocalFlujo = this.uriServer + "api/flujos/";
         this.serverCambio = this.uriServer + "api/";
@@ -869,7 +880,7 @@ var AuthenticationService = /** @class */ (function () {
                 return [2 /*return*/, this.goblal.login(json).then(function (data) {
                         localStorage.setItem('tokenSTS', data['Data'].Token);
                         localStorage.setItem('typouser', data['Data'].IdPatrono);
-                        result.data = { typo: data['Data'].IdPatrono, changedPass: data['Data'].UsuarioPerfil.CambioContrasena };
+                        result.data = { typo: data['Data'].IdPatrono, changedPass: data['Data'].ChangedPass };
                         return result;
                     }, function (e) {
                         result.error = e.error;
@@ -1461,13 +1472,18 @@ var RegistrarExpedienteComponent = /** @class */ (function () {
         });
         actionSheet.present();
     };
-    RegistrarExpedienteComponent.prototype.showModal = function (datafront) {
+    RegistrarExpedienteComponent.prototype.showModal = function (datafront, index) {
+        var _this = this;
         var dataMo = {
-            datapass: datafront
+            datapass: datafront,
         };
         var modal = this.myModal.create(__WEBPACK_IMPORTED_MODULE_5__modal_registrar_modal_registrar__["a" /* ModalRegistrarComponent */], dataMo);
         modal.onDidDismiss(function (data) {
-            console.log(data);
+            _this.dataService.ReportExpediente = _this.dataService.ReportExpediente.filter(function (current) {
+                if (current['NroExpedienteIntegral'] !== data['numExp']) {
+                    return current;
+                }
+            });
         });
         modal.present();
     };
@@ -1481,7 +1497,7 @@ var RegistrarExpedienteComponent = /** @class */ (function () {
     ], RegistrarExpedienteComponent.prototype, "nav2", void 0);
     RegistrarExpedienteComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-nosotros',template:/*ion-inline-start:"C:\Projects\APPSTSS\AppMovil\src\pages\RegistrarExpediente\RegistrarExpediente.html"*/'<!-- -->\n<ion-header>\n  <ion-navbar color="miTema">\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      <strong>Registrar Info. de Expedientes\n      </strong>\n    </ion-title>\n    <ion-buttons end>\n\n      <button ion-button tappable (click)="logout()">\n        <ion-icon name="log-out" style="zoom: 130%"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n\n  \n\n  \n<ion-content no-padding class="animated fadeIn  common-bg page-consulta">\n\n\n  <form class="list-form-home" [formGroup]="dataService._form"  *ngIf="!colapse">\n\n    <ion-grid>\n      <ion-row>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label floating class="labelFont">\n              <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n              Nro. Exp. Integral\n            </ion-label>\n            <ion-input type="text" class="text-primary-login sinespacio" maxLength="25" name="numeroExpedienteIntegral" id="numeroExpedienteIntegral" formControlName="numeroExpedienteIntegral" [(ngModel)]="dataService.dataRegistrarExp.numeroExpedienteIntegral"></ion-input>\n\n          </ion-item>\n        </ion-col>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label floating class="labelFont">\n              <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n              Nro. Exp. Interno\n            </ion-label>\n            <ion-input type="text" class="text-primary-login sinespacio" maxLength="25" name="numeroExpedienteInterno" id="numeroExpedienteInterno" formControlName="numeroExpedienteInterno" [(ngModel)]="dataService.dataRegistrarExp.numeroExpedienteInterno"></ion-input>\n\n          </ion-item>\n        </ion-col>\n        <ion-col col-12>\n          <ion-item>\n            <ion-label floating class="labelFont">\n              <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n              Nombre de  la empresa\n            </ion-label>\n            <ion-input type="text" class="text-primary-login sinespacio" maxLength="25" name="nombreEmpresa" id="nombreEmpresa" formControlName="nombreEmpresa" [(ngModel)]="dataService.dataRegistrarExp.nombreEmpresa"></ion-input>\n\n          </ion-item>\n        </ion-col>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label floating class="labelFont">\n              <ion-icon name="md-calendar" cancelText ="Cancelar" doneText="Guardar" item-start class="text-primary-login"></ion-icon>\n              Fecha Desde\n              \n\n            </ion-label>\n            <ion-datetime displayFormat="YYYY-MM-DD" max ="{{myDate | date:\'yyyy-MM-dd\'}}" cancelText ="Cancelar" doneText="Guardar" name="fechaDesde" id="fechaDesde" formControlName="fechaDesde" [(ngModel)]="dataService.dataRegistrarExp.fechaDesde"></ion-datetime>\n\n          </ion-item>\n        </ion-col>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label floating class="labelFont">\n              <ion-icon name="md-calendar" item-start class="text-primary-login" ></ion-icon>\n              Fecha Hasta\n            </ion-label>\n            <ion-datetime displayFormat="YYYY-MM-DD" max ="{{myDate | date:\'yyyy-MM-dd\'}}" cancelText ="Cancelar" doneText="Guardar" name="fechaHasta" id="fechaHasta" formControlName="fechaHasta" [(ngModel)]="dataService.dataRegistrarExp.fechaHasta"></ion-datetime>\n          </ion-item>\n        </ion-col>\n      </ion-row>\n    </ion-grid>\n    <button ion-button icon-start block color="dark" class="buttontn" tappable (click)="loadDataExpedientes(dataService.dataRegistrarExp)">\n      <ion-icon name="md-search"></ion-icon>\n      Buscar\n    </button>\n\n    \n  </form>\n\n\n  <div text-center *ngIf="dataService.ReportExpediente.length==0; else hasElement">\n    <h4 class="img">Sin registros para mostrar</h4>\n  </div>\n  <ng-template #hasElement>\n    <ion-list>\n      <ion-list-header>\n        <h2><strong>Resultados</strong> </h2>\n      </ion-list-header>\n      <ion-item-sliding *ngFor="let item of dataService.ReportExpediente">\n        <ion-item class="item item-block item-md">\n            <ion-icon name="md-document" color="primary" item-start></ion-icon>\n             <ion-label text-wrap col-9>\n               <h2>{{item.NroExpedienteIntegral}}</h2>\n               <p>{{item.Actividad}}</p>\n             </ion-label>\n             <ion-label text-wrap class="wrap-dateTime" col-3>\n                {{item.FechaInicio}}\n             </ion-label>\n        </ion-item>\n        <ion-item-options side="right">\n          <button ion-button color="miTema" (click)="showModal(item)">\n            <ion-icon name="md-eye"></ion-icon>\n            Visualizar\n          </button>\n        </ion-item-options>\n      \n      </ion-item-sliding>\n\n    </ion-list>\n\n  </ng-template>\n\n  \n  \n\n</ion-content>\n\n<ion-footer no-border>\n  \n    <!--<div  align="center"> <br><br>\n      <ion-fab right bottom>\n        <button ion-fab (click)="colapse=!colapse" *ngIf="!colapse" color="danger">\n          <ion-icon name="md-search"></ion-icon>\n        </button>\n  \n        <button ion-fab  (click)="colapse=!colapse;" *ngIf="colapse">\n          <ion-icon name="md-search"></ion-icon>\n        </button>\n  \n      </ion-fab>\n  \n    </div>-->\n    \n</ion-footer>\n'/*ion-inline-end:"C:\Projects\APPSTSS\AppMovil\src\pages\RegistrarExpediente\RegistrarExpediente.html"*/,
+            selector: 'page-nosotros',template:/*ion-inline-start:"C:\Projects\APPSTSS\AppMovil\src\pages\RegistrarExpediente\RegistrarExpediente.html"*/'<!-- -->\n<ion-header>\n  <ion-navbar color="miTema">\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      <strong>Registrar Info. de Expedientes\n      </strong>\n    </ion-title>\n    <ion-buttons end>\n\n      <button ion-button tappable (click)="logout()">\n        <ion-icon name="log-out" style="zoom: 130%"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n\n  \n\n  \n<ion-content no-padding class="animated fadeIn  common-bg page-consulta">\n\n\n  <form class="list-form-home" [formGroup]="dataService._form"  *ngIf="!colapse">\n\n    <ion-grid>\n      <ion-row>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label floating class="labelFont">\n              <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n              Nro. Exp. Integral\n            </ion-label>\n            <ion-input type="text" class="text-primary-login sinespacio" maxLength="25" name="numeroExpedienteIntegral" id="numeroExpedienteIntegral" formControlName="numeroExpedienteIntegral" [(ngModel)]="dataService.dataRegistrarExp.numeroExpedienteIntegral"></ion-input>\n\n          </ion-item>\n        </ion-col>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label floating class="labelFont">\n              <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n              Nro. Exp. Interno\n            </ion-label>\n            <ion-input type="text" class="text-primary-login sinespacio" maxLength="25" name="numeroExpedienteInterno" id="numeroExpedienteInterno" formControlName="numeroExpedienteInterno" [(ngModel)]="dataService.dataRegistrarExp.numeroExpedienteInterno"></ion-input>\n\n          </ion-item>\n        </ion-col>\n        <ion-col col-12>\n          <ion-item>\n            <ion-label floating class="labelFont">\n              <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n              Nombre de  la empresa\n            </ion-label>\n            <ion-input type="text" class="text-primary-login sinespacio" maxLength="25" name="nombreEmpresa" id="nombreEmpresa" formControlName="nombreEmpresa" [(ngModel)]="dataService.dataRegistrarExp.nombreEmpresa"></ion-input>\n\n          </ion-item>\n        </ion-col>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label floating class="labelFont">\n              <ion-icon name="md-calendar" cancelText ="Cancelar" doneText="Guardar" item-start class="text-primary-login"></ion-icon>\n              Fecha Desde\n              \n\n            </ion-label>\n            <ion-datetime displayFormat="YYYY-MM-DD" max ="{{myDate | date:\'yyyy-MM-dd\'}}" cancelText ="Cancelar" doneText="Guardar" name="fechaDesde" id="fechaDesde" formControlName="fechaDesde" [(ngModel)]="dataService.dataRegistrarExp.fechaDesde"></ion-datetime>\n\n          </ion-item>\n        </ion-col>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label floating class="labelFont">\n              <ion-icon name="md-calendar" item-start class="text-primary-login" ></ion-icon>\n              Fecha Hasta\n            </ion-label>\n            <ion-datetime displayFormat="YYYY-MM-DD" max ="{{myDate | date:\'yyyy-MM-dd\'}}" cancelText ="Cancelar" doneText="Guardar" name="fechaHasta" id="fechaHasta" formControlName="fechaHasta" [(ngModel)]="dataService.dataRegistrarExp.fechaHasta"></ion-datetime>\n          </ion-item>\n        </ion-col>\n      </ion-row>\n    </ion-grid>\n    <button ion-button icon-start block color="dark" class="buttontn" tappable (click)="loadDataExpedientes(dataService.dataRegistrarExp)">\n      <ion-icon name="md-search"></ion-icon>\n      Buscar\n    </button>\n\n    \n  </form>\n\n\n  <div text-center *ngIf="dataService.ReportExpediente.length==0; else hasElement">\n    <h4 class="img">Sin registros para mostrar</h4>\n  </div>\n  <ng-template #hasElement>\n    <ion-list>\n      <ion-list-header>\n        <h2><strong>Resultados</strong> </h2>\n      </ion-list-header>\n      <ion-item-sliding *ngFor="let item of dataService.ReportExpediente;index as i">\n        <ion-item class="item item-block item-md">\n            <ion-icon name="md-document" color="primary" item-start></ion-icon>\n             <ion-label text-wrap col-9>\n               <h2>{{item.NroExpedienteIntegral}}</h2>\n               <p>{{item.Actividad}}</p>\n             </ion-label>\n             <ion-label text-wrap class="wrap-dateTime" col-3>\n                {{item.FechaInicio}}\n             </ion-label>\n        </ion-item>\n        <ion-item-options side="right">\n          <button ion-button color="miTema" (click)="showModal(item,i)">\n            <ion-icon name="md-eye"></ion-icon>\n            Visualizar\n          </button>\n        </ion-item-options>\n      \n      </ion-item-sliding>\n\n    </ion-list>\n\n  </ng-template>\n\n  \n  \n\n</ion-content>\n\n<ion-footer no-border>\n  \n    <!--<div  align="center"> <br><br>\n      <ion-fab right bottom>\n        <button ion-fab (click)="colapse=!colapse" *ngIf="!colapse" color="danger">\n          <ion-icon name="md-search"></ion-icon>\n        </button>\n  \n        <button ion-fab  (click)="colapse=!colapse;" *ngIf="colapse">\n          <ion-icon name="md-search"></ion-icon>\n        </button>\n  \n      </ion-fab>\n  \n    </div>-->\n    \n</ion-footer>\n'/*ion-inline-end:"C:\Projects\APPSTSS\AppMovil\src\pages\RegistrarExpediente\RegistrarExpediente.html"*/,
             styles: ['RegistrarExpediente.scss'],
             providers: [__WEBPACK_IMPORTED_MODULE_2__services_dataService__["a" /* DataService */], __WEBPACK_IMPORTED_MODULE_3__services_ServiceGlobals__["a" /* ServiceGlobals */], __WEBPACK_IMPORTED_MODULE_7__services_ServiceAlert__["a" /* ServiceAlert */], __WEBPACK_IMPORTED_MODULE_8__services_Messages__["a" /* Menssages */], __WEBPACK_IMPORTED_MODULE_9__services_AuthenticationService__["a" /* AuthenticationService */]]
         }),
@@ -1520,9 +1536,9 @@ var RegistrarExpedienteComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_jquery__ = __webpack_require__(160);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_jquery__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__modal_forma_pago_modal_forma_pago__ = __webpack_require__(364);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__services_PhotoService__ = __webpack_require__(705);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Models_ListFiles__ = __webpack_require__(706);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__Models_InsertActaModel__ = __webpack_require__(707);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__services_PhotoService__ = __webpack_require__(706);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Models_ListFiles__ = __webpack_require__(707);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__Models_InsertActaModel__ = __webpack_require__(708);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1639,12 +1655,12 @@ var ModalRegistrarComponent = /** @class */ (function () {
             'tipoActa': new __WEBPACK_IMPORTED_MODULE_2__angular_forms__["FormControl"](null, [
                 __WEBPACK_IMPORTED_MODULE_2__angular_forms__["Validators"].required
             ]),
-            'TieneInfraccion': new __WEBPACK_IMPORTED_MODULE_2__angular_forms__["FormControl"](null, [
-                __WEBPACK_IMPORTED_MODULE_2__angular_forms__["Validators"].required
-            ]),
-            'TieneArregloPago': new __WEBPACK_IMPORTED_MODULE_2__angular_forms__["FormControl"](null, [
-                __WEBPACK_IMPORTED_MODULE_2__angular_forms__["Validators"].required
-            ]),
+            // 'TieneInfraccion': new FormControl(null, [
+            //   Validators.required
+            // ]),
+            // 'TieneArregloPago': new FormControl(null, [
+            //   Validators.required
+            // ]),
             // 'file': new FormControl(null, [
             //   Validators.required
             // ]),
@@ -1658,11 +1674,10 @@ var ModalRegistrarComponent = /** @class */ (function () {
         this.extensiones = ".png";
     }
     ModalRegistrarComponent.prototype.closeModal = function () {
-        var data = { 'foo': 'bar' };
-        this.viewCtrl.dismiss(data);
+        this.viewCtrl.dismiss();
     };
-    ModalRegistrarComponent.prototype.dismiss = function () {
-        var data = { 'foo': 'bar' };
+    ModalRegistrarComponent.prototype.dismiss = function (expediente) {
+        var data = { 'numExp': expediente };
         this.viewCtrl.dismiss(data);
     };
     ModalRegistrarComponent.prototype.TakePicture = function (e) {
@@ -2103,6 +2118,7 @@ var ModalRegistrarComponent = /** @class */ (function () {
                         insert.rutasActas = this.actaFiles;
                         insert.rutasAttch = this.attchFiles;
                         insert.IdAccionSeguimiento = comp.ListaAcciones[0].IdAccionSeguimientoFlujo;
+                        insert.ArregloPago = this.payment;
                         this._serviceAlert.showLoading();
                         _a.label = 1;
                     case 1:
@@ -2113,7 +2129,7 @@ var ModalRegistrarComponent = /** @class */ (function () {
                         console.log(result);
                         this._serviceAlert.presentConfirm('datos actualizados');
                         this._serviceAlert.dismissLoading();
-                        this.closeModal();
+                        this.dismiss(insert.NroExpedienteIntegral);
                         return [3 /*break*/, 4];
                     case 3:
                         e_1 = _a.sent();
@@ -2122,7 +2138,7 @@ var ModalRegistrarComponent = /** @class */ (function () {
                             this._serviceAlert.presentConfirm('No se puedo establecer conexion a internet, se almacenara la información para su procesamiento ');
                             this.setToLocalStorage(insert);
                             this._serviceAlert.dismissLoading();
-                            this.closeModal();
+                            this.dismiss(insert.NroExpedienteIntegral);
                         }
                         else {
                             this._serviceAlert.presentConfirm('Error al actualizar los datos, verificque la informacion ingresada');
@@ -2202,14 +2218,18 @@ var ModalRegistrarComponent = /** @class */ (function () {
         var payment = this.myModal.create(__WEBPACK_IMPORTED_MODULE_8__modal_forma_pago_modal_forma_pago__["a" /* ModalFormaPagoComponent */], { datapass: this.dataService.dataRegistrarExp });
         payment.onDidDismiss(function (data) {
             if (data['isSave']) {
-                _this.hasPayment = "tengo data perras";
+                _this.hasPayment = true;
+                _this.payment = data['data'];
             }
         });
         payment.present();
     };
+    ModalRegistrarComponent.prototype.deletePayment = function () {
+        this.hasPayment = undefined;
+    };
     ModalRegistrarComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'modal-details',template:/*ion-inline-start:"C:\Projects\APPSTSS\AppMovil\src\pages\modal-registrar\modal-registrar.html"*/'<!--\n  Generated template for the ModalPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n\n<style>\n  input[type="file"] {\n    display: none;\n}\n.custom-file-upload {\n    border: 1px solid #ccc;\n    display: inline-block;\n    padding: 6px 12px;\n    cursor: pointer;\n}\n</style>\n<ion-header>\n\n  <ion-navbar color="miTema">\n    <ion-title>\n      <strong>Registrar Info. de Expediente\n      </strong>\n    </ion-title>\n    <ion-buttons end>\n      <button ion-button (click)="closeModal()">Cerrar</button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content no-padding>\n\n\n\n  <ion-content #popoverContent padding class="popover-page">\n\n    <form class="list-form-home" [formGroup]="ComForm">\n\n      <ion-grid>\n        <ion-row>\n          <ion-col col-12>\n            <ion-item>\n              <ion-label floating>\n                <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n                <span class="text-danger">*</span>\n                Razón Social\n              </ion-label>\n              <ion-input type="text" id="NombreRazon" name="NombreRazon" class="text-primary-login" maxLength="25"\n                formControlName="NombreRazon" [(ngModel)]="dataService.dataRegistrarExp.NombreRazon" [readonly]="true">\n              </ion-input>\n\n            </ion-item>\n          </ion-col>\n          <ion-col col-12>\n            <ion-item>\n              <ion-label floating>\n                <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n                <span class="text-danger">*</span>\n                Número de expediente integral\n              </ion-label>\n              <ion-input type="text" class="text-primary-login" maxLength="25" id="NroExpedienteIntegral"\n                name="NroExpedienteIntegral" formControlName="NroExpedienteIntegral"\n                [(ngModel)]="dataService.dataRegistrarExp.NroExpedienteIntegral" [readonly]="true"></ion-input>\n\n            </ion-item>\n          </ion-col>\n\n          <!--- -->\n          <ion-col col-12>\n            <ion-item>\n              <ion-label floating>\n                <ion-icon name="md-calendar" item-start class="text-primary-login"></ion-icon>\n                <span class="text-danger">*</span>\n                Fecha Registro\n              </ion-label>\n              <ion-input displayFormat="YYYY-MM-DD" id="FechaActa" name="FechaActa" formControlName="FechaActa"\n                [(ngModel)]="dataService.dataRegistrarExp.FechaActa" [readonly]="true"></ion-input>\n\n            </ion-item>\n          </ion-col>\n          <!--<ion-item>\n            <ion-label floating>              \n              Porcentaje de Avance {{dataService.dataRegistrarExp.Porcentaje}}%\n            </ion-label>\n            \n            <ion-range min="0" max="100" pin="true"  snaps="trues"  name="Porcentaje" id="Porcentaje"  [(ngModel)]="dataService.dataRegistrarExp.Porcentaje" formControlName="Porcentaje" color="secondary" >\n              <ion-icon range-left small name="ios-remove-circle-outline"></ion-icon>\n              <ion-icon range-right name="md-checkbox"></ion-icon>\n            </ion-range>\n          </ion-item>-->\n          <ion-col col-12>\n            <ion-item>\n              <ion-label floating>\n                <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n                <span class="text-danger">*</span>\n                Tipo de acta\n              </ion-label>\n              <ion-input type="text" class="text-primary-login" maxLength="25" id="tipoActa" name="tipoActa"\n                value="Acta circunstanciada" formControlName="tipoActa"\n                [(ngModel)]="dataService.dataRegistrarExp.tipoActa" [readonly]="true"></ion-input>\n\n            </ion-item>\n          </ion-col>\n\n          <!-- <ion-col col-12 *ngIf="listUsuario.length>0">\n            <ion-item>\n\n              <label for="">Inspector</label>\n              <ion-grid>\n                <ion-row>\n                  <ion-col col-12 *ngFor="let x of listUsuario">\n                    <div>\n                      {{x.NombreEmpleado}}\n\n                    </div>\n                  </ion-col>\n                </ion-row>\n              </ion-grid>\n\n\n            </ion-item>\n          </ion-col> -->\n          <ion-col col-12>\n            <ion-item>\n               <ion-label><span class="text-danger">*</span>Tiene Infracción </ion-label>\n               <ion-toggle (ionChange)="hasInfraction = !hasInfraction"></ion-toggle>\n              \n              <!-- <ion-label><span class="text-danger">*</span> Tiene Infracción</ion-label>\n\n              <ion-select okText="Guardar" cancelText="Cancelar" placeholder="Seleccione" id="TieneInfraccion"\n                name="TieneInfraccion" formControlName="TieneInfraccion"\n                [(ngModel)]="dataService.dataRegistrarExp.TieneInfraccion">\n                <ion-option value=1>Si</ion-option>\n                <ion-option value=0>No</ion-option>\n              </ion-select> -->\n            </ion-item>\n          </ion-col>\n\n          <ion-col col-12 *ngIf="hasInfraction">\n              <ion-item *ngIf="hasPayment == undefined || hasPayment == null;else showPayment">\n                <ion-label col-9><span class="text-danger">*</span>Agregar arreglo de pago</ion-label>\n                <ion-label col-2>\n                  <button ion-button icon-start icon-only [clear]="true" (click)="addPayment($event)">\n                    <ion-icon name="add-circle"></ion-icon>\n                  </button>\n                </ion-label>\n              </ion-item>\n          </ion-col>\n\n          <ng-template #showPayment>\n            <ion-item>\n              <ion-label text-wrap col-9>\n                <h3>Agreglo pago blabla</h3>\n                <p>Monto: L. 1,000 cuotas: 3</p>\n            \n              </ion-label>\n              <ion-label col-2>\n                 <button ion-button icon-only [clear]="true" color="danger" >\n                   <ion-icon name="trash"></ion-icon>\n                 </button>\n              </ion-label>\n            </ion-item>\n                \n          </ng-template>\n         \n\n          <ion-col col-12>\n            <ion-item>\n              <ion-label text-wrap col-7>\n                <span class="text-danger">*</span>\n                Adjuntar Acta Circunstanciada\n              </ion-label>\n              \n              <ion-label col-2>\n                <button ion-button icon-only [clear]="true" (click)="TakePicture($event)">\n                 <ion-icon name="camera"></ion-icon>\n                </button>\n              </ion-label> \n\n           \n              <ion-label col-2>\n                 <button ion-button icon-only [clear]="true" (click)="presentActionSheet()">\n                   <ion-icon name="attach"></ion-icon>\n                 </button>\n                 \n              </ion-label>\n\n            </ion-item>\n\n          </ion-col>\n\n          <ion-col col-12>\n\n            <ion-list>\n              <ion-item-sliding *ngFor="let item of actaFiles?.reverse() ">\n                <ion-item>\n                  <ion-label text-wrap col-10>\n                    {{item.name}}\n                  </ion-label>\n                  <ion-label col-2>\n                    <button ion-button icon-only [clear]="true" color="danger" (click)="delete(item)">\n                      <ion-icon name="trash"></ion-icon>\n                    </button>\n                  </ion-label>\n                </ion-item>\n                <ion-item-options side="right">\n\n                  <button ion-button color="danger" (click)="delete(item)">\n                    <ion-icon name="trash"></ion-icon> Eliminar\n                  </button>\n                </ion-item-options>\n\n\n              </ion-item-sliding>\n            </ion-list>\n\n          </ion-col>\n\n\n\n\n          <ion-col col-12>\n            <ion-item>\n              <ion-label text-wrap col-8>\n                <span class="text-danger">*</span>\n                Adjuntar Archivo\n              </ion-label>\n               <ion-label col-2>\n                 <button ion-button icon-only [clear]="true" (click)="presentFileActionSheet()">\n                   <ion-icon name="attach"></ion-icon>\n                 </button>\n\n               </ion-label>\n            </ion-item>\n          </ion-col>\n\n\n          <ion-col col-12>\n\n            <ion-list>\n              <ion-item-sliding *ngFor="let attch of attchFiles?.reverse() ">\n                <ion-item>\n                  <ion-label text-wrap col-10>\n                    {{attch.name}}\n                  </ion-label>\n                  <ion-label col-2>\n                    <button ion-button icon-only [clear]="true" color="danger" (click)="deleteAttch(attch)">\n                      <ion-icon name="trash"></ion-icon>\n                    </button>\n                  </ion-label>\n                </ion-item>\n                <ion-item-options side="right">\n\n                  <button ion-button color="danger" (click)="deleteAttch(attch)">\n                    <ion-icon name="trash"></ion-icon> Eliminar\n                  </button>\n                </ion-item-options>\n\n\n              </ion-item-sliding>\n            </ion-list>\n\n          </ion-col>\n          \n\n\n\n\n          <ion-col col-6>\n            <ion-item>\n              <button ion-button icon-start block color="info" class="buttontn" tappable\n                (click)="Save(dataService.dataRegistrarExp)" [disabled]="!ComForm.valid || attchFiles.length==0 ||\n                actaFiles.length==0">\n                <ion-icon name="md-checkmark-circle-outline"></ion-icon>\n                Guardar\n              </button>\n            </ion-item>\n          </ion-col>\n          <ion-col col-6>\n            <ion-item>\n              <button ion-button icon-start block color="danger" class="buttontn" tappable (click)="closeModal()">\n                <ion-icon name="md-close"></ion-icon>\n                Cancelar\n              </button>\n            </ion-item>\n          </ion-col>\n\n        </ion-row>\n      </ion-grid>\n      <br><br>\n\n    </form>\n\n\n\n\n\n  </ion-content>\n\n\n\n\n</ion-content>\n'/*ion-inline-end:"C:\Projects\APPSTSS\AppMovil\src\pages\modal-registrar\modal-registrar.html"*/,
+            selector: 'modal-details',template:/*ion-inline-start:"C:\Projects\APPSTSS\AppMovil\src\pages\modal-registrar\modal-registrar.html"*/'<!--\n  Generated template for the ModalPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n\n<style>\n  input[type="file"] {\n    display: none;\n}\n.custom-file-upload {\n    border: 1px solid #ccc;\n    display: inline-block;\n    padding: 6px 12px;\n    cursor: pointer;\n}\n</style>\n<ion-header>\n\n  <ion-navbar color="miTema">\n    <ion-title>\n      <strong>Registrar Info. de Expediente\n      </strong>\n    </ion-title>\n    <ion-buttons end>\n      <button ion-button (click)="closeModal()">Cerrar</button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content no-padding>\n\n\n\n  <ion-content #popoverContent padding class="popover-page">\n\n    <form class="list-form-home" [formGroup]="ComForm">\n\n      <ion-grid>\n        <ion-row>\n          <ion-col col-12>\n            <ion-item>\n              <ion-label floating>\n                <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n                <span class="text-danger">*</span>\n                Razón Social\n              </ion-label>\n              <ion-input type="text" id="NombreRazon" name="NombreRazon" class="text-primary-login" maxLength="25"\n                formControlName="NombreRazon" [(ngModel)]="dataService.dataRegistrarExp.NombreRazon" [readonly]="true">\n              </ion-input>\n\n            </ion-item>\n          </ion-col>\n          <ion-col col-12>\n            <ion-item>\n              <ion-label floating>\n                <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n                <span class="text-danger">*</span>\n                Número de expediente integral\n              </ion-label>\n              <ion-input type="text" class="text-primary-login" maxLength="25" id="NroExpedienteIntegral"\n                name="NroExpedienteIntegral" formControlName="NroExpedienteIntegral"\n                [(ngModel)]="dataService.dataRegistrarExp.NroExpedienteIntegral" [readonly]="true"></ion-input>\n\n            </ion-item>\n          </ion-col>\n\n          <!--- -->\n          <ion-col col-12>\n            <ion-item>\n              <ion-label floating>\n                <ion-icon name="md-calendar" item-start class="text-primary-login"></ion-icon>\n                <span class="text-danger">*</span>\n                Fecha Registro\n              </ion-label>\n              <ion-input displayFormat="YYYY-MM-DD" id="FechaActa" name="FechaActa" formControlName="FechaActa"\n                [(ngModel)]="dataService.dataRegistrarExp.FechaActa" [readonly]="true"></ion-input>\n\n            </ion-item>\n          </ion-col>\n          <!--<ion-item>\n            <ion-label floating>              \n              Porcentaje de Avance {{dataService.dataRegistrarExp.Porcentaje}}%\n            </ion-label>\n            \n            <ion-range min="0" max="100" pin="true"  snaps="trues"  name="Porcentaje" id="Porcentaje"  [(ngModel)]="dataService.dataRegistrarExp.Porcentaje" formControlName="Porcentaje" color="secondary" >\n              <ion-icon range-left small name="ios-remove-circle-outline"></ion-icon>\n              <ion-icon range-right name="md-checkbox"></ion-icon>\n            </ion-range>\n          </ion-item>-->\n          <ion-col col-12>\n            <ion-item>\n              <ion-label floating>\n                <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n                <span class="text-danger">*</span>\n                Tipo de acta\n              </ion-label>\n              <ion-input type="text" class="text-primary-login" maxLength="25" id="tipoActa" name="tipoActa"\n                value="Acta circunstanciada" formControlName="tipoActa"\n                [(ngModel)]="dataService.dataRegistrarExp.tipoActa" [readonly]="true"></ion-input>\n\n            </ion-item>\n          </ion-col>\n\n          <!-- <ion-col col-12 *ngIf="listUsuario.length>0">\n            <ion-item>\n\n              <label for="">Inspector</label>\n              <ion-grid>\n                <ion-row>\n                  <ion-col col-12 *ngFor="let x of listUsuario">\n                    <div>\n                      {{x.NombreEmpleado}}\n\n                    </div>\n                  </ion-col>\n                </ion-row>\n              </ion-grid>\n\n\n            </ion-item>\n          </ion-col> -->\n          <ion-col col-12>\n            <ion-item>\n               <ion-label><span class="text-danger">*</span>Tiene Infracción </ion-label>\n               <ion-toggle (ionChange)="hasInfraction = !hasInfraction"></ion-toggle>\n              \n              <!-- <ion-label><span class="text-danger">*</span> Tiene Infracción</ion-label>\n\n              <ion-select okText="Guardar" cancelText="Cancelar" placeholder="Seleccione" id="TieneInfraccion"\n                name="TieneInfraccion" formControlName="TieneInfraccion"\n                [(ngModel)]="dataService.dataRegistrarExp.TieneInfraccion">\n                <ion-option value=1>Si</ion-option>\n                <ion-option value=0>No</ion-option>\n              </ion-select> -->\n            </ion-item>\n          </ion-col>\n\n          <ion-col col-12 *ngIf="hasInfraction">\n              <ion-item *ngIf="hasPayment == undefined || hasPayment == null;else showPayment">\n                <ion-label col-9><span class="text-danger">*</span>Agregar arreglo de pago</ion-label>\n                <ion-label col-2>\n                  <button ion-button icon-start icon-only [clear]="true" (click)="addPayment($event)">\n                    <ion-icon name="add-circle"></ion-icon>\n                  </button>\n                </ion-label>\n              </ion-item>\n          </ion-col>\n\n          <ng-template #showPayment>\n            <ion-item>\n              <ion-label text-wrap col-9>\n                <h3>{{payment.Nombre}}</h3>\n                <p>Monto: {{payment.TotalPago | currency:\'L. \'}} cuotas: {{payment.NumPagos}}</p>\n            \n              </ion-label>\n              <ion-label col-2>\n                 <button ion-button icon-only [clear]="true" color="danger" (click)="deletePayment()">\n                   <ion-icon name="trash"></ion-icon>\n                 </button>\n              </ion-label>\n            </ion-item>\n                \n          </ng-template>\n         \n\n          <ion-col col-12>\n            <ion-item>\n              <ion-label text-wrap col-7>\n                <span class="text-danger">*</span>\n                Adjuntar Acta Circunstanciada\n              </ion-label>\n              \n              <ion-label col-2>\n                <button ion-button icon-only [clear]="true" (click)="TakePicture($event)">\n                 <ion-icon name="camera"></ion-icon>\n                </button>\n              </ion-label> \n\n           \n              <ion-label col-2>\n                 <button ion-button icon-only [clear]="true" (click)="presentActionSheet()">\n                   <ion-icon name="attach"></ion-icon>\n                 </button>\n                 \n              </ion-label>\n\n            </ion-item>\n\n          </ion-col>\n\n          <ion-col col-12>\n\n            <ion-list>\n              <ion-item-sliding *ngFor="let item of actaFiles?.reverse() ">\n                <ion-item>\n                  <ion-label text-wrap col-10>\n                    {{item.name}}\n                  </ion-label>\n                  <ion-label col-2>\n                    <button ion-button icon-only [clear]="true" color="danger" (click)="delete(item)">\n                      <ion-icon name="trash"></ion-icon>\n                    </button>\n                  </ion-label>\n                </ion-item>\n                <ion-item-options side="right">\n\n                  <button ion-button color="danger" (click)="delete(item)">\n                    <ion-icon name="trash"></ion-icon> Eliminar\n                  </button>\n                </ion-item-options>\n\n\n              </ion-item-sliding>\n            </ion-list>\n\n          </ion-col>\n\n\n\n\n          <ion-col col-12>\n            <ion-item>\n              <ion-label text-wrap col-8>\n                <span class="text-danger">*</span>\n                Adjuntar Archivo\n              </ion-label>\n               <ion-label col-2>\n                 <button ion-button icon-only [clear]="true" (click)="presentFileActionSheet()">\n                   <ion-icon name="attach"></ion-icon>\n                 </button>\n\n               </ion-label>\n            </ion-item>\n          </ion-col>\n\n\n          <ion-col col-12>\n\n            <ion-list>\n              <ion-item-sliding *ngFor="let attch of attchFiles?.reverse() ">\n                <ion-item>\n                  <ion-label text-wrap col-10>\n                    {{attch.name}}\n                  </ion-label>\n                  <ion-label col-2>\n                    <button ion-button icon-only [clear]="true" color="danger" (click)="deleteAttch(attch)">\n                      <ion-icon name="trash"></ion-icon>\n                    </button>\n                  </ion-label>\n                </ion-item>\n                <ion-item-options side="right">\n\n                  <button ion-button color="danger" (click)="deleteAttch(attch)">\n                    <ion-icon name="trash"></ion-icon> Eliminar\n                  </button>\n                </ion-item-options>\n\n\n              </ion-item-sliding>\n            </ion-list>\n\n          </ion-col>\n          \n\n\n\n\n          <ion-col col-6>\n            <ion-item>\n              <button ion-button icon-start block color="info" class="buttontn" tappable\n                (click)="Save(dataService.dataRegistrarExp)" [disabled]="!ComForm.valid || attchFiles.length==0 ||\n                actaFiles.length==0">\n                <ion-icon name="md-checkmark-circle-outline"></ion-icon>\n                Guardar\n              </button>\n            </ion-item>\n          </ion-col>\n          <ion-col col-6>\n            <ion-item>\n              <button ion-button icon-start block color="danger" class="buttontn" tappable (click)="closeModal()">\n                <ion-icon name="md-close"></ion-icon>\n                Cancelar\n              </button>\n            </ion-item>\n          </ion-col>\n\n        </ion-row>\n      </ion-grid>\n      <br><br>\n\n    </form>\n\n\n\n\n\n  </ion-content>\n\n\n\n\n</ion-content>\n'/*ion-inline-end:"C:\Projects\APPSTSS\AppMovil\src\pages\modal-registrar\modal-registrar.html"*/,
             styles: ['./modal-registrar.scss'],
             providers: [__WEBPACK_IMPORTED_MODULE_4__services_ServiceGlobals__["a" /* ServiceGlobals */], __WEBPACK_IMPORTED_MODULE_3__services_ServiceAlert__["a" /* ServiceAlert */], __WEBPACK_IMPORTED_MODULE_6__services_dataService__["a" /* DataService */], __WEBPACK_IMPORTED_MODULE_5__services_Messages__["a" /* Menssages */], __WEBPACK_IMPORTED_MODULE_9__services_PhotoService__["b" /* PhotoService */]]
         }),
@@ -2244,6 +2264,7 @@ var ModalRegistrarComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_Messages__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_forms__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_common__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Models_ArregloPagoModel__ = __webpack_require__(705);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2253,6 +2274,42 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [0, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
 
 
 
@@ -2270,10 +2327,17 @@ var ModalFormaPagoComponent = /** @class */ (function () {
         this.ServiceGlobal = ServiceGlobal;
         this._mensajes = _mensajes;
         this.currencyPipe = currencyPipe;
+        this.hasFee = false;
+        this.today = new Date().toISOString();
         this.arregloPagos = [];
         this.pagos = {};
         this.box_price_formatted = '';
         this.box_price = 0;
+        //init
+        var data = this.navParams.get("datapass");
+        this.model = new __WEBPACK_IMPORTED_MODULE_8__Models_ArregloPagoModel__["a" /* ArregloPagoModel */]();
+        this.model.NroExpedienteIntegral = data['NroExpedienteIntegral'];
+        console.log(data);
         this.dataService.dataRegistrarPago = {
             NroExpedienteIntegral: "",
             NroExpedienteInterno: "",
@@ -2313,7 +2377,11 @@ var ModalFormaPagoComponent = /** @class */ (function () {
             ])
         });
         this.ServiceGlobal.validationNumeros();
+        this.ServiceGlobal.FormatCurrency();
         this.loadFormaPago();
+        this.messageErrorPayments = new Array();
+        this.messageErrorFee = new Array();
+        this.messageErrors = new Array();
     }
     ModalFormaPagoComponent.prototype.ionViewDidLoad = function () {
         //console.log('ionViewDidLoad ModalPage');
@@ -2337,7 +2405,7 @@ var ModalFormaPagoComponent = /** @class */ (function () {
         this.dataService.dataRegistrarPago = body;
         this.dataService.dataRegistrarPago['CantidadPago'] = 0;
         this.dataService.dataRegistrarPago['NumeroPago'] = 0;
-        console.log(this.dataService.dataRegistrarPago);
+        //console.log(this.dataService.dataRegistrarPago)
         //alert(this.target);
     };
     ModalFormaPagoComponent.prototype.guardarPagoTesoreria = function (dataFront) {
@@ -2510,11 +2578,24 @@ var ModalFormaPagoComponent = /** @class */ (function () {
         this.viewCtrl.dismiss(data);
     };
     ModalFormaPagoComponent.prototype.savePayment = function () {
-        var data = { 'isSave': true };
+        if (!this.Validate()) {
+            return;
+        }
+        this.model.Pagos = this.listaPagos;
+        var data = { 'isSave': true, 'data': this.model };
+        console.log('save data in dismiss');
         this.viewCtrl.dismiss(data);
     };
     ModalFormaPagoComponent.prototype.onKeyPress = function (e, value) {
-        if (value > 999999999.99) {
+        if (e.code == "Space")
+            e.preventDefault();
+        if (e.key == "." && (value == undefined || value == ""))
+            e.preventDefault();
+        if (e.key == "." && String(value).includes('.'))
+            e.preventDefault();
+        if (e.key == "0" && (value == undefined || value == ""))
+            e.preventDefault();
+        if (String(value).length > 8) {
             e.preventDefault();
         }
         if (this.hasDecimal(value)) {
@@ -2523,12 +2604,161 @@ var ModalFormaPagoComponent = /** @class */ (function () {
                 e.preventDefault();
         }
     };
+    ModalFormaPagoComponent.prototype.onFeeKeyPress = function (e, value) {
+        if (e.code == "Space")
+            e.preventDefault();
+        if (e.key == ".")
+            e.preventDefault();
+        if (e.key == "0" && (value == undefined || value == ""))
+            e.preventDefault();
+        if (this.hasDecimal(value)) {
+            e.preventDefault();
+        }
+        if (String(value).length > 1) {
+            e.preventDefault();
+        }
+        this.hasFee = true;
+    };
     ModalFormaPagoComponent.prototype.hasDecimal = function (n) {
         return (n - Math.floor(n)) !== 0;
     };
+    ModalFormaPagoComponent.prototype.addFee = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var nextPay, cuota, i, pago;
+            return __generator(this, function (_a) {
+                console.log(this.model);
+                if (this.model.NumPagos == undefined
+                    || this.model.NumPagos == null
+                    || this.model.TotalPago == undefined || this.model.TotalPago == null) {
+                    return [2 /*return*/];
+                }
+                nextPay = new Date();
+                this.listaPagos = new Array();
+                cuota = Number.parseFloat((this.model.TotalPago / this.model.NumPagos).toFixed(2));
+                for (i = 0; i < this.model.NumPagos; i++) {
+                    pago = new __WEBPACK_IMPORTED_MODULE_8__Models_ArregloPagoModel__["b" /* Pagos */]();
+                    nextPay.setMonth(nextPay.getMonth() + 1); //add one month in each loop
+                    pago.FechaPago = new Date(nextPay);
+                    pago.FechaPagoText = pago.FechaPago.toISOString();
+                    pago.MinDate = this.itemDateMinDate(i);
+                    pago.ValorPago = cuota;
+                    pago.CuotaNum = i + 1;
+                    this.listaPagos.push(pago);
+                }
+                return [2 /*return*/];
+            });
+        });
+    };
+    ModalFormaPagoComponent.prototype.itemDateMinDate = function (index) {
+        var today = new Date();
+        if (index == 0)
+            return today.toISOString();
+        var itemBefore = this.listaPagos[index - 1].FechaPago;
+        return itemBefore.toISOString();
+    };
+    ModalFormaPagoComponent.prototype.itemDateIsValid = function () {
+        this.messageErrorPayments = new Array();
+        for (var i = 0; i <= this.listaPagos.length - 1; i++) {
+            var currentDate = this.listaPagos[i].FechaPago;
+            if (i == 0) {
+                var dAf = this.listaPagos[i + 1].FechaPago;
+                if (currentDate > dAf)
+                    this.messageErrorPayments.push("Fecha de Pago " + (i + 1) + " debe ser menor a Pago " + (i + 2));
+                continue;
+            }
+            if (i == this.listaPagos.length - 1) {
+                var dBf = this.listaPagos[i - 1].FechaPago;
+                if (dBf >= currentDate)
+                    this.messageErrorPayments.push("Fecha de Pago " + (i + 1) + " debe ser mayor a Pago " + i);
+                continue;
+            }
+            var beforeCurrent = this.listaPagos[i - 1].FechaPago;
+            var afterCurrent = this.listaPagos[i + 1].FechaPago;
+            if (beforeCurrent >= currentDate)
+                this.messageErrorPayments.push("Fecha de Pago " + (i + 1) + " debe ser mayor a cuota " + i);
+            if (currentDate > afterCurrent)
+                this.messageErrorPayments.push("Fecha de Pago " + (i + 1) + " debe ser menor a cuota " + (i + 2));
+        }
+    };
+    ModalFormaPagoComponent.prototype.onItemValueKeyPress = function (e, value, index) {
+        if (e.key == "." && (value == undefined || value == "")) {
+            e.preventDefault();
+            return;
+        }
+        if (e.key == "." && String(value).includes('.')) {
+            e.preventDefault();
+            return;
+        }
+        if (e.key == "0" && (value == undefined || value == "")) {
+            e.preventDefault();
+            return;
+        }
+        if (String(value).length > 8) {
+            e.preventDefault();
+            return;
+        }
+        if (this.hasDecimal(value)) {
+            var precision = value.toString().split('.')[1].length;
+            if (precision >= 2)
+                e.preventDefault();
+            return;
+        }
+    };
+    ModalFormaPagoComponent.prototype.onItemBlur = function (e) {
+        this.messageErrorFee = new Array();
+        var sumTotal = this.listaPagos.reduce(function (prev, cur) {
+            return prev + (cur.ValorPago * 1);
+        }, 0);
+        console.log(sumTotal);
+        if (Number.parseFloat(sumTotal.toFixed(2)) > this.model.TotalPago) {
+            this.messageErrorFee.push('Suma de Pagos es mayor a Pago Total');
+        }
+        if (this.model.TotalPago > Number.parseFloat(sumTotal.toFixed(2))) {
+            this.messageErrorFee.push('Suma de Pagos es menor a Pago Total');
+        }
+        if (this.hasEmptyVules()) {
+            this.messageErrorFee.push('Pago no puede ser vacio o cero');
+        }
+        console.log(this.messageErrorFee);
+    };
+    ModalFormaPagoComponent.prototype.hasEmptyVules = function () {
+        for (var i = 0; i <= this.listaPagos.length - 1; i++) {
+            if (this.listaPagos[i].ValorPago == null || this.listaPagos[i].ValorPago == "")
+                return true;
+        }
+        return false;
+    };
+    ModalFormaPagoComponent.prototype.onItemDateChange = function (e, index) {
+        var dateString = e.month + "/" + e.day + "/" + e.year;
+        var date = new Date(dateString);
+        this.listaPagos[index].FechaPago = date;
+        this.listaPagos[index].FechaPagoText = date.toISOString();
+        var len = this.listaPagos.length - 1;
+        if (index != len) {
+            this.listaPagos[index + 1].MinDate = date.toISOString();
+        }
+        else {
+            this.listaPagos[index].MinDate = this.itemDateMinDate(index);
+        }
+        this.itemDateIsValid();
+    };
+    ModalFormaPagoComponent.prototype.Validate = function () {
+        this.messageErrors = new Array();
+        if (this.model.ConceptoPago == undefined || this.model.ConceptoPago == null)
+            this.messageErrors.push('Concepto Pago es requerido');
+        if (this.model.Nombre == undefined || this.model.Nombre == null)
+            this.messageErrors.push('Nombre Pago es requerido');
+        if (this.model.DescripcionActa == undefined || this.model.DescripcionActa == null)
+            this.messageErrors.push('Descripcion Pago es requerido');
+        if (this.model.TotalPago == undefined || this.model.TotalPago == null)
+            this.messageErrors.push('Total Pago no valido');
+        if (this.model.NumPagos == undefined || this.model.NumPagos == null)
+            this.messageErrors.push('Numero de pagos no valido');
+        return this.messageErrors.length > 0 ? false : true;
+    };
     ModalFormaPagoComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'modal-forma-pago',template:/*ion-inline-start:"C:\Projects\APPSTSS\AppMovil\src\pages\modal-forma-pago\modal-forma-pago.html"*/'<ion-header>\n\n  <ion-navbar color="miTema">\n    <ion-title>\n      <strong>Arreglo de pago\n      </strong>\n    </ion-title>\n    <ion-buttons end>\n      <button ion-button (click)="closeModal()">Cerrar</button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n<ion-content no-padding>\n   <ion-grid>\n    <ion-row>\n      <ion-col col-12>\n        <ion-item>\n          <ion-label floating>\n            <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n            <span class="text-danger">*</span> Número de Expediente Integral\n          </ion-label>\n          <ion-input type="text" class="text-primary-login" maxLength="25" id="NroExpedienteIntegral"\n            name="NroExpedienteIntegral"    [readonly]="true" ></ion-input>\n        </ion-item>\n      </ion-col>\n\n      <ion-col col-12>\n        <ion-item>\n          <ion-label floating>\n            <ion-icon name="ios-person-outline" item-start class="text-primary-login"></ion-icon>\n            <span class="text-danger">*</span> Nombre\n          </ion-label>\n          <ion-input type="text" id="NombreRazon" name="NombreRazon" class="text-primary-login" maxLength="25"\n            [readonly]="false"></ion-input>\n        </ion-item>\n      </ion-col>\n\n      <ion-col col-12>\n        <ion-item>\n          <ion-label floating>\n            <ion-icon name="ios-book-outline" item-start class="text-primary-login"></ion-icon>\n            <span class="text-danger">*</span> Concepto Pago\n          </ion-label>\n          <ion-input id="conceptoPago" name="ConceptoPago" ></ion-input>\n        </ion-item>\n      </ion-col>\n\n      <ion-col col-12>\n        <ion-item>\n          <ion-label floating>\n            <ion-icon name="ios-calendar-outline" item-start class="text-primary-login"></ion-icon>\n            <span class="text-danger">*</span> Descripción Acta\n          </ion-label>\n          <ion-input id="DescripcionActa" name="DescripcionActa"></ion-input>\n        </ion-item>\n      </ion-col>\n\n      <ion-col col-12>\n        <ion-item>\n          <ion-label floating>\n            <ion-icon name="ios-cash-outline" item-start class="text-primary-login"></ion-icon>\n            <span class="text-danger">*</span> Total a Pagar Lempiras\n          </ion-label>\n          <ion-input id="CantidadPago" [(ngModel)]="value" type="tel"\n            name="CantidadPago" class="numeros" (keypress)="onKeyPress($event, $event.target.value)" >\n          </ion-input>\n         \n         \n          \n        </ion-item>\n      </ion-col>\n\n      <ion-col col-12>\n        <ion-item>\n          <ion-label floating>\n            <ion-icon name="ios-calendar-outline" item-start class="text-primary-login"></ion-icon>\n            <span class="text-danger">*</span> Nro. Pago a Realizar\n          </ion-label>\n          <ion-input type="tel" id="NumeroPago" class="numeros" name="NumeroPago">\n          </ion-input>\n        </ion-item>\n      </ion-col>\n\n      \n\n    </ion-row>\n\n   </ion-grid>\n\n\n\n\n\n  <button ion-button icon-start block color="info" class="buttontn" tappable (click)="savePayment()">\n    <ion-icon name="md-checkmark-circle-outline"></ion-icon>\n    Guardar\n  </button>\n  <button ion-button icon-start block color="danger" class="buttontn" tappable (click)="closeModal()">\n    <ion-icon name="md-close"></ion-icon>\n    Cancelar\n  </button>\n</ion-content>\n\n'/*ion-inline-end:"C:\Projects\APPSTSS\AppMovil\src\pages\modal-forma-pago\modal-forma-pago.html"*/,
+            selector: 'modal-forma-pago',template:/*ion-inline-start:"C:\Projects\APPSTSS\AppMovil\src\pages\modal-forma-pago\modal-forma-pago.html"*/'<ion-header>\n\n  <ion-navbar color="miTema">\n    <ion-title>\n      <strong>Arreglo de pago\n      </strong>\n    </ion-title>\n    <ion-buttons end>\n      <button ion-button (click)="closeModal()">Cerrar</button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n<ion-content no-padding>\n   <ion-grid>\n    <ion-row>\n      <ion-col col-12>\n        <ion-item>\n          <ion-label floating>\n            <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n            <span class="text-danger">*</span> Número de Expediente Integral\n          </ion-label>\n          <ion-input type="text" \n                     class="text-primary-login" \n                     maxLength="25" id="NroExpedienteIntegral"\n                     [(ngModel)]="model.NroExpedienteIntegral"\n                     name="NroExpedienteIntegral"    \n                     [readonly]="true" ></ion-input>\n        </ion-item>\n      </ion-col>\n\n      <ion-col col-12>\n        <ion-item>\n          <ion-label floating>\n            <ion-icon name="ios-person-outline" item-start class="text-primary-login"></ion-icon>\n            <span class="text-danger">*</span> Nombre\n          </ion-label>\n          <ion-input type="text" id="NombreRazon" \n                     name="NombreRazon" \n                     [(ngModel)]="model.Nombre"\n                     class="text-primary-login" \n                     maxLength="25"\n                     [readonly]="false"></ion-input>\n        </ion-item>\n      </ion-col>\n\n      <ion-col col-12>\n        <ion-item>\n          <ion-label floating>\n            <ion-icon name="ios-book-outline" item-start class="text-primary-login"></ion-icon>\n            <span class="text-danger">*</span> Concepto Pago\n          </ion-label>\n          <ion-input id="conceptoPago" \n                     [(ngModel)]="model.ConceptoPago"\n                     name="ConceptoPago" ></ion-input>\n        </ion-item>\n      </ion-col>\n\n      <ion-col col-12>\n        <ion-item>\n          <ion-label floating>\n            <ion-icon name="ios-calendar-outline" item-start class="text-primary-login"></ion-icon>\n            <span class="text-danger">*</span> Descripción Acta\n          </ion-label>\n          <ion-input id="DescripcionActa" \n                    [(ngModel)]="model.DescripcionActa"\n                    name="DescripcionActa"></ion-input>\n        </ion-item>\n      </ion-col>\n\n      <ion-col col-12>\n        <ion-item>\n          <ion-label floating>\n            <ion-icon name="ios-cash-outline" item-start class="text-primary-login"></ion-icon>\n            <span class="text-danger">*</span> Total a Pagar Lempiras\n          </ion-label>\n          <ion-input id="CantidadPago" \n                    [(ngModel)]="model.TotalPago"\n                    type="tel"\n                    name="CantidadPago" class="numeros CurrencyInput"\n                    (keypress)="onKeyPress($event, $event.target.value)" >\n          </ion-input>\n        </ion-item>\n      </ion-col>\n\n      <ion-col col-12>\n         <ion-row>\n             <ion-item col-7>\n               <ion-label floating class="labelFont">\n                 <ion-icon name="ios-calendar-outline" item-start class="text-primary-login"></ion-icon>\n                 <span class="text-danger">*</span> Nro. Pagos a Realizar\n               </ion-label>\n               <ion-input type="tel" \n                          id="NumeroPago" class="numeros"\n                          [(ngModel)]="model.NumPagos"\n                          (keypress)="onFeeKeyPress($event, $event.target.value)" \n                          name="NumeroPago">\n               </ion-input>\n             </ion-item>\n\n             <ion-item col-5>\n\n               <button ion-button icon-start block color="info" class="btnaddFee" [disabled]="!hasFee" tappable\n                 (click)="addFee()">\n                 <ion-icon name="md-checkmark-circle-outline"></ion-icon>\n                 Agregar\n               </button>\n             </ion-item>\n         </ion-row>\n       </ion-col>\n        \n      <ion-col col-12 *ngIf="listaPagos !== undefined || listaPagos != null">\n        <ion-grid>\n          <ion-row>\n            <ion-col col-2>\n              <ion-item>\n                <ion-label>\n                  <p>N°</p>\n                </ion-label>\n              </ion-item>\n            </ion-col>\n            <ion-col col-5>\n              <ion-item text-center>\n                <ion-label>\n                  <p>Fecha</p>\n                </ion-label>\n              </ion-item>\n            </ion-col>\n            <ion-col col-5>\n              <ion-item text-center>\n                <ion-label>\n                  <p> Valor en L.</p>\n                </ion-label>\n              </ion-item>\n            </ion-col>\n          </ion-row>\n          <ion-row *ngFor="let item of listaPagos; index as i">\n              <ion-col col-2>\n                <ion-item>\n                  <ion-label><span style="font-size: 11px;"> {{i + 1}}</span> </ion-label>\n                </ion-item>\n              </ion-col>\n              <ion-col col-5>\n                 <ion-item class="item-coutas">\n                   <ion-datetime displayFormat="DD/MM/YYYY" \n                                pickerFormat="DD/MM/YYYY"\n                                [(ngModel)]="item.FechaPagoText"\n                                name="FechaPago"\n                                min={{listaPagos[i].MinDate}}\n                                max="2050-12-31"\n                                (ionChange)="onItemDateChange($event,i)"\n                                [ngModelOptions]="{standalone: true}"\n                                class="text-primary-login"></ion-datetime>\n                  </ion-item>\n              </ion-col>\n              <ion-col col-5>\n                <ion-item>\n                          <ion-input type="tel" \n                            name="ValorPagar" \n                            class="text-primary-login numeros"\n                            (keypress)="onKeyPress($event, $event.target.value,i)"\n                            (ionBlur)="onItemBlur()"\n                            [(ngModel)]="item.ValorPago"></ion-input>\n                </ion-item>\n                 \n              </ion-col>\n          </ion-row>\n        </ion-grid>\n      </ion-col>\n     <ion-col *ngIf="messageErrorPayments.length > 0">\n        <ion-row *ngFor="let item of messageErrorPayments">\n            <span class="text-danger">*{{item}}</span>\n        </ion-row>\n    \n     </ion-col>\n     <ion-col *ngIf="messageErrorFee.length > 0">\n       <ion-row *ngFor="let item of messageErrorFee">\n          <span class="text-danger">*{{item}}</span>\n       </ion-row>\n\n     </ion-col>\n\n      <ion-col *ngIf="messageErrors.length > 0">\n        <ion-row *ngFor="let item of messageErrors">\n          <span class="text-danger">*{{item}}</span>\n        </ion-row>\n      \n      </ion-col>\n    </ion-row>\n\n   </ion-grid>\n\n\n\n\n\n  <button ion-button icon-start block color="info" class="buttontn" tappable (click)="savePayment()">\n    <ion-icon name="md-checkmark-circle-outline"></ion-icon>\n    Guardar\n  </button>\n  <button ion-button icon-start block color="danger" class="buttontn" tappable (click)="closeModal()">\n    <ion-icon name="md-close"></ion-icon>\n    Cancelar\n  </button>\n</ion-content>\n\n'/*ion-inline-end:"C:\Projects\APPSTSS\AppMovil\src\pages\modal-forma-pago\modal-forma-pago.html"*/,
             //styleUrls:['modal-pago.scss'], 
             providers: [__WEBPACK_IMPORTED_MODULE_2__services_dataService__["a" /* DataService */], __WEBPACK_IMPORTED_MODULE_3__services_ServiceAlert__["a" /* ServiceAlert */], __WEBPACK_IMPORTED_MODULE_4__services_ServiceGlobals__["a" /* ServiceGlobals */], __WEBPACK_IMPORTED_MODULE_5__services_Messages__["a" /* Menssages */], __WEBPACK_IMPORTED_MODULE_7__angular_common__["CurrencyPipe"]]
         }),
@@ -2590,17 +2820,17 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__ionic_native_splash_screen__ = __webpack_require__(370);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__angular_forms__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__ionic_native_camera__ = __webpack_require__(365);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__ionic_native_ionic_webview_ngx__ = __webpack_require__(708);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__ionic_native_ionic_webview_ngx__ = __webpack_require__(709);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__ionic_native_image_picker__ = __webpack_require__(366);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__ionic_native_file_path__ = __webpack_require__(367);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__ionic_native_chooser__ = __webpack_require__(368);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__ionic_native_background_mode__ = __webpack_require__(709);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__ionic_native_network__ = __webpack_require__(710);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__services_BackgroundTask__ = __webpack_require__(711);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__ionic_native_network_interface__ = __webpack_require__(712);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__ionic_native_background_mode__ = __webpack_require__(710);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__ionic_native_network__ = __webpack_require__(711);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__services_BackgroundTask__ = __webpack_require__(712);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__ionic_native_network_interface__ = __webpack_require__(713);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__ionic_native_file__ = __webpack_require__(356);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__ionic_native_local_notifications__ = __webpack_require__(371);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33_angular2_text_mask__ = __webpack_require__(713);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33_angular2_text_mask__ = __webpack_require__(714);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_33_angular2_text_mask___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_33_angular2_text_mask__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2999,6 +3229,41 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [0, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 
 
 var ServiceAlert = /** @class */ (function () {
@@ -3032,6 +3297,37 @@ var ServiceAlert = /** @class */ (function () {
             this.loading.dismiss();
             this.loading = null;
         }
+    };
+    ServiceAlert.prototype.showConfirm = function (titleAlert, messageAlert) {
+        return __awaiter(this, void 0, void 0, function () {
+            var confirm;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        confirm = this.alertCtrl.create({
+                            title: titleAlert,
+                            message: messageAlert,
+                            buttons: [
+                                {
+                                    text: 'Cancelar',
+                                    role: 'cancel',
+                                    handler: function () {
+                                        return false;
+                                    }
+                                },
+                                {
+                                    text: 'Aceptar',
+                                    handler: function () {
+                                        return true;
+                                    }
+                                }
+                            ]
+                        });
+                        return [4 /*yield*/, confirm.present()];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
     };
     ServiceAlert = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
@@ -3314,6 +3610,28 @@ var LoginResult = /** @class */ (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ArregloPagoModel; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return Pagos; });
+var ArregloPagoModel = /** @class */ (function () {
+    function ArregloPagoModel() {
+    }
+    return ArregloPagoModel;
+}());
+
+var Pagos = /** @class */ (function () {
+    function Pagos() {
+    }
+    return Pagos;
+}());
+
+//# sourceMappingURL=ArregloPagoModel.js.map
+
+/***/ }),
+
+/***/ 706:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return PhotoService; });
 /* unused harmony export FilesResponsePhoto */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FileType; });
@@ -3593,7 +3911,7 @@ var FileType;
 
 /***/ }),
 
-/***/ 706:
+/***/ 707:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3615,7 +3933,7 @@ var ListFiles = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 707:
+/***/ 708:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3630,7 +3948,7 @@ var InsertActaModel = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 711:
+/***/ 712:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

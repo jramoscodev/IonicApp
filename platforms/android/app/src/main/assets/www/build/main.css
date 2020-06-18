@@ -40912,6 +40912,19 @@ modal-details .embed-container iframe {
   height: 100%;
 }
 
+.btnaddFee {
+  position: absolute;
+  bottom: 10px;
+}
+
+.labelFont {
+  font-size: 3.5vw !important;
+}
+
+.item-coutas {
+  font-size: 1em !important;
+}
+
 modal-details {
   /* style 1 */
   /* style 2 */

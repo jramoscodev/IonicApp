@@ -53,7 +53,6 @@ export class ModalRegistrarComponent implements OnInit {
   attchFiles: ListFiles[] = new Array();
   dataToStorage: InsertActaModel[] = new Array();
   payment: ArregloPagoModel;
-  
   files;
   public img;
 
@@ -131,12 +130,12 @@ export class ModalRegistrarComponent implements OnInit {
       'tipoActa': new FormControl(null, [
         Validators.required
       ]),
-      'TieneInfraccion': new FormControl(null, [
-        Validators.required
-      ]),
-      'TieneArregloPago': new FormControl(null, [
-        Validators.required
-      ]),
+      // 'TieneInfraccion': new FormControl(null, [
+      //   Validators.required
+      // ]),
+      // 'TieneArregloPago': new FormControl(null, [
+      //   Validators.required
+      // ]),
       // 'file': new FormControl(null, [
       //   Validators.required
       // ]),
@@ -156,12 +155,11 @@ export class ModalRegistrarComponent implements OnInit {
 
 
   public closeModal() {
-    let data = { 'foo': 'bar' };
-    this.viewCtrl.dismiss(data);
+    this.viewCtrl.dismiss();
   }
 
-  dismiss() {
-    let data = { 'foo': 'bar' };
+  dismiss(expediente:any) {
+    let data = { 'numExp': expediente };
     this.viewCtrl.dismiss(data);
   }
 
@@ -653,7 +651,7 @@ export class ModalRegistrarComponent implements OnInit {
 
      this._serviceAlert.presentConfirm('datos actualizados')
      this._serviceAlert.dismissLoading();
-     this.closeModal()
+     this.dismiss(insert.NroExpedienteIntegral)
    }catch(e){
      console.log('catch error',e);
      if (e.status == 0)
@@ -661,7 +659,7 @@ export class ModalRegistrarComponent implements OnInit {
        this._serviceAlert.presentConfirm('No se puedo establecer conexion a internet, se almacenara la información para su procesamiento ');
        this.setToLocalStorage(insert);
        this._serviceAlert.dismissLoading();
-       this.closeModal()
+       this.dismiss(insert.NroExpedienteIntegral)
       }else{
        this._serviceAlert.presentConfirm('Error al actualizar los datos, verificque la informacion ingresada');
        this._serviceAlert.dismissLoading();

@@ -588,10 +588,12 @@ var ServiceGlobals = /** @class */ (function () {
     };
     ServiceGlobals = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_4__angular_common_http__["a" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__angular_common_http__["a" /* HttpClient */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__ConfigSystems_constants__["a" /* Configuration */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ConfigSystems_constants__["a" /* Configuration */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_5__ionic_storage__["b" /* Storage */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__ionic_storage__["b" /* Storage */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_7__ionic_native_file__["a" /* File */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_7__ionic_native_file__["a" /* File */]) === "function" && _d || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__angular_common_http__["a" /* HttpClient */],
+            __WEBPACK_IMPORTED_MODULE_3__ConfigSystems_constants__["a" /* Configuration */],
+            __WEBPACK_IMPORTED_MODULE_5__ionic_storage__["b" /* Storage */],
+            __WEBPACK_IMPORTED_MODULE_7__ionic_native_file__["a" /* File */]])
     ], ServiceGlobals);
     return ServiceGlobals;
-    var _a, _b, _c, _d;
 }());
 
 //# sourceMappingURL=ServiceGlobals.js.map
@@ -878,7 +880,7 @@ var AuthenticationService = /** @class */ (function () {
                 return [2 /*return*/, this.goblal.login(json).then(function (data) {
                         localStorage.setItem('tokenSTS', data['Data'].Token);
                         localStorage.setItem('typouser', data['Data'].IdPatrono);
-                        result.data = { typo: data['Data'].IdPatrono, changedPass: data['Data'].UsuarioPerfil.CambioContrasena };
+                        result.data = { typo: data['Data'].IdPatrono, changedPass: data['Data'].ChangedPass };
                         return result;
                     }, function (e) {
                         result.error = e.error;
@@ -1470,13 +1472,18 @@ var RegistrarExpedienteComponent = /** @class */ (function () {
         });
         actionSheet.present();
     };
-    RegistrarExpedienteComponent.prototype.showModal = function (datafront) {
+    RegistrarExpedienteComponent.prototype.showModal = function (datafront, index) {
+        var _this = this;
         var dataMo = {
-            datapass: datafront
+            datapass: datafront,
         };
         var modal = this.myModal.create(__WEBPACK_IMPORTED_MODULE_5__modal_registrar_modal_registrar__["a" /* ModalRegistrarComponent */], dataMo);
         modal.onDidDismiss(function (data) {
-            console.log(data);
+            _this.dataService.ReportExpediente = _this.dataService.ReportExpediente.filter(function (current) {
+                if (current['NroExpedienteIntegral'] !== data['numExp']) {
+                    return current;
+                }
+            });
         });
         modal.present();
     };
@@ -1490,7 +1497,7 @@ var RegistrarExpedienteComponent = /** @class */ (function () {
     ], RegistrarExpedienteComponent.prototype, "nav2", void 0);
     RegistrarExpedienteComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-nosotros',template:/*ion-inline-start:"C:\Projects\APPSTSS\AppMovil\src\pages\RegistrarExpediente\RegistrarExpediente.html"*/'<!-- -->\n<ion-header>\n  <ion-navbar color="miTema">\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      <strong>Registrar Info. de Expedientes\n      </strong>\n    </ion-title>\n    <ion-buttons end>\n\n      <button ion-button tappable (click)="logout()">\n        <ion-icon name="log-out" style="zoom: 130%"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n\n  \n\n  \n<ion-content no-padding class="animated fadeIn  common-bg page-consulta">\n\n\n  <form class="list-form-home" [formGroup]="dataService._form"  *ngIf="!colapse">\n\n    <ion-grid>\n      <ion-row>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label floating class="labelFont">\n              <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n              Nro. Exp. Integral\n            </ion-label>\n            <ion-input type="text" class="text-primary-login sinespacio" maxLength="25" name="numeroExpedienteIntegral" id="numeroExpedienteIntegral" formControlName="numeroExpedienteIntegral" [(ngModel)]="dataService.dataRegistrarExp.numeroExpedienteIntegral"></ion-input>\n\n          </ion-item>\n        </ion-col>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label floating class="labelFont">\n              <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n              Nro. Exp. Interno\n            </ion-label>\n            <ion-input type="text" class="text-primary-login sinespacio" maxLength="25" name="numeroExpedienteInterno" id="numeroExpedienteInterno" formControlName="numeroExpedienteInterno" [(ngModel)]="dataService.dataRegistrarExp.numeroExpedienteInterno"></ion-input>\n\n          </ion-item>\n        </ion-col>\n        <ion-col col-12>\n          <ion-item>\n            <ion-label floating class="labelFont">\n              <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n              Nombre de  la empresa\n            </ion-label>\n            <ion-input type="text" class="text-primary-login sinespacio" maxLength="25" name="nombreEmpresa" id="nombreEmpresa" formControlName="nombreEmpresa" [(ngModel)]="dataService.dataRegistrarExp.nombreEmpresa"></ion-input>\n\n          </ion-item>\n        </ion-col>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label floating class="labelFont">\n              <ion-icon name="md-calendar" cancelText ="Cancelar" doneText="Guardar" item-start class="text-primary-login"></ion-icon>\n              Fecha Desde\n              \n\n            </ion-label>\n            <ion-datetime displayFormat="YYYY-MM-DD" max ="{{myDate | date:\'yyyy-MM-dd\'}}" cancelText ="Cancelar" doneText="Guardar" name="fechaDesde" id="fechaDesde" formControlName="fechaDesde" [(ngModel)]="dataService.dataRegistrarExp.fechaDesde"></ion-datetime>\n\n          </ion-item>\n        </ion-col>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label floating class="labelFont">\n              <ion-icon name="md-calendar" item-start class="text-primary-login" ></ion-icon>\n              Fecha Hasta\n            </ion-label>\n            <ion-datetime displayFormat="YYYY-MM-DD" max ="{{myDate | date:\'yyyy-MM-dd\'}}" cancelText ="Cancelar" doneText="Guardar" name="fechaHasta" id="fechaHasta" formControlName="fechaHasta" [(ngModel)]="dataService.dataRegistrarExp.fechaHasta"></ion-datetime>\n          </ion-item>\n        </ion-col>\n      </ion-row>\n    </ion-grid>\n    <button ion-button icon-start block color="dark" class="buttontn" tappable (click)="loadDataExpedientes(dataService.dataRegistrarExp)">\n      <ion-icon name="md-search"></ion-icon>\n      Buscar\n    </button>\n\n    \n  </form>\n\n\n  <div text-center *ngIf="dataService.ReportExpediente.length==0; else hasElement">\n    <h4 class="img">Sin registros para mostrar</h4>\n  </div>\n  <ng-template #hasElement>\n    <ion-list>\n      <ion-list-header>\n        <h2><strong>Resultados</strong> </h2>\n      </ion-list-header>\n      <ion-item-sliding *ngFor="let item of dataService.ReportExpediente">\n        <ion-item class="item item-block item-md">\n            <ion-icon name="md-document" color="primary" item-start></ion-icon>\n             <ion-label text-wrap col-9>\n               <h2>{{item.NroExpedienteIntegral}}</h2>\n               <p>{{item.Actividad}}</p>\n             </ion-label>\n             <ion-label text-wrap class="wrap-dateTime" col-3>\n                {{item.FechaInicio}}\n             </ion-label>\n        </ion-item>\n        <ion-item-options side="right">\n          <button ion-button color="miTema" (click)="showModal(item)">\n            <ion-icon name="md-eye"></ion-icon>\n            Visualizar\n          </button>\n        </ion-item-options>\n      \n      </ion-item-sliding>\n\n    </ion-list>\n\n  </ng-template>\n\n  \n  \n\n</ion-content>\n\n<ion-footer no-border>\n  \n    <!--<div  align="center"> <br><br>\n      <ion-fab right bottom>\n        <button ion-fab (click)="colapse=!colapse" *ngIf="!colapse" color="danger">\n          <ion-icon name="md-search"></ion-icon>\n        </button>\n  \n        <button ion-fab  (click)="colapse=!colapse;" *ngIf="colapse">\n          <ion-icon name="md-search"></ion-icon>\n        </button>\n  \n      </ion-fab>\n  \n    </div>-->\n    \n</ion-footer>\n'/*ion-inline-end:"C:\Projects\APPSTSS\AppMovil\src\pages\RegistrarExpediente\RegistrarExpediente.html"*/,
+            selector: 'page-nosotros',template:/*ion-inline-start:"C:\Projects\APPSTSS\AppMovil\src\pages\RegistrarExpediente\RegistrarExpediente.html"*/'<!-- -->\n<ion-header>\n  <ion-navbar color="miTema">\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      <strong>Registrar Info. de Expedientes\n      </strong>\n    </ion-title>\n    <ion-buttons end>\n\n      <button ion-button tappable (click)="logout()">\n        <ion-icon name="log-out" style="zoom: 130%"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n\n  \n\n  \n<ion-content no-padding class="animated fadeIn  common-bg page-consulta">\n\n\n  <form class="list-form-home" [formGroup]="dataService._form"  *ngIf="!colapse">\n\n    <ion-grid>\n      <ion-row>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label floating class="labelFont">\n              <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n              Nro. Exp. Integral\n            </ion-label>\n            <ion-input type="text" class="text-primary-login sinespacio" maxLength="25" name="numeroExpedienteIntegral" id="numeroExpedienteIntegral" formControlName="numeroExpedienteIntegral" [(ngModel)]="dataService.dataRegistrarExp.numeroExpedienteIntegral"></ion-input>\n\n          </ion-item>\n        </ion-col>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label floating class="labelFont">\n              <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n              Nro. Exp. Interno\n            </ion-label>\n            <ion-input type="text" class="text-primary-login sinespacio" maxLength="25" name="numeroExpedienteInterno" id="numeroExpedienteInterno" formControlName="numeroExpedienteInterno" [(ngModel)]="dataService.dataRegistrarExp.numeroExpedienteInterno"></ion-input>\n\n          </ion-item>\n        </ion-col>\n        <ion-col col-12>\n          <ion-item>\n            <ion-label floating class="labelFont">\n              <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n              Nombre de  la empresa\n            </ion-label>\n            <ion-input type="text" class="text-primary-login sinespacio" maxLength="25" name="nombreEmpresa" id="nombreEmpresa" formControlName="nombreEmpresa" [(ngModel)]="dataService.dataRegistrarExp.nombreEmpresa"></ion-input>\n\n          </ion-item>\n        </ion-col>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label floating class="labelFont">\n              <ion-icon name="md-calendar" cancelText ="Cancelar" doneText="Guardar" item-start class="text-primary-login"></ion-icon>\n              Fecha Desde\n              \n\n            </ion-label>\n            <ion-datetime displayFormat="YYYY-MM-DD" max ="{{myDate | date:\'yyyy-MM-dd\'}}" cancelText ="Cancelar" doneText="Guardar" name="fechaDesde" id="fechaDesde" formControlName="fechaDesde" [(ngModel)]="dataService.dataRegistrarExp.fechaDesde"></ion-datetime>\n\n          </ion-item>\n        </ion-col>\n        <ion-col col-6>\n          <ion-item>\n            <ion-label floating class="labelFont">\n              <ion-icon name="md-calendar" item-start class="text-primary-login" ></ion-icon>\n              Fecha Hasta\n            </ion-label>\n            <ion-datetime displayFormat="YYYY-MM-DD" max ="{{myDate | date:\'yyyy-MM-dd\'}}" cancelText ="Cancelar" doneText="Guardar" name="fechaHasta" id="fechaHasta" formControlName="fechaHasta" [(ngModel)]="dataService.dataRegistrarExp.fechaHasta"></ion-datetime>\n          </ion-item>\n        </ion-col>\n      </ion-row>\n    </ion-grid>\n    <button ion-button icon-start block color="dark" class="buttontn" tappable (click)="loadDataExpedientes(dataService.dataRegistrarExp)">\n      <ion-icon name="md-search"></ion-icon>\n      Buscar\n    </button>\n\n    \n  </form>\n\n\n  <div text-center *ngIf="dataService.ReportExpediente.length==0; else hasElement">\n    <h4 class="img">Sin registros para mostrar</h4>\n  </div>\n  <ng-template #hasElement>\n    <ion-list>\n      <ion-list-header>\n        <h2><strong>Resultados</strong> </h2>\n      </ion-list-header>\n      <ion-item-sliding *ngFor="let item of dataService.ReportExpediente;index as i">\n        <ion-item class="item item-block item-md">\n            <ion-icon name="md-document" color="primary" item-start></ion-icon>\n             <ion-label text-wrap col-9>\n               <h2>{{item.NroExpedienteIntegral}}</h2>\n               <p>{{item.Actividad}}</p>\n             </ion-label>\n             <ion-label text-wrap class="wrap-dateTime" col-3>\n                {{item.FechaInicio}}\n             </ion-label>\n        </ion-item>\n        <ion-item-options side="right">\n          <button ion-button color="miTema" (click)="showModal(item,i)">\n            <ion-icon name="md-eye"></ion-icon>\n            Visualizar\n          </button>\n        </ion-item-options>\n      \n      </ion-item-sliding>\n\n    </ion-list>\n\n  </ng-template>\n\n  \n  \n\n</ion-content>\n\n<ion-footer no-border>\n  \n    <!--<div  align="center"> <br><br>\n      <ion-fab right bottom>\n        <button ion-fab (click)="colapse=!colapse" *ngIf="!colapse" color="danger">\n          <ion-icon name="md-search"></ion-icon>\n        </button>\n  \n        <button ion-fab  (click)="colapse=!colapse;" *ngIf="colapse">\n          <ion-icon name="md-search"></ion-icon>\n        </button>\n  \n      </ion-fab>\n  \n    </div>-->\n    \n</ion-footer>\n'/*ion-inline-end:"C:\Projects\APPSTSS\AppMovil\src\pages\RegistrarExpediente\RegistrarExpediente.html"*/,
             styles: ['RegistrarExpediente.scss'],
             providers: [__WEBPACK_IMPORTED_MODULE_2__services_dataService__["a" /* DataService */], __WEBPACK_IMPORTED_MODULE_3__services_ServiceGlobals__["a" /* ServiceGlobals */], __WEBPACK_IMPORTED_MODULE_7__services_ServiceAlert__["a" /* ServiceAlert */], __WEBPACK_IMPORTED_MODULE_8__services_Messages__["a" /* Menssages */], __WEBPACK_IMPORTED_MODULE_9__services_AuthenticationService__["a" /* AuthenticationService */]]
         }),
@@ -1648,12 +1655,12 @@ var ModalRegistrarComponent = /** @class */ (function () {
             'tipoActa': new __WEBPACK_IMPORTED_MODULE_2__angular_forms__["FormControl"](null, [
                 __WEBPACK_IMPORTED_MODULE_2__angular_forms__["Validators"].required
             ]),
-            'TieneInfraccion': new __WEBPACK_IMPORTED_MODULE_2__angular_forms__["FormControl"](null, [
-                __WEBPACK_IMPORTED_MODULE_2__angular_forms__["Validators"].required
-            ]),
-            'TieneArregloPago': new __WEBPACK_IMPORTED_MODULE_2__angular_forms__["FormControl"](null, [
-                __WEBPACK_IMPORTED_MODULE_2__angular_forms__["Validators"].required
-            ]),
+            // 'TieneInfraccion': new FormControl(null, [
+            //   Validators.required
+            // ]),
+            // 'TieneArregloPago': new FormControl(null, [
+            //   Validators.required
+            // ]),
             // 'file': new FormControl(null, [
             //   Validators.required
             // ]),
@@ -1667,11 +1674,10 @@ var ModalRegistrarComponent = /** @class */ (function () {
         this.extensiones = ".png";
     }
     ModalRegistrarComponent.prototype.closeModal = function () {
-        var data = { 'foo': 'bar' };
-        this.viewCtrl.dismiss(data);
+        this.viewCtrl.dismiss();
     };
-    ModalRegistrarComponent.prototype.dismiss = function () {
-        var data = { 'foo': 'bar' };
+    ModalRegistrarComponent.prototype.dismiss = function (expediente) {
+        var data = { 'numExp': expediente };
         this.viewCtrl.dismiss(data);
     };
     ModalRegistrarComponent.prototype.TakePicture = function (e) {
@@ -2123,7 +2129,7 @@ var ModalRegistrarComponent = /** @class */ (function () {
                         console.log(result);
                         this._serviceAlert.presentConfirm('datos actualizados');
                         this._serviceAlert.dismissLoading();
-                        this.closeModal();
+                        this.dismiss(insert.NroExpedienteIntegral);
                         return [3 /*break*/, 4];
                     case 3:
                         e_1 = _a.sent();
@@ -2132,7 +2138,7 @@ var ModalRegistrarComponent = /** @class */ (function () {
                             this._serviceAlert.presentConfirm('No se puedo establecer conexion a internet, se almacenara la información para su procesamiento ');
                             this.setToLocalStorage(insert);
                             this._serviceAlert.dismissLoading();
-                            this.closeModal();
+                            this.dismiss(insert.NroExpedienteIntegral);
                         }
                         else {
                             this._serviceAlert.presentConfirm('Error al actualizar los datos, verificque la informacion ingresada');
@@ -2227,10 +2233,18 @@ var ModalRegistrarComponent = /** @class */ (function () {
             styles: ['./modal-registrar.scss'],
             providers: [__WEBPACK_IMPORTED_MODULE_4__services_ServiceGlobals__["a" /* ServiceGlobals */], __WEBPACK_IMPORTED_MODULE_3__services_ServiceAlert__["a" /* ServiceAlert */], __WEBPACK_IMPORTED_MODULE_6__services_dataService__["a" /* DataService */], __WEBPACK_IMPORTED_MODULE_5__services_Messages__["a" /* Menssages */], __WEBPACK_IMPORTED_MODULE_9__services_PhotoService__["b" /* PhotoService */]]
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["q" /* ViewController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["q" /* ViewController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__services_ServiceAlert__["a" /* ServiceAlert */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_ServiceAlert__["a" /* ServiceAlert */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_6__services_dataService__["a" /* DataService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__services_dataService__["a" /* DataService */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_4__services_ServiceGlobals__["a" /* ServiceGlobals */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_ServiceGlobals__["a" /* ServiceGlobals */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_5__services_Messages__["a" /* Menssages */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__services_Messages__["a" /* Menssages */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* NavParams */]) === "function" && _h || Object, typeof (_j = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* ModalController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* ModalController */]) === "function" && _j || Object, typeof (_k = typeof __WEBPACK_IMPORTED_MODULE_9__services_PhotoService__["b" /* PhotoService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_9__services_PhotoService__["b" /* PhotoService */]) === "function" && _k || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["q" /* ViewController */],
+            __WEBPACK_IMPORTED_MODULE_3__services_ServiceAlert__["a" /* ServiceAlert */],
+            __WEBPACK_IMPORTED_MODULE_6__services_dataService__["a" /* DataService */],
+            __WEBPACK_IMPORTED_MODULE_4__services_ServiceGlobals__["a" /* ServiceGlobals */],
+            __WEBPACK_IMPORTED_MODULE_5__services_Messages__["a" /* Menssages */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* NavParams */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* ModalController */],
+            __WEBPACK_IMPORTED_MODULE_9__services_PhotoService__["b" /* PhotoService */]])
     ], ModalRegistrarComponent);
     return ModalRegistrarComponent;
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
 }());
 
 //# sourceMappingURL=modal-registrar.js.map
@@ -2748,10 +2762,15 @@ var ModalFormaPagoComponent = /** @class */ (function () {
             //styleUrls:['modal-pago.scss'], 
             providers: [__WEBPACK_IMPORTED_MODULE_2__services_dataService__["a" /* DataService */], __WEBPACK_IMPORTED_MODULE_3__services_ServiceAlert__["a" /* ServiceAlert */], __WEBPACK_IMPORTED_MODULE_4__services_ServiceGlobals__["a" /* ServiceGlobals */], __WEBPACK_IMPORTED_MODULE_5__services_Messages__["a" /* Menssages */], __WEBPACK_IMPORTED_MODULE_7__angular_common__["CurrencyPipe"]]
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["q" /* ViewController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["q" /* ViewController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__services_dataService__["a" /* DataService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_dataService__["a" /* DataService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* NavParams */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__services_ServiceAlert__["a" /* ServiceAlert */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_ServiceAlert__["a" /* ServiceAlert */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__services_ServiceGlobals__["a" /* ServiceGlobals */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_ServiceGlobals__["a" /* ServiceGlobals */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_5__services_Messages__["a" /* Menssages */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__services_Messages__["a" /* Menssages */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_7__angular_common__["CurrencyPipe"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_7__angular_common__["CurrencyPipe"]) === "function" && _g || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["q" /* ViewController */],
+            __WEBPACK_IMPORTED_MODULE_2__services_dataService__["a" /* DataService */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* NavParams */],
+            __WEBPACK_IMPORTED_MODULE_3__services_ServiceAlert__["a" /* ServiceAlert */],
+            __WEBPACK_IMPORTED_MODULE_4__services_ServiceGlobals__["a" /* ServiceGlobals */],
+            __WEBPACK_IMPORTED_MODULE_5__services_Messages__["a" /* Menssages */],
+            __WEBPACK_IMPORTED_MODULE_7__angular_common__["CurrencyPipe"]])
     ], ModalFormaPagoComponent);
     return ModalFormaPagoComponent;
-    var _a, _b, _c, _d, _e, _f, _g;
 }());
 
 //# sourceMappingURL=modal-forma-pago.js.map

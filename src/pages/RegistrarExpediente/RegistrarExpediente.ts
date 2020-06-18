@@ -61,10 +61,6 @@ export class RegistrarExpedienteComponent implements OnInit {
   rootPage: any = LoginPage;
   myDate = new Date();
 
-
-
-
-
   constructor(
     public nav: NavController,
     public popoverCtrl: PopoverController,
@@ -223,14 +219,18 @@ export class RegistrarExpedienteComponent implements OnInit {
     actionSheet.present();
   }
 
-   showModal(datafront:any) {
+   showModal(datafront:any,index:number) {
     var dataMo = {
-      datapass: datafront
+      datapass: datafront,
     };
-
     let modal = this.myModal.create(ModalRegistrarComponent, dataMo);
-    modal.onDidDismiss(data=>{
-      console.log(data);
+    modal.onDidDismiss( data=>{
+      this.dataService.ReportExpediente=  this.dataService.ReportExpediente.filter(function(current){
+          if (current['NroExpedienteIntegral'] !== data['numExp']){
+            return current
+          }
+        })
+
     });
     modal.present();
  
@@ -240,6 +240,8 @@ export class RegistrarExpedienteComponent implements OnInit {
     this.auth.logOut();
     this.nav.push(LoginPage);
   }
+
+ 
 }
 
 //

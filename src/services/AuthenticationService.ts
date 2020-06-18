@@ -17,7 +17,7 @@ export class AuthenticationService {
           localStorage.setItem('tokenSTS', data['Data'].Token);
           localStorage.setItem('typouser', data['Data'].IdPatrono)
          
-          result.data = { typo: data['Data'].IdPatrono, changedPass: data['Data'].UsuarioPerfil.CambioContrasena };
+          result.data = { typo: data['Data'].IdPatrono, changedPass: data['Data'].ChangedPass };
 
           return result;
         },e=>{
