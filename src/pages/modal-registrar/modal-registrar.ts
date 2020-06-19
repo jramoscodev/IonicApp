@@ -628,24 +628,29 @@ export class ModalRegistrarComponent implements OnInit {
   async Save(comp) {
 
 
+    if(this.hasInfraction && this.payment == undefined){
+      this._serviceAlert.presentConfirm('Debe agregar arreglo de pago');
+      return;
+
+    }
+
     let insert = new InsertActaModel();
    
     insert.IdAccionSeguimiento = comp.ListaAcciones[0].IdAccionSeguimientoFlujo;
     insert.NroExpedienteIntegral = comp.NroExpedienteIntegral;
     insert.NroExpedienteInterno = comp.NroExpedienteInterno;
-    insert.Tipo = 178;
+   // insert.Tipo = 178;
     insert.FechaActa = comp.FechaActa;
-    insert.RutaArchivo=this.rutaFinal;
-    insert.TieneInfraccion= comp.TieneInfraccion;
-    insert.TieneArregloPago= comp.TieneArregloPago;
-    insert.Estado = 10;
+    insert.TieneInfraccion= this.hasInfraction ? 1:0;
+    insert.TieneArregloPago = this.hasInfraction ? 1 : 0;
+    //insert.Estado = 10;
     insert.rutasActas = this.actaFiles;
     insert.rutasAttch = this.attchFiles;
     insert.IdAccionSeguimiento= comp.ListaAcciones[0].IdAccionSeguimientoFlujo;
     insert.ArregloPago = this.payment;
     this._serviceAlert.showLoading()
    try{
-     
+     console.log('request:',insert)
      let result = await this.ServiceGlobal.UpdateActa(insert);
      console.log(result);
 

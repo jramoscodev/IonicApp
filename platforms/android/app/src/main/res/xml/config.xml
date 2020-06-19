@@ -1,10 +1,34 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.secretariaseguridad.app" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <feature name="CallNumber">
-        <param name="android-package" value="com.rohithvaranasi.callnumber.CFCallNumber" />
+    <feature name="Whitelist">
+        <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="StatusBar">
+        <param name="android-package" value="org.apache.cordova.statusbar.StatusBar" />
+        <param name="onload" value="true" />
     </feature>
     <feature name="Device">
         <param name="android-package" value="org.apache.cordova.device.Device" />
+    </feature>
+    <feature name="SplashScreen">
+        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="CallNumber">
+        <param name="android-package" value="com.rohithvaranasi.callnumber.CFCallNumber" />
+    </feature>
+    <feature name="SQLitePlugin">
+        <param name="android-package" value="io.sqlc.SQLitePlugin" />
+    </feature>
+    <feature name="Camera">
+        <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
+    </feature>
+    <feature name="ImagePicker">
+        <param name="android-package" value="com.synconset.ImagePicker" />
+    </feature>
+    <feature name="NetworkStatus">
+        <param name="android-package" value="org.apache.cordova.networkinformation.NetworkManager" />
     </feature>
     <feature name="BackgroundMode">
         <param name="android-package" value="de.appplant.cordova.plugin.background.BackgroundMode" />
@@ -12,33 +36,9 @@
     <feature name="BackgroundModeExt">
         <param name="android-package" value="de.appplant.cordova.plugin.background.BackgroundModeExt" />
     </feature>
-    <feature name="Camera">
-        <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
-    </feature>
     <feature name="FilePath">
         <param name="android-package" value="com.hiddentao.cordova.filepath.FilePath" />
         <param name="onload" value="true" />
-    </feature>
-    <feature name="NetworkStatus">
-        <param name="android-package" value="org.apache.cordova.networkinformation.NetworkManager" />
-    </feature>
-    <feature name="SplashScreen">
-        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
-        <param name="onload" value="true" />
-    </feature>
-    <feature name="StatusBar">
-        <param name="android-package" value="org.apache.cordova.statusbar.StatusBar" />
-        <param name="onload" value="true" />
-    </feature>
-    <feature name="ImagePicker">
-        <param name="android-package" value="com.synconset.ImagePicker" />
-    </feature>
-    <feature name="Whitelist">
-        <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
-        <param name="onload" value="true" />
-    </feature>
-    <feature name="SQLitePlugin">
-        <param name="android-package" value="io.sqlc.SQLitePlugin" />
     </feature>
     <feature name="networkinterface">
         <param name="android-package" value="com.albahra.plugin.networkinterface.networkinterface" />
@@ -51,17 +51,17 @@
     <feature name="LocalNotification">
         <param name="android-package" value="de.appplant.cordova.plugin.localnotification.LocalNotification" />
     </feature>
-    <feature name="Chooser">
-        <param name="android-package" value="com.cyph.cordova.Chooser" />
-    </feature>
-    <feature name="CDVIonicKeyboard">
-        <param name="android-package" onload="true" value="io.ionic.keyboard.CDVIonicKeyboard" />
-    </feature>
     <allow-navigation href="http://localhost/*" />
     <allow-navigation href="https://localhost/*" />
     <allow-navigation href="ionic://*" />
     <feature name="IonicWebView">
         <param name="android-package" value="com.ionicframework.cordova.webview.IonicWebView" />
+    </feature>
+    <feature name="CDVIonicKeyboard">
+        <param name="android-package" onload="true" value="io.ionic.keyboard.CDVIonicKeyboard" />
+    </feature>
+    <feature name="Chooser">
+        <param name="android-package" value="com.cyph.cordova.Chooser" />
     </feature>
     <feature name="Badge">
         <param name="android-package" value="de.appplant.cordova.plugin.badge.Badge" />

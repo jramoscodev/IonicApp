@@ -40,6 +40,7 @@
                      [(ngModel)]="model.Nombre"
                      class="text-primary-login" 
                      maxLength="25"
+                     (ionBlur)="onBlurValidation($event)"
                      [readonly]="false"></ion-input>
         </ion-item>
       </ion-col>
@@ -52,6 +53,7 @@
           </ion-label>
           <ion-input id="conceptoPago" 
                      [(ngModel)]="model.ConceptoPago"
+                     (ionBlur)="onBlurValidation($event)"
                      name="ConceptoPago" ></ion-input>
         </ion-item>
       </ion-col>
@@ -64,6 +66,7 @@
           </ion-label>
           <ion-input id="DescripcionActa" 
                     [(ngModel)]="model.DescripcionActa"
+                    (ionBlur)="onBlurValidation($event)"
                     name="DescripcionActa"></ion-input>
         </ion-item>
       </ion-col>
@@ -75,9 +78,10 @@
             <span class="text-danger">*</span> Total a Pagar Lempiras
           </ion-label>
           <ion-input id="CantidadPago" 
-                    [(ngModel)]="model.TotalPago"
+                    [(ngModel)]="model.TotalPagar"
                     type="tel"
                     name="CantidadPago" class="numeros CurrencyInput"
+                    (ionBlur)="onBlurValidation($event)"
                     (keypress)="onKeyPress($event, $event.target.value)" >
           </ion-input>
         </ion-item>
@@ -92,8 +96,9 @@
                </ion-label>
                <ion-input type="tel" 
                           id="NumeroPago" class="numeros"
-                          [(ngModel)]="model.NumPagos"
+                          [(ngModel)]="model.CantidadPago"
                           (keypress)="onFeeKeyPress($event, $event.target.value)" 
+                          (ionBlur)="onBlurValidation($event)"
                           name="NumeroPago">
                </ion-input>
              </ion-item>
@@ -160,7 +165,7 @@
                             class="text-primary-login numeros"
                             (keypress)="onKeyPress($event, $event.target.value,i)"
                             (ionBlur)="onItemBlur()"
-                            [(ngModel)]="item.ValorPago"></ion-input>
+                            [(ngModel)]="item.ValorPagar"></ion-input>
                 </ion-item>
                  
               </ion-col>
@@ -190,17 +195,25 @@
 
    </ion-grid>
 
+  <ion-col col-12>
+    <ion-row>
+        <ion-item col-6>
+          <button ion-button icon-start block color="info" class="buttontn" tappable (click)="savePayment()">
+            <ion-icon name="md-checkmark-circle-outline"></ion-icon>
+            Guardar
+          </button>
+        </ion-item>
+        <ion-item col-6>
+          <button ion-button icon-start block color="danger" class="buttontn" tappable (click)="closeModal()">
+            <ion-icon name="md-close"></ion-icon>
+            Cancelar
+          </button>
+        </ion-item>
 
+    </ion-row>
 
-
-
-  <button ion-button icon-start block color="info" class="buttontn" tappable (click)="savePayment()">
-    <ion-icon name="md-checkmark-circle-outline"></ion-icon>
-    Guardar
-  </button>
-  <button ion-button icon-start block color="danger" class="buttontn" tappable (click)="closeModal()">
-    <ion-icon name="md-close"></ion-icon>
-    Cancelar
-  </button>
+  </ion-col>
+  
+  
 </ion-content>
 

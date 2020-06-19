@@ -1,16 +1,18 @@
+import { ArregloPagoModel } from "./ArregloPagoModel";
+
 
 export class InsertActaModel {
     IdAccionSeguimientoFlujo: any;
     NroExpedienteIntegral: any;
     NroExpedienteInterno: any;
-    Tipo: number;
+   // Tipo: number;
     FechaActa: any;
-    RutaArchivo: string;
+   // RutaArchivo: string;
     TieneInfraccion: any;
     TieneArregloPago: any;
-    Estado: number;
+    //Estado: number;
     rutasActas:any[];
     rutasAttch:any[];
     IdAccionSeguimiento:any;
-    ArregloPago:any;
+    ArregloPago: ArregloPagoModel;
 }

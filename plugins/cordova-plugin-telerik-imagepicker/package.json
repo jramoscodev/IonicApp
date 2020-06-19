@@ -21,7 +21,7 @@
   "_resolved": "https://registry.npmjs.org/cordova-plugin-telerik-imagepicker/-/cordova-plugin-telerik-imagepicker-2.3.3.tgz",
   "_shasum": "67c309eda940d980bdfa4b833edc575ab4797fd6",
   "_spec": "cordova-plugin-telerik-imagepicker@^2.3.3",
-  "_where": "C:\\Users\\jramos\\Downloads\\AppMovil_CodigoFuente\\AppMovil",
+  "_where": "C:\\Projects\\APPSTSS\\AppMovil",
   "bugs": {
     "url": "https://github.com/Telerik-Verified-Plugins/ImagePicker/issues"
   },

@@ -1,28 +1,27 @@
 {
-  "_from": "cordova-plugin-networkinterface",
+  "_from": "cordova-plugin-networkinterface@^2.0.0",
   "_id": "cordova-plugin-networkinterface@2.0.0",
   "_inBundle": false,
   "_integrity": "sha512-cvKkzUxhDhU1EYjFsj1wSYXBnK2qoop/7GiDenGPGR9JFHTYgi55HoJFxxBEaiPxH0uiKd97Bc/mw7ywdemjJQ==",
   "_location": "/cordova-plugin-networkinterface",
   "_phantomChildren": {},
   "_requested": {
-    "type": "tag",
+    "type": "range",
     "registry": true,
-    "raw": "cordova-plugin-networkinterface",
+    "raw": "cordova-plugin-networkinterface@^2.0.0",
     "name": "cordova-plugin-networkinterface",
     "escapedName": "cordova-plugin-networkinterface",
-    "rawSpec": "",
+    "rawSpec": "^2.0.0",
     "saveSpec": null,
-    "fetchSpec": "latest"
+    "fetchSpec": "^2.0.0"
   },
   "_requiredBy": [
-    "#USER",
     "/"
   ],
   "_resolved": "https://registry.npmjs.org/cordova-plugin-networkinterface/-/cordova-plugin-networkinterface-2.0.0.tgz",
   "_shasum": "b26871b75a788c8bdfa1cfcf7a8d67584bfeca59",
-  "_spec": "cordova-plugin-networkinterface",
-  "_where": "C:\\Users\\jramos\\Downloads\\AppMovil_CodigoFuente\\AppMovil",
+  "_spec": "cordova-plugin-networkinterface@^2.0.0",
+  "_where": "C:\\Projects\\APPSTSS\\AppMovil",
   "author": {
     "name": "Samer Albahra, tombolaLtd"
   },

@@ -4,9 +4,11 @@ export class ArregloPagoModel
     Nombre:String;
     ConceptoPago:String;
     DescripcionActa:String;
-    TotalPago:number;
-    NumPagos:number;
-    Pagos:Pagos[];
+    TotalPagar:number;
+    CantidadPago:number;
+    IdPatronoEmpleador:number;
+    IdTrabajador:number;
+    ArregloPago: Pagos[];
 
 }
 
@@ -15,5 +17,9 @@ export class Pagos {
     FechaPago:Date;
     FechaPagoText:String;
     MinDate:string;
-    ValorPago:any;
+    ValorPagar:any;
+}
+
+export class PagoTesoreria {
+    ListaDetallePago: Pagos[];
 }

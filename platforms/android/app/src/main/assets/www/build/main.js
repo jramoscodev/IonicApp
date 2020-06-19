@@ -233,6 +233,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __values = (this && this.__values) || function (o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+    if (m) return m.call(o);
+    return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+};
 
 
 
@@ -346,50 +356,88 @@ var ServiceGlobals = /** @class */ (function () {
     };
     ServiceGlobals.prototype.UpdateActa = function (request) {
         return __awaiter(this, void 0, void 0, function () {
-            var data, actas, i, arry, attch, i, arry, key;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var data, actas, i, arry, attch, i, arry, payment, i, setDate, key, _a, _b, pair, e_2, _c;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
                     case 0:
                         data = new FormData();
+                        data.append("IdRegistroActa", "0");
                         actas = request.rutasActas;
                         i = 0;
-                        _a.label = 1;
+                        _d.label = 1;
                     case 1:
                         if (!(i <= actas.length - 1)) return [3 /*break*/, 4];
                         return [4 /*yield*/, this.readFiles(actas[i].path, actas[i].name)];
                     case 2:
-                        arry = _a.sent();
+                        arry = _d.sent();
                         if (arry == null) {
                             return [3 /*break*/, 3];
                         }
                         data.append("filesActas[" + i + "]", new Blob([arry]), actas[i].name);
-                        _a.label = 3;
+                        _d.label = 3;
                     case 3:
                         i++;
                         return [3 /*break*/, 1];
                     case 4:
                         attch = request.rutasAttch;
                         i = 0;
-                        _a.label = 5;
+                        _d.label = 5;
                     case 5:
                         if (!(i <= attch.length - 1)) return [3 /*break*/, 8];
                         return [4 /*yield*/, this.readFiles(attch[i].path, attch[i].name)];
                     case 6:
-                        arry = _a.sent();
+                        arry = _d.sent();
                         if (arry == null) {
                             return [3 /*break*/, 7];
                         }
                         data.append("filesAttch[" + i + "]", new Blob([arry]), attch[i].name);
-                        _a.label = 7;
+                        _d.label = 7;
                     case 7:
                         i++;
                         return [3 /*break*/, 5];
                     case 8:
+                        //has payment FechaPago
+                        if (request.ArregloPago != undefined || request.ArregloPago != null) {
+                            if (request.ArregloPago.ArregloPago.length > 0) {
+                                payment = request.ArregloPago.ArregloPago;
+                                for (i = 0; i <= request.ArregloPago.ArregloPago.length - 1; i++) {
+                                    setDate = (new Date(payment[i].FechaPago)).toUTCString();
+                                    data.append("ArregloPago.ListaDetallePago[" + i + "].ValorPagar", payment[i].ValorPagar);
+                                    data.append("ArregloPago.ListaDetallePago[" + i + "].FechaPago", setDate);
+                                    data.append("ArregloPago.ListaDetallePago[" + i + "].IdPagoTesoreria", "0");
+                                    data.append("ArregloPago.ListaDetallePago[" + i + "].IdDetallePago", "0");
+                                }
+                            }
+                            data.append("ArregloPago.IdTrabajador", request.ArregloPago.IdTrabajador == null ? "0" :
+                                request.ArregloPago.IdTrabajador.toString());
+                            data.append("ArregloPago.IdPatronoEmpleador", request.ArregloPago.IdPatronoEmpleador.toString());
+                            data.append("ArregloPago.NombreEncargado", request.ArregloPago.Nombre.toString());
+                            data.append("ArregloPago.ConceptoPago", request.ArregloPago.ConceptoPago.toString());
+                            data.append("ArregloPago.NroExpedienteIntegral", request.ArregloPago.NroExpedienteIntegral.toString());
+                            data.append("ArregloPago.TotalPagar", request.ArregloPago.TotalPagar.toString());
+                            data.append("ArregloPago.CantidadPago", request.ArregloPago.CantidadPago.toString());
+                            data.append("ArregloPago.DescripcionActa", request.ArregloPago.DescripcionActa.toString());
+                            data.append("ArregloPago.IdSolicitudArregloPago", "0");
+                        }
+                        data.append("IdAccionSeguimientoFlujo", request.IdAccionSeguimiento);
                         for (key in request) {
-                            if (key == 'rutasActas' || key == 'rutasAttch') {
+                            if (key == 'rutasActas' || key == 'rutasAttch' || key == 'ArregloPago') {
                                 continue;
                             }
                             data.append("" + key, request[key]);
+                        }
+                        try {
+                            for (_a = __values(data.entries()), _b = _a.next(); !_b.done; _b = _a.next()) {
+                                pair = _b.value;
+                                console.log(pair[0] + ', ' + pair[1]);
+                            }
+                        }
+                        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+                        finally {
+                            try {
+                                if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+                            }
+                            finally { if (e_2) throw e_2.error; }
                         }
                         return [2 /*return*/, this.http.post(this._url.BaseUrl + "/riesgoprofesional/insertarregistroactaappmovil", data, {
                                 headers: new __WEBPACK_IMPORTED_MODULE_4__angular_common_http__["c" /* HttpHeaders */]().set('enctype', 'multipart/form-data').set('XAuthToken', localStorage.getItem('tokenSTS'))
@@ -619,9 +667,10 @@ var Configuration = /** @class */ (function () {
         // public uriServer="http://201.220.133.207:81/";
         // public uriServer="http://201.220.133.218:8007/";
         // public uriServer="https://172.16.1.116:444/";
-        // public uriServer = "https://192.168.0.11:45455/";
+        // public uriServer = "https://192.168.0.10:45455/";
         this.uriServer = "https://ecms-backend.conveyor.cloud/";
         this.BaseUrl = "https://ecms-backend.conveyor.cloud/api";
+        //public BaseUrl = "https://192.168.0.10:45455/api";
         this.ServerLocal_Security = this.uriServer + 'api/seguridad/';
         this.serverLocalFlujo = this.uriServer + "api/flujos/";
         this.serverCambio = this.uriServer + "api/";
@@ -2105,16 +2154,19 @@ var ModalRegistrarComponent = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        if (this.hasInfraction && this.payment == undefined) {
+                            this._serviceAlert.presentConfirm('Debe agregar arreglo de pago');
+                            return [2 /*return*/];
+                        }
                         insert = new __WEBPACK_IMPORTED_MODULE_11__Models_InsertActaModel__["a" /* InsertActaModel */]();
                         insert.IdAccionSeguimiento = comp.ListaAcciones[0].IdAccionSeguimientoFlujo;
                         insert.NroExpedienteIntegral = comp.NroExpedienteIntegral;
                         insert.NroExpedienteInterno = comp.NroExpedienteInterno;
-                        insert.Tipo = 178;
+                        // insert.Tipo = 178;
                         insert.FechaActa = comp.FechaActa;
-                        insert.RutaArchivo = this.rutaFinal;
-                        insert.TieneInfraccion = comp.TieneInfraccion;
-                        insert.TieneArregloPago = comp.TieneArregloPago;
-                        insert.Estado = 10;
+                        insert.TieneInfraccion = this.hasInfraction ? 1 : 0;
+                        insert.TieneArregloPago = this.hasInfraction ? 1 : 0;
+                        //insert.Estado = 10;
                         insert.rutasActas = this.actaFiles;
                         insert.rutasAttch = this.attchFiles;
                         insert.IdAccionSeguimiento = comp.ListaAcciones[0].IdAccionSeguimientoFlujo;
@@ -2123,6 +2175,7 @@ var ModalRegistrarComponent = /** @class */ (function () {
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
+                        console.log('request:', insert);
                         return [4 /*yield*/, this.ServiceGlobal.UpdateActa(insert)];
                     case 2:
                         result = _a.sent();
@@ -2229,7 +2282,7 @@ var ModalRegistrarComponent = /** @class */ (function () {
     };
     ModalRegistrarComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'modal-details',template:/*ion-inline-start:"C:\Projects\APPSTSS\AppMovil\src\pages\modal-registrar\modal-registrar.html"*/'<!--\n  Generated template for the ModalPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n\n<style>\n  input[type="file"] {\n    display: none;\n}\n.custom-file-upload {\n    border: 1px solid #ccc;\n    display: inline-block;\n    padding: 6px 12px;\n    cursor: pointer;\n}\n</style>\n<ion-header>\n\n  <ion-navbar color="miTema">\n    <ion-title>\n      <strong>Registrar Info. de Expediente\n      </strong>\n    </ion-title>\n    <ion-buttons end>\n      <button ion-button (click)="closeModal()">Cerrar</button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content no-padding>\n\n\n\n  <ion-content #popoverContent padding class="popover-page">\n\n    <form class="list-form-home" [formGroup]="ComForm">\n\n      <ion-grid>\n        <ion-row>\n          <ion-col col-12>\n            <ion-item>\n              <ion-label floating>\n                <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n                <span class="text-danger">*</span>\n                Razón Social\n              </ion-label>\n              <ion-input type="text" id="NombreRazon" name="NombreRazon" class="text-primary-login" maxLength="25"\n                formControlName="NombreRazon" [(ngModel)]="dataService.dataRegistrarExp.NombreRazon" [readonly]="true">\n              </ion-input>\n\n            </ion-item>\n          </ion-col>\n          <ion-col col-12>\n            <ion-item>\n              <ion-label floating>\n                <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n                <span class="text-danger">*</span>\n                Número de expediente integral\n              </ion-label>\n              <ion-input type="text" class="text-primary-login" maxLength="25" id="NroExpedienteIntegral"\n                name="NroExpedienteIntegral" formControlName="NroExpedienteIntegral"\n                [(ngModel)]="dataService.dataRegistrarExp.NroExpedienteIntegral" [readonly]="true"></ion-input>\n\n            </ion-item>\n          </ion-col>\n\n          <!--- -->\n          <ion-col col-12>\n            <ion-item>\n              <ion-label floating>\n                <ion-icon name="md-calendar" item-start class="text-primary-login"></ion-icon>\n                <span class="text-danger">*</span>\n                Fecha Registro\n              </ion-label>\n              <ion-input displayFormat="YYYY-MM-DD" id="FechaActa" name="FechaActa" formControlName="FechaActa"\n                [(ngModel)]="dataService.dataRegistrarExp.FechaActa" [readonly]="true"></ion-input>\n\n            </ion-item>\n          </ion-col>\n          <!--<ion-item>\n            <ion-label floating>              \n              Porcentaje de Avance {{dataService.dataRegistrarExp.Porcentaje}}%\n            </ion-label>\n            \n            <ion-range min="0" max="100" pin="true"  snaps="trues"  name="Porcentaje" id="Porcentaje"  [(ngModel)]="dataService.dataRegistrarExp.Porcentaje" formControlName="Porcentaje" color="secondary" >\n              <ion-icon range-left small name="ios-remove-circle-outline"></ion-icon>\n              <ion-icon range-right name="md-checkbox"></ion-icon>\n            </ion-range>\n          </ion-item>-->\n          <ion-col col-12>\n            <ion-item>\n              <ion-label floating>\n                <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n                <span class="text-danger">*</span>\n                Tipo de acta\n              </ion-label>\n              <ion-input type="text" class="text-primary-login" maxLength="25" id="tipoActa" name="tipoActa"\n                value="Acta circunstanciada" formControlName="tipoActa"\n                [(ngModel)]="dataService.dataRegistrarExp.tipoActa" [readonly]="true"></ion-input>\n\n            </ion-item>\n          </ion-col>\n\n          <!-- <ion-col col-12 *ngIf="listUsuario.length>0">\n            <ion-item>\n\n              <label for="">Inspector</label>\n              <ion-grid>\n                <ion-row>\n                  <ion-col col-12 *ngFor="let x of listUsuario">\n                    <div>\n                      {{x.NombreEmpleado}}\n\n                    </div>\n                  </ion-col>\n                </ion-row>\n              </ion-grid>\n\n\n            </ion-item>\n          </ion-col> -->\n          <ion-col col-12>\n            <ion-item>\n               <ion-label><span class="text-danger">*</span>Tiene Infracción </ion-label>\n               <ion-toggle (ionChange)="hasInfraction = !hasInfraction"></ion-toggle>\n              \n              <!-- <ion-label><span class="text-danger">*</span> Tiene Infracción</ion-label>\n\n              <ion-select okText="Guardar" cancelText="Cancelar" placeholder="Seleccione" id="TieneInfraccion"\n                name="TieneInfraccion" formControlName="TieneInfraccion"\n                [(ngModel)]="dataService.dataRegistrarExp.TieneInfraccion">\n                <ion-option value=1>Si</ion-option>\n                <ion-option value=0>No</ion-option>\n              </ion-select> -->\n            </ion-item>\n          </ion-col>\n\n          <ion-col col-12 *ngIf="hasInfraction">\n              <ion-item *ngIf="hasPayment == undefined || hasPayment == null;else showPayment">\n                <ion-label col-9><span class="text-danger">*</span>Agregar arreglo de pago</ion-label>\n                <ion-label col-2>\n                  <button ion-button icon-start icon-only [clear]="true" (click)="addPayment($event)">\n                    <ion-icon name="add-circle"></ion-icon>\n                  </button>\n                </ion-label>\n              </ion-item>\n          </ion-col>\n\n          <ng-template #showPayment>\n            <ion-item>\n              <ion-label text-wrap col-9>\n                <h3>{{payment.Nombre}}</h3>\n                <p>Monto: {{payment.TotalPago | currency:\'L. \'}} cuotas: {{payment.NumPagos}}</p>\n            \n              </ion-label>\n              <ion-label col-2>\n                 <button ion-button icon-only [clear]="true" color="danger" (click)="deletePayment()">\n                   <ion-icon name="trash"></ion-icon>\n                 </button>\n              </ion-label>\n            </ion-item>\n                \n          </ng-template>\n         \n\n          <ion-col col-12>\n            <ion-item>\n              <ion-label text-wrap col-7>\n                <span class="text-danger">*</span>\n                Adjuntar Acta Circunstanciada\n              </ion-label>\n              \n              <ion-label col-2>\n                <button ion-button icon-only [clear]="true" (click)="TakePicture($event)">\n                 <ion-icon name="camera"></ion-icon>\n                </button>\n              </ion-label> \n\n           \n              <ion-label col-2>\n                 <button ion-button icon-only [clear]="true" (click)="presentActionSheet()">\n                   <ion-icon name="attach"></ion-icon>\n                 </button>\n                 \n              </ion-label>\n\n            </ion-item>\n\n          </ion-col>\n\n          <ion-col col-12>\n\n            <ion-list>\n              <ion-item-sliding *ngFor="let item of actaFiles?.reverse() ">\n                <ion-item>\n                  <ion-label text-wrap col-10>\n                    {{item.name}}\n                  </ion-label>\n                  <ion-label col-2>\n                    <button ion-button icon-only [clear]="true" color="danger" (click)="delete(item)">\n                      <ion-icon name="trash"></ion-icon>\n                    </button>\n                  </ion-label>\n                </ion-item>\n                <ion-item-options side="right">\n\n                  <button ion-button color="danger" (click)="delete(item)">\n                    <ion-icon name="trash"></ion-icon> Eliminar\n                  </button>\n                </ion-item-options>\n\n\n              </ion-item-sliding>\n            </ion-list>\n\n          </ion-col>\n\n\n\n\n          <ion-col col-12>\n            <ion-item>\n              <ion-label text-wrap col-8>\n                <span class="text-danger">*</span>\n                Adjuntar Archivo\n              </ion-label>\n               <ion-label col-2>\n                 <button ion-button icon-only [clear]="true" (click)="presentFileActionSheet()">\n                   <ion-icon name="attach"></ion-icon>\n                 </button>\n\n               </ion-label>\n            </ion-item>\n          </ion-col>\n\n\n          <ion-col col-12>\n\n            <ion-list>\n              <ion-item-sliding *ngFor="let attch of attchFiles?.reverse() ">\n                <ion-item>\n                  <ion-label text-wrap col-10>\n                    {{attch.name}}\n                  </ion-label>\n                  <ion-label col-2>\n                    <button ion-button icon-only [clear]="true" color="danger" (click)="deleteAttch(attch)">\n                      <ion-icon name="trash"></ion-icon>\n                    </button>\n                  </ion-label>\n                </ion-item>\n                <ion-item-options side="right">\n\n                  <button ion-button color="danger" (click)="deleteAttch(attch)">\n                    <ion-icon name="trash"></ion-icon> Eliminar\n                  </button>\n                </ion-item-options>\n\n\n              </ion-item-sliding>\n            </ion-list>\n\n          </ion-col>\n          \n\n\n\n\n          <ion-col col-6>\n            <ion-item>\n              <button ion-button icon-start block color="info" class="buttontn" tappable\n                (click)="Save(dataService.dataRegistrarExp)" [disabled]="!ComForm.valid || attchFiles.length==0 ||\n                actaFiles.length==0">\n                <ion-icon name="md-checkmark-circle-outline"></ion-icon>\n                Guardar\n              </button>\n            </ion-item>\n          </ion-col>\n          <ion-col col-6>\n            <ion-item>\n              <button ion-button icon-start block color="danger" class="buttontn" tappable (click)="closeModal()">\n                <ion-icon name="md-close"></ion-icon>\n                Cancelar\n              </button>\n            </ion-item>\n          </ion-col>\n\n        </ion-row>\n      </ion-grid>\n      <br><br>\n\n    </form>\n\n\n\n\n\n  </ion-content>\n\n\n\n\n</ion-content>\n'/*ion-inline-end:"C:\Projects\APPSTSS\AppMovil\src\pages\modal-registrar\modal-registrar.html"*/,
+            selector: 'modal-details',template:/*ion-inline-start:"C:\Projects\APPSTSS\AppMovil\src\pages\modal-registrar\modal-registrar.html"*/'<!--\n  Generated template for the ModalPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n\n<style>\n  input[type="file"] {\n    display: none;\n}\n.custom-file-upload {\n    border: 1px solid #ccc;\n    display: inline-block;\n    padding: 6px 12px;\n    cursor: pointer;\n}\n</style>\n<ion-header>\n\n  <ion-navbar color="miTema">\n    <ion-title>\n      <strong>Registrar Info. de Expediente\n      </strong>\n    </ion-title>\n    <ion-buttons end>\n      <button ion-button (click)="closeModal()">Cerrar</button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content no-padding>\n\n\n\n  <ion-content #popoverContent padding class="popover-page">\n\n    <form class="list-form-home" [formGroup]="ComForm">\n\n      <ion-grid>\n        <ion-row>\n          <ion-col col-12>\n            <ion-item>\n              <ion-label floating>\n                <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n                <span class="text-danger">*</span>\n                Razón Social\n              </ion-label>\n              <ion-input type="text" id="NombreRazon" name="NombreRazon" class="text-primary-login" maxLength="25"\n                formControlName="NombreRazon" [(ngModel)]="dataService.dataRegistrarExp.NombreRazon" [readonly]="true">\n              </ion-input>\n\n            </ion-item>\n          </ion-col>\n          <ion-col col-12>\n            <ion-item>\n              <ion-label floating>\n                <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n                <span class="text-danger">*</span>\n                Número de expediente integral\n              </ion-label>\n              <ion-input type="text" class="text-primary-login" maxLength="25" id="NroExpedienteIntegral"\n                name="NroExpedienteIntegral" formControlName="NroExpedienteIntegral"\n                [(ngModel)]="dataService.dataRegistrarExp.NroExpedienteIntegral" [readonly]="true"></ion-input>\n\n            </ion-item>\n          </ion-col>\n\n          <!--- -->\n          <ion-col col-12>\n            <ion-item>\n              <ion-label floating>\n                <ion-icon name="md-calendar" item-start class="text-primary-login"></ion-icon>\n                <span class="text-danger">*</span>\n                Fecha Registro\n              </ion-label>\n              <ion-input displayFormat="YYYY-MM-DD" id="FechaActa" name="FechaActa" formControlName="FechaActa"\n                [(ngModel)]="dataService.dataRegistrarExp.FechaActa" [readonly]="true"></ion-input>\n\n            </ion-item>\n          </ion-col>\n          <!--<ion-item>\n            <ion-label floating>              \n              Porcentaje de Avance {{dataService.dataRegistrarExp.Porcentaje}}%\n            </ion-label>\n            \n            <ion-range min="0" max="100" pin="true"  snaps="trues"  name="Porcentaje" id="Porcentaje"  [(ngModel)]="dataService.dataRegistrarExp.Porcentaje" formControlName="Porcentaje" color="secondary" >\n              <ion-icon range-left small name="ios-remove-circle-outline"></ion-icon>\n              <ion-icon range-right name="md-checkbox"></ion-icon>\n            </ion-range>\n          </ion-item>-->\n          <ion-col col-12>\n            <ion-item>\n              <ion-label floating>\n                <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n                <span class="text-danger">*</span>\n                Tipo de acta\n              </ion-label>\n              <ion-input type="text" class="text-primary-login" maxLength="25" id="tipoActa" name="tipoActa"\n                value="Acta circunstanciada" formControlName="tipoActa"\n                [(ngModel)]="dataService.dataRegistrarExp.tipoActa" [readonly]="true"></ion-input>\n\n            </ion-item>\n          </ion-col>\n\n          <!-- <ion-col col-12 *ngIf="listUsuario.length>0">\n            <ion-item>\n\n              <label for="">Inspector</label>\n              <ion-grid>\n                <ion-row>\n                  <ion-col col-12 *ngFor="let x of listUsuario">\n                    <div>\n                      {{x.NombreEmpleado}}\n\n                    </div>\n                  </ion-col>\n                </ion-row>\n              </ion-grid>\n\n\n            </ion-item>\n          </ion-col> -->\n          <ion-col col-12>\n            <ion-item>\n               <ion-label><span class="text-danger">*</span>Tiene Infracción </ion-label>\n               <ion-toggle (ionChange)="hasInfraction = !hasInfraction"></ion-toggle>\n              \n              <!-- <ion-label><span class="text-danger">*</span> Tiene Infracción</ion-label>\n\n              <ion-select okText="Guardar" cancelText="Cancelar" placeholder="Seleccione" id="TieneInfraccion"\n                name="TieneInfraccion" formControlName="TieneInfraccion"\n                [(ngModel)]="dataService.dataRegistrarExp.TieneInfraccion">\n                <ion-option value=1>Si</ion-option>\n                <ion-option value=0>No</ion-option>\n              </ion-select> -->\n            </ion-item>\n          </ion-col>\n\n          <ion-col col-12 *ngIf="hasInfraction">\n              <ion-item *ngIf="hasPayment == undefined || hasPayment == null;else showPayment">\n                <ion-label col-9><span class="text-danger">*</span>Agregar arreglo de pago</ion-label>\n                <ion-label col-2>\n                  <button ion-button icon-start icon-only [clear]="true" (click)="addPayment($event)">\n                    <ion-icon name="add-circle"></ion-icon>\n                  </button>\n                </ion-label>\n              </ion-item>\n          </ion-col>\n\n          <ng-template #showPayment>\n            <ion-item>\n              <ion-label text-wrap col-9>\n                <h3>{{payment.Nombre}}</h3>\n                <p>Monto: {{payment.TotalPagar | currency:\'L. \'}} cuotas: {{payment.CantidadPago}}</p>\n            \n              </ion-label>\n              <ion-label col-2>\n                 <button ion-button icon-only [clear]="true" color="danger" (click)="deletePayment()">\n                   <ion-icon name="trash"></ion-icon>\n                 </button>\n              </ion-label>\n            </ion-item>\n                \n          </ng-template>\n         \n\n          <ion-col col-12>\n            <ion-item>\n              <ion-label text-wrap col-7>\n                <span class="text-danger">*</span>\n                Adjuntar Acta Circunstanciada\n              </ion-label>\n              \n              <ion-label col-2>\n                <button ion-button icon-only [clear]="true" (click)="TakePicture($event)">\n                 <ion-icon name="camera"></ion-icon>\n                </button>\n              </ion-label> \n\n           \n              <ion-label col-2>\n                 <button ion-button icon-only [clear]="true" (click)="presentActionSheet()">\n                   <ion-icon name="attach"></ion-icon>\n                 </button>\n                 \n              </ion-label>\n\n            </ion-item>\n\n          </ion-col>\n\n          <ion-col col-12>\n\n            <ion-list>\n              <ion-item-sliding *ngFor="let item of actaFiles?.reverse() ">\n                <ion-item>\n                  <ion-label text-wrap col-10>\n                    {{item.name}}\n                  </ion-label>\n                  <ion-label col-2>\n                    <button ion-button icon-only [clear]="true" color="danger" (click)="delete(item)">\n                      <ion-icon name="trash"></ion-icon>\n                    </button>\n                  </ion-label>\n                </ion-item>\n                <ion-item-options side="right">\n\n                  <button ion-button color="danger" (click)="delete(item)">\n                    <ion-icon name="trash"></ion-icon> Eliminar\n                  </button>\n                </ion-item-options>\n\n\n              </ion-item-sliding>\n            </ion-list>\n\n          </ion-col>\n\n\n\n\n          <ion-col col-12>\n            <ion-item>\n              <ion-label text-wrap col-8>\n                <span class="text-danger">*</span>\n                Adjuntar Archivo\n              </ion-label>\n               <ion-label col-2>\n                 <button ion-button icon-only [clear]="true" (click)="presentFileActionSheet()">\n                   <ion-icon name="attach"></ion-icon>\n                 </button>\n\n               </ion-label>\n            </ion-item>\n          </ion-col>\n\n\n          <ion-col col-12>\n\n            <ion-list>\n              <ion-item-sliding *ngFor="let attch of attchFiles?.reverse() ">\n                <ion-item>\n                  <ion-label text-wrap col-10>\n                    {{attch.name}}\n                  </ion-label>\n                  <ion-label col-2>\n                    <button ion-button icon-only [clear]="true" color="danger" (click)="deleteAttch(attch)">\n                      <ion-icon name="trash"></ion-icon>\n                    </button>\n                  </ion-label>\n                </ion-item>\n                <ion-item-options side="right">\n\n                  <button ion-button color="danger" (click)="deleteAttch(attch)">\n                    <ion-icon name="trash"></ion-icon> Eliminar\n                  </button>\n                </ion-item-options>\n\n\n              </ion-item-sliding>\n            </ion-list>\n\n          </ion-col>\n          \n\n\n\n\n          <ion-col col-6>\n            <ion-item>\n              <button ion-button icon-start block color="info" class="buttontn" tappable\n                (click)="Save(dataService.dataRegistrarExp)" [disabled]="!ComForm.valid || attchFiles.length==0 ||\n                actaFiles.length==0">\n                <ion-icon name="md-checkmark-circle-outline"></ion-icon>\n                Guardar\n              </button>\n            </ion-item>\n          </ion-col>\n          <ion-col col-6>\n            <ion-item>\n              <button ion-button icon-start block color="danger" class="buttontn" tappable (click)="closeModal()">\n                <ion-icon name="md-close"></ion-icon>\n                Cancelar\n              </button>\n            </ion-item>\n          </ion-col>\n\n        </ion-row>\n      </ion-grid>\n      <br><br>\n\n    </form>\n\n\n\n\n\n  </ion-content>\n\n\n\n\n</ion-content>\n'/*ion-inline-end:"C:\Projects\APPSTSS\AppMovil\src\pages\modal-registrar\modal-registrar.html"*/,
             styles: ['./modal-registrar.scss'],
             providers: [__WEBPACK_IMPORTED_MODULE_4__services_ServiceGlobals__["a" /* ServiceGlobals */], __WEBPACK_IMPORTED_MODULE_3__services_ServiceAlert__["a" /* ServiceAlert */], __WEBPACK_IMPORTED_MODULE_6__services_dataService__["a" /* DataService */], __WEBPACK_IMPORTED_MODULE_5__services_Messages__["a" /* Menssages */], __WEBPACK_IMPORTED_MODULE_9__services_PhotoService__["b" /* PhotoService */]]
         }),
@@ -2309,6 +2362,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __values = (this && this.__values) || function (o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+    if (m) return m.call(o);
+    return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+};
 
 
 
@@ -2337,7 +2400,8 @@ var ModalFormaPagoComponent = /** @class */ (function () {
         var data = this.navParams.get("datapass");
         this.model = new __WEBPACK_IMPORTED_MODULE_8__Models_ArregloPagoModel__["a" /* ArregloPagoModel */]();
         this.model.NroExpedienteIntegral = data['NroExpedienteIntegral'];
-        console.log(data);
+        this.model.IdPatronoEmpleador = data['IdPatronoEmpleador'];
+        this.model.IdTrabajador = data['IdTrabajador'];
         this.dataService.dataRegistrarPago = {
             NroExpedienteIntegral: "",
             NroExpedienteInterno: "",
@@ -2415,15 +2479,24 @@ var ModalFormaPagoComponent = /** @class */ (function () {
         dataFront.nombre = dataFront.nombreEncargadoPago;
         console.log(dataFront.nombre);
         var sumaTotal = 0;
-        for (var _i = 0, _a = this.arregloPagos; _i < _a.length; _i++) {
-            var x = _a[_i];
-            if (x.FechaPago == '' || x.FechaPago == null || x.FechaPago == undefined) {
-                this._serviceAlert.presentConfirm("La fecha de pago es obligatoria");
-                sumaTotal = 0;
-                this._serviceAlert.dismissLoading();
-                return;
+        try {
+            for (var _a = __values(this.arregloPagos), _b = _a.next(); !_b.done; _b = _a.next()) {
+                var x = _b.value;
+                if (x.FechaPago == '' || x.FechaPago == null || x.FechaPago == undefined) {
+                    this._serviceAlert.presentConfirm("La fecha de pago es obligatoria");
+                    sumaTotal = 0;
+                    this._serviceAlert.dismissLoading();
+                    return;
+                }
+                sumaTotal += parseFloat(x.ValorPagar);
             }
-            sumaTotal += parseFloat(x.ValorPagar);
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+            }
+            finally { if (e_1) throw e_1.error; }
         }
         if (sumaTotal > parseFloat(dataFront.CantidadPago)) {
             this._serviceAlert.presentConfirm("El valor de los pagos sobrepasa el valor del pago total");
@@ -2488,6 +2561,7 @@ var ModalFormaPagoComponent = /** @class */ (function () {
             }
             _this._serviceAlert.dismissLoading();
         });
+        var e_1, _c;
     };
     ModalFormaPagoComponent.prototype.loadFormaPago = function () {
         var _this = this;
@@ -2581,7 +2655,7 @@ var ModalFormaPagoComponent = /** @class */ (function () {
         if (!this.Validate()) {
             return;
         }
-        this.model.Pagos = this.listaPagos;
+        this.model.ArregloPago = this.listaPagos;
         var data = { 'isSave': true, 'data': this.model };
         console.log('save data in dismiss');
         this.viewCtrl.dismiss(data);
@@ -2627,21 +2701,21 @@ var ModalFormaPagoComponent = /** @class */ (function () {
             var nextPay, cuota, i, pago;
             return __generator(this, function (_a) {
                 console.log(this.model);
-                if (this.model.NumPagos == undefined
-                    || this.model.NumPagos == null
-                    || this.model.TotalPago == undefined || this.model.TotalPago == null) {
+                if (this.model.CantidadPago == undefined
+                    || this.model.CantidadPago == null
+                    || this.model.TotalPagar == undefined || this.model.TotalPagar == null) {
                     return [2 /*return*/];
                 }
                 nextPay = new Date();
                 this.listaPagos = new Array();
-                cuota = Number.parseFloat((this.model.TotalPago / this.model.NumPagos).toFixed(2));
-                for (i = 0; i < this.model.NumPagos; i++) {
+                cuota = Number.parseFloat((this.model.TotalPagar / this.model.CantidadPago).toFixed(2));
+                for (i = 0; i < this.model.CantidadPago; i++) {
                     pago = new __WEBPACK_IMPORTED_MODULE_8__Models_ArregloPagoModel__["b" /* Pagos */]();
                     nextPay.setMonth(nextPay.getMonth() + 1); //add one month in each loop
                     pago.FechaPago = new Date(nextPay);
                     pago.FechaPagoText = pago.FechaPago.toISOString();
                     pago.MinDate = this.itemDateMinDate(i);
-                    pago.ValorPago = cuota;
+                    pago.ValorPagar = cuota;
                     pago.CuotaNum = i + 1;
                     this.listaPagos.push(pago);
                 }
@@ -2707,13 +2781,13 @@ var ModalFormaPagoComponent = /** @class */ (function () {
     ModalFormaPagoComponent.prototype.onItemBlur = function (e) {
         this.messageErrorFee = new Array();
         var sumTotal = this.listaPagos.reduce(function (prev, cur) {
-            return prev + (cur.ValorPago * 1);
+            return prev + (cur.ValorPagar * 1);
         }, 0);
         console.log(sumTotal);
-        if (Number.parseFloat(sumTotal.toFixed(2)) > this.model.TotalPago) {
+        if (Number.parseFloat(sumTotal.toFixed(2)) > this.model.TotalPagar) {
             this.messageErrorFee.push('Suma de Pagos es mayor a Pago Total');
         }
-        if (this.model.TotalPago > Number.parseFloat(sumTotal.toFixed(2))) {
+        if (this.model.TotalPagar > Number.parseFloat(sumTotal.toFixed(2))) {
             this.messageErrorFee.push('Suma de Pagos es menor a Pago Total');
         }
         if (this.hasEmptyVules()) {
@@ -2723,7 +2797,7 @@ var ModalFormaPagoComponent = /** @class */ (function () {
     };
     ModalFormaPagoComponent.prototype.hasEmptyVules = function () {
         for (var i = 0; i <= this.listaPagos.length - 1; i++) {
-            if (this.listaPagos[i].ValorPago == null || this.listaPagos[i].ValorPago == "")
+            if (this.listaPagos[i].ValorPagar == null || this.listaPagos[i].ValorPagar == "")
                 return true;
         }
         return false;
@@ -2750,15 +2824,29 @@ var ModalFormaPagoComponent = /** @class */ (function () {
             this.messageErrors.push('Nombre Pago es requerido');
         if (this.model.DescripcionActa == undefined || this.model.DescripcionActa == null)
             this.messageErrors.push('Descripcion Pago es requerido');
-        if (this.model.TotalPago == undefined || this.model.TotalPago == null)
+        if (this.model.TotalPagar == undefined || this.model.TotalPagar == null)
             this.messageErrors.push('Total Pago no valido');
-        if (this.model.NumPagos == undefined || this.model.NumPagos == null)
+        if (this.model.CantidadPago == undefined || this.model.CantidadPago == null)
             this.messageErrors.push('Numero de pagos no valido');
         return this.messageErrors.length > 0 ? false : true;
     };
+    ModalFormaPagoComponent.prototype.onBlurValidation = function (value) {
+        if (this.messageErrors !== undefined && this.messageErrors.length > 0) {
+            if (this.model.Nombre != undefined && this.model.Nombre.length > 0)
+                this.messageErrors = this.messageErrors.filter(function (e) { return e != 'Nombre Pago es requerido'; });
+            if (this.model.DescripcionActa != undefined && this.model.DescripcionActa.length > 0)
+                this.messageErrors = this.messageErrors.filter(function (e) { return e != 'Descripcion Pago es requerido'; });
+            if (this.model.ConceptoPago != undefined && this.model.ConceptoPago.length > 0)
+                this.messageErrors = this.messageErrors.filter(function (e) { return e != 'Concepto Pago es requerido'; });
+            if (this.model.TotalPagar != undefined && this.model.TotalPagar > 0)
+                this.messageErrors = this.messageErrors.filter(function (e) { return e != 'Total Pago no valido'; });
+            if (this.model.CantidadPago != undefined && this.model.CantidadPago > 0)
+                this.messageErrors = this.messageErrors.filter(function (e) { return e != 'Numero de pagos no valido'; });
+        }
+    };
     ModalFormaPagoComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'modal-forma-pago',template:/*ion-inline-start:"C:\Projects\APPSTSS\AppMovil\src\pages\modal-forma-pago\modal-forma-pago.html"*/'<ion-header>\n\n  <ion-navbar color="miTema">\n    <ion-title>\n      <strong>Arreglo de pago\n      </strong>\n    </ion-title>\n    <ion-buttons end>\n      <button ion-button (click)="closeModal()">Cerrar</button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n<ion-content no-padding>\n   <ion-grid>\n    <ion-row>\n      <ion-col col-12>\n        <ion-item>\n          <ion-label floating>\n            <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n            <span class="text-danger">*</span> Número de Expediente Integral\n          </ion-label>\n          <ion-input type="text" \n                     class="text-primary-login" \n                     maxLength="25" id="NroExpedienteIntegral"\n                     [(ngModel)]="model.NroExpedienteIntegral"\n                     name="NroExpedienteIntegral"    \n                     [readonly]="true" ></ion-input>\n        </ion-item>\n      </ion-col>\n\n      <ion-col col-12>\n        <ion-item>\n          <ion-label floating>\n            <ion-icon name="ios-person-outline" item-start class="text-primary-login"></ion-icon>\n            <span class="text-danger">*</span> Nombre\n          </ion-label>\n          <ion-input type="text" id="NombreRazon" \n                     name="NombreRazon" \n                     [(ngModel)]="model.Nombre"\n                     class="text-primary-login" \n                     maxLength="25"\n                     [readonly]="false"></ion-input>\n        </ion-item>\n      </ion-col>\n\n      <ion-col col-12>\n        <ion-item>\n          <ion-label floating>\n            <ion-icon name="ios-book-outline" item-start class="text-primary-login"></ion-icon>\n            <span class="text-danger">*</span> Concepto Pago\n          </ion-label>\n          <ion-input id="conceptoPago" \n                     [(ngModel)]="model.ConceptoPago"\n                     name="ConceptoPago" ></ion-input>\n        </ion-item>\n      </ion-col>\n\n      <ion-col col-12>\n        <ion-item>\n          <ion-label floating>\n            <ion-icon name="ios-calendar-outline" item-start class="text-primary-login"></ion-icon>\n            <span class="text-danger">*</span> Descripción Acta\n          </ion-label>\n          <ion-input id="DescripcionActa" \n                    [(ngModel)]="model.DescripcionActa"\n                    name="DescripcionActa"></ion-input>\n        </ion-item>\n      </ion-col>\n\n      <ion-col col-12>\n        <ion-item>\n          <ion-label floating>\n            <ion-icon name="ios-cash-outline" item-start class="text-primary-login"></ion-icon>\n            <span class="text-danger">*</span> Total a Pagar Lempiras\n          </ion-label>\n          <ion-input id="CantidadPago" \n                    [(ngModel)]="model.TotalPago"\n                    type="tel"\n                    name="CantidadPago" class="numeros CurrencyInput"\n                    (keypress)="onKeyPress($event, $event.target.value)" >\n          </ion-input>\n        </ion-item>\n      </ion-col>\n\n      <ion-col col-12>\n         <ion-row>\n             <ion-item col-7>\n               <ion-label floating class="labelFont">\n                 <ion-icon name="ios-calendar-outline" item-start class="text-primary-login"></ion-icon>\n                 <span class="text-danger">*</span> Nro. Pagos a Realizar\n               </ion-label>\n               <ion-input type="tel" \n                          id="NumeroPago" class="numeros"\n                          [(ngModel)]="model.NumPagos"\n                          (keypress)="onFeeKeyPress($event, $event.target.value)" \n                          name="NumeroPago">\n               </ion-input>\n             </ion-item>\n\n             <ion-item col-5>\n\n               <button ion-button icon-start block color="info" class="btnaddFee" [disabled]="!hasFee" tappable\n                 (click)="addFee()">\n                 <ion-icon name="md-checkmark-circle-outline"></ion-icon>\n                 Agregar\n               </button>\n             </ion-item>\n         </ion-row>\n       </ion-col>\n        \n      <ion-col col-12 *ngIf="listaPagos !== undefined || listaPagos != null">\n        <ion-grid>\n          <ion-row>\n            <ion-col col-2>\n              <ion-item>\n                <ion-label>\n                  <p>N°</p>\n                </ion-label>\n              </ion-item>\n            </ion-col>\n            <ion-col col-5>\n              <ion-item text-center>\n                <ion-label>\n                  <p>Fecha</p>\n                </ion-label>\n              </ion-item>\n            </ion-col>\n            <ion-col col-5>\n              <ion-item text-center>\n                <ion-label>\n                  <p> Valor en L.</p>\n                </ion-label>\n              </ion-item>\n            </ion-col>\n          </ion-row>\n          <ion-row *ngFor="let item of listaPagos; index as i">\n              <ion-col col-2>\n                <ion-item>\n                  <ion-label><span style="font-size: 11px;"> {{i + 1}}</span> </ion-label>\n                </ion-item>\n              </ion-col>\n              <ion-col col-5>\n                 <ion-item class="item-coutas">\n                   <ion-datetime displayFormat="DD/MM/YYYY" \n                                pickerFormat="DD/MM/YYYY"\n                                [(ngModel)]="item.FechaPagoText"\n                                name="FechaPago"\n                                min={{listaPagos[i].MinDate}}\n                                max="2050-12-31"\n                                (ionChange)="onItemDateChange($event,i)"\n                                [ngModelOptions]="{standalone: true}"\n                                class="text-primary-login"></ion-datetime>\n                  </ion-item>\n              </ion-col>\n              <ion-col col-5>\n                <ion-item>\n                          <ion-input type="tel" \n                            name="ValorPagar" \n                            class="text-primary-login numeros"\n                            (keypress)="onKeyPress($event, $event.target.value,i)"\n                            (ionBlur)="onItemBlur()"\n                            [(ngModel)]="item.ValorPago"></ion-input>\n                </ion-item>\n                 \n              </ion-col>\n          </ion-row>\n        </ion-grid>\n      </ion-col>\n     <ion-col *ngIf="messageErrorPayments.length > 0">\n        <ion-row *ngFor="let item of messageErrorPayments">\n            <span class="text-danger">*{{item}}</span>\n        </ion-row>\n    \n     </ion-col>\n     <ion-col *ngIf="messageErrorFee.length > 0">\n       <ion-row *ngFor="let item of messageErrorFee">\n          <span class="text-danger">*{{item}}</span>\n       </ion-row>\n\n     </ion-col>\n\n      <ion-col *ngIf="messageErrors.length > 0">\n        <ion-row *ngFor="let item of messageErrors">\n          <span class="text-danger">*{{item}}</span>\n        </ion-row>\n      \n      </ion-col>\n    </ion-row>\n\n   </ion-grid>\n\n\n\n\n\n  <button ion-button icon-start block color="info" class="buttontn" tappable (click)="savePayment()">\n    <ion-icon name="md-checkmark-circle-outline"></ion-icon>\n    Guardar\n  </button>\n  <button ion-button icon-start block color="danger" class="buttontn" tappable (click)="closeModal()">\n    <ion-icon name="md-close"></ion-icon>\n    Cancelar\n  </button>\n</ion-content>\n\n'/*ion-inline-end:"C:\Projects\APPSTSS\AppMovil\src\pages\modal-forma-pago\modal-forma-pago.html"*/,
+            selector: 'modal-forma-pago',template:/*ion-inline-start:"C:\Projects\APPSTSS\AppMovil\src\pages\modal-forma-pago\modal-forma-pago.html"*/'<ion-header>\n\n  <ion-navbar color="miTema">\n    <ion-title>\n      <strong>Arreglo de pago\n      </strong>\n    </ion-title>\n    <ion-buttons end>\n      <button ion-button (click)="closeModal()">Cerrar</button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n<ion-content no-padding>\n   <ion-grid>\n    <ion-row>\n      <ion-col col-12>\n        <ion-item>\n          <ion-label floating>\n            <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>\n            <span class="text-danger">*</span> Número de Expediente Integral\n          </ion-label>\n          <ion-input type="text" \n                     class="text-primary-login" \n                     maxLength="25" id="NroExpedienteIntegral"\n                     [(ngModel)]="model.NroExpedienteIntegral"\n                     name="NroExpedienteIntegral"    \n                     [readonly]="true" ></ion-input>\n        </ion-item>\n      </ion-col>\n\n      <ion-col col-12>\n        <ion-item>\n          <ion-label floating>\n            <ion-icon name="ios-person-outline" item-start class="text-primary-login"></ion-icon>\n            <span class="text-danger">*</span> Nombre\n          </ion-label>\n          <ion-input type="text" id="NombreRazon" \n                     name="NombreRazon" \n                     [(ngModel)]="model.Nombre"\n                     class="text-primary-login" \n                     maxLength="25"\n                     (ionBlur)="onBlurValidation($event)"\n                     [readonly]="false"></ion-input>\n        </ion-item>\n      </ion-col>\n\n      <ion-col col-12>\n        <ion-item>\n          <ion-label floating>\n            <ion-icon name="ios-book-outline" item-start class="text-primary-login"></ion-icon>\n            <span class="text-danger">*</span> Concepto Pago\n          </ion-label>\n          <ion-input id="conceptoPago" \n                     [(ngModel)]="model.ConceptoPago"\n                     (ionBlur)="onBlurValidation($event)"\n                     name="ConceptoPago" ></ion-input>\n        </ion-item>\n      </ion-col>\n\n      <ion-col col-12>\n        <ion-item>\n          <ion-label floating>\n            <ion-icon name="ios-calendar-outline" item-start class="text-primary-login"></ion-icon>\n            <span class="text-danger">*</span> Descripción Acta\n          </ion-label>\n          <ion-input id="DescripcionActa" \n                    [(ngModel)]="model.DescripcionActa"\n                    (ionBlur)="onBlurValidation($event)"\n                    name="DescripcionActa"></ion-input>\n        </ion-item>\n      </ion-col>\n\n      <ion-col col-12>\n        <ion-item>\n          <ion-label floating>\n            <ion-icon name="ios-cash-outline" item-start class="text-primary-login"></ion-icon>\n            <span class="text-danger">*</span> Total a Pagar Lempiras\n          </ion-label>\n          <ion-input id="CantidadPago" \n                    [(ngModel)]="model.TotalPagar"\n                    type="tel"\n                    name="CantidadPago" class="numeros CurrencyInput"\n                    (ionBlur)="onBlurValidation($event)"\n                    (keypress)="onKeyPress($event, $event.target.value)" >\n          </ion-input>\n        </ion-item>\n      </ion-col>\n\n      <ion-col col-12>\n         <ion-row>\n             <ion-item col-7>\n               <ion-label floating class="labelFont">\n                 <ion-icon name="ios-calendar-outline" item-start class="text-primary-login"></ion-icon>\n                 <span class="text-danger">*</span> Nro. Pagos a Realizar\n               </ion-label>\n               <ion-input type="tel" \n                          id="NumeroPago" class="numeros"\n                          [(ngModel)]="model.CantidadPago"\n                          (keypress)="onFeeKeyPress($event, $event.target.value)" \n                          (ionBlur)="onBlurValidation($event)"\n                          name="NumeroPago">\n               </ion-input>\n             </ion-item>\n\n             <ion-item col-5>\n\n               <button ion-button icon-start block color="info" class="btnaddFee" [disabled]="!hasFee" tappable\n                 (click)="addFee()">\n                 <ion-icon name="md-checkmark-circle-outline"></ion-icon>\n                 Agregar\n               </button>\n             </ion-item>\n         </ion-row>\n       </ion-col>\n        \n      <ion-col col-12 *ngIf="listaPagos !== undefined || listaPagos != null">\n        <ion-grid>\n          <ion-row>\n            <ion-col col-2>\n              <ion-item>\n                <ion-label>\n                  <p>N°</p>\n                </ion-label>\n              </ion-item>\n            </ion-col>\n            <ion-col col-5>\n              <ion-item text-center>\n                <ion-label>\n                  <p>Fecha</p>\n                </ion-label>\n              </ion-item>\n            </ion-col>\n            <ion-col col-5>\n              <ion-item text-center>\n                <ion-label>\n                  <p> Valor en L.</p>\n                </ion-label>\n              </ion-item>\n            </ion-col>\n          </ion-row>\n          <ion-row *ngFor="let item of listaPagos; index as i">\n              <ion-col col-2>\n                <ion-item>\n                  <ion-label><span style="font-size: 11px;"> {{i + 1}}</span> </ion-label>\n                </ion-item>\n              </ion-col>\n              <ion-col col-5>\n                 <ion-item class="item-coutas">\n                   <ion-datetime displayFormat="DD/MM/YYYY" \n                                pickerFormat="DD/MM/YYYY"\n                                [(ngModel)]="item.FechaPagoText"\n                                name="FechaPago"\n                                min={{listaPagos[i].MinDate}}\n                                max="2050-12-31"\n                                (ionChange)="onItemDateChange($event,i)"\n                                [ngModelOptions]="{standalone: true}"\n                                class="text-primary-login"></ion-datetime>\n                  </ion-item>\n              </ion-col>\n              <ion-col col-5>\n                <ion-item>\n                          <ion-input type="tel" \n                            name="ValorPagar" \n                            class="text-primary-login numeros"\n                            (keypress)="onKeyPress($event, $event.target.value,i)"\n                            (ionBlur)="onItemBlur()"\n                            [(ngModel)]="item.ValorPagar"></ion-input>\n                </ion-item>\n                 \n              </ion-col>\n          </ion-row>\n        </ion-grid>\n      </ion-col>\n     <ion-col *ngIf="messageErrorPayments.length > 0">\n        <ion-row *ngFor="let item of messageErrorPayments">\n            <span class="text-danger">*{{item}}</span>\n        </ion-row>\n    \n     </ion-col>\n     <ion-col *ngIf="messageErrorFee.length > 0">\n       <ion-row *ngFor="let item of messageErrorFee">\n          <span class="text-danger">*{{item}}</span>\n       </ion-row>\n\n     </ion-col>\n\n      <ion-col *ngIf="messageErrors.length > 0">\n        <ion-row *ngFor="let item of messageErrors">\n          <span class="text-danger">*{{item}}</span>\n        </ion-row>\n      \n      </ion-col>\n    </ion-row>\n\n   </ion-grid>\n\n  <ion-col col-12>\n    <ion-row>\n        <ion-item col-6>\n          <button ion-button icon-start block color="info" class="buttontn" tappable (click)="savePayment()">\n            <ion-icon name="md-checkmark-circle-outline"></ion-icon>\n            Guardar\n          </button>\n        </ion-item>\n        <ion-item col-6>\n          <button ion-button icon-start block color="danger" class="buttontn" tappable (click)="closeModal()">\n            <ion-icon name="md-close"></ion-icon>\n            Cancelar\n          </button>\n        </ion-item>\n\n    </ion-row>\n\n  </ion-col>\n  \n  \n</ion-content>\n\n'/*ion-inline-end:"C:\Projects\APPSTSS\AppMovil\src\pages\modal-forma-pago\modal-forma-pago.html"*/,
             //styleUrls:['modal-pago.scss'], 
             providers: [__WEBPACK_IMPORTED_MODULE_2__services_dataService__["a" /* DataService */], __WEBPACK_IMPORTED_MODULE_3__services_ServiceAlert__["a" /* ServiceAlert */], __WEBPACK_IMPORTED_MODULE_4__services_ServiceGlobals__["a" /* ServiceGlobals */], __WEBPACK_IMPORTED_MODULE_5__services_Messages__["a" /* Menssages */], __WEBPACK_IMPORTED_MODULE_7__angular_common__["CurrencyPipe"]]
         }),
@@ -3046,6 +3134,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __values = (this && this.__values) || function (o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+    if (m) return m.call(o);
+    return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+};
 
 
 
@@ -3119,13 +3217,13 @@ var MyApp = /** @class */ (function () {
                 return __generator(this, function (_a) {
                     console.log('bk proccess');
                     this.timer = setInterval(function () { return __awaiter(_this, void 0, void 0, function () {
-                        var hasAccess, data, errorData, count, tmp, _i, data_1, item, e_1;
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
+                        var hasAccess, data, errorData, count, tmp, data_1, data_1_1, item, e_1, e_2_1, e_2, _a;
+                        return __generator(this, function (_b) {
+                            switch (_b.label) {
                                 case 0: return [4 /*yield*/, this.service.PingServer()];
                                 case 1:
-                                    hasAccess = _a.sent();
-                                    if (!(!this.isRunning && hasAccess)) return [3 /*break*/, 8];
+                                    hasAccess = _b.sent();
+                                    if (!(!this.isRunning && hasAccess)) return [3 /*break*/, 12];
                                     // //if(this.isRunning) return; //salir si ya se esta ejecutando 
                                     console.log('internet y no se esta ejecutando ');
                                     this.isRunning = true;
@@ -3136,29 +3234,43 @@ var MyApp = /** @class */ (function () {
                                         return [2 /*return*/];
                                     } // salimos si no hay nada que procesar
                                     count = 0;
-                                    _i = 0, data_1 = data;
-                                    _a.label = 2;
+                                    _b.label = 2;
                                 case 2:
-                                    if (!(_i < data_1.length)) return [3 /*break*/, 7];
-                                    item = data_1[_i];
-                                    tmp = item;
-                                    _a.label = 3;
+                                    _b.trys.push([2, 9, 10, 11]);
+                                    data_1 = __values(data), data_1_1 = data_1.next();
+                                    _b.label = 3;
                                 case 3:
-                                    _a.trys.push([3, 5, , 6]);
-                                    return [4 /*yield*/, this.service.UpdateActa(item)];
+                                    if (!!data_1_1.done) return [3 /*break*/, 8];
+                                    item = data_1_1.value;
+                                    tmp = item;
+                                    _b.label = 4;
                                 case 4:
-                                    _a.sent();
-                                    count++;
-                                    return [3 /*break*/, 6];
+                                    _b.trys.push([4, 6, , 7]);
+                                    return [4 /*yield*/, this.service.UpdateActa(item)];
                                 case 5:
-                                    e_1 = _a.sent();
+                                    _b.sent();
+                                    count++;
+                                    return [3 /*break*/, 7];
+                                case 6:
+                                    e_1 = _b.sent();
                                     console.error(e_1);
                                     errorData.push(tmp);
-                                    return [3 /*break*/, 6];
-                                case 6:
-                                    _i++;
-                                    return [3 /*break*/, 2];
+                                    return [3 /*break*/, 7];
                                 case 7:
+                                    data_1_1 = data_1.next();
+                                    return [3 /*break*/, 3];
+                                case 8: return [3 /*break*/, 11];
+                                case 9:
+                                    e_2_1 = _b.sent();
+                                    e_2 = { error: e_2_1 };
+                                    return [3 /*break*/, 11];
+                                case 10:
+                                    try {
+                                        if (data_1_1 && !data_1_1.done && (_a = data_1.return)) _a.call(data_1);
+                                    }
+                                    finally { if (e_2) throw e_2.error; }
+                                    return [7 /*endfinally*/];
+                                case 11:
                                     if (count > 0) {
                                         //set notification
                                         this.localNotifications.schedule({
@@ -3171,8 +3283,8 @@ var MyApp = /** @class */ (function () {
                                     errorData.length > 0 ? localStorage.setItem('background', JSON.stringify(errorData)) : localStorage.removeItem('background');
                                     console.log('setting is running to false');
                                     this.isRunning = false;
-                                    _a.label = 8;
-                                case 8: return [2 /*return*/];
+                                    _b.label = 12;
+                                case 12: return [2 /*return*/];
                             }
                         });
                     }); }, 3000);
@@ -3612,6 +3724,7 @@ var LoginResult = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ArregloPagoModel; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return Pagos; });
+/* unused harmony export PagoTesoreria */
 var ArregloPagoModel = /** @class */ (function () {
     function ArregloPagoModel() {
     }
@@ -3622,6 +3735,12 @@ var Pagos = /** @class */ (function () {
     function Pagos() {
     }
     return Pagos;
+}());
+
+var PagoTesoreria = /** @class */ (function () {
+    function PagoTesoreria() {
+    }
+    return PagoTesoreria;
 }());
 
 //# sourceMappingURL=ArregloPagoModel.js.map
@@ -4045,7 +4164,7 @@ var HomePage = /** @class */ (function () {
     ], HomePage.prototype, "nav2", void 0);
     HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-home',template:/*ion-inline-start:"C:\Projects\APPSTSS\AppMovil\src\pages\home\home.html"*/'<!-- -->\n<ion-header>\n  <ion-navbar color="miTema">\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      <strong style="font-size: 16px;">Secretaría  de Trabajo y Seguridad Social\n      </strong>\n    </ion-title>\n    <ion-buttons end>\n\n      <button ion-button tappable (click)="logout()"> \n        <ion-icon name="log-out" style="zoom: 130%"></ion-icon>\n      </button>\n    </ion-buttons> \n  </ion-navbar>\n</ion-header>\n\n<ion-content padding class="animated fadeIn  common-bg auth-page-home">\n <br><br>\n  <div align="center">\n      <img src="assets/imgs/stss-logo2.png" alt=""> <br><br>\n\n      <button ion-button color="primary" outline menuToggle>Iniciar</button>\n  </div>\n  \n\n</ion-content>\n'/*ion-inline-end:"C:\Projects\APPSTSS\AppMovil\src\pages\home\home.html"*/,
+            selector: 'page-home',template:/*ion-inline-start:"C:\Projects\APPSTSS\AppMovil\src\pages\home\home.html"*/'<!-- -->\n<ion-header>\n  <ion-navbar color="miTema">\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      <strong style="font-size: 16px;">Secretaría  de Trabajo y Seguridad Social\n      </strong>\n    </ion-title>\n    <ion-buttons end>\n\n      <button ion-button tappable (click)="logout()"> \n        <ion-icon name="log-out" style="zoom: 130%"></ion-icon>\n      </button>\n    </ion-buttons> \n  </ion-navbar>\n</ion-header>\n\n<ion-content padding class="animated fadeIn  common-bg auth-page-home">\n  <div align="center">\n      <img src="assets/imgs/stss-logo2.png" alt="">\n\n      <button ion-button color="primary" outline menuToggle>Iniciar</button>\n  </div>\n  \n\n</ion-content>\n'/*ion-inline-end:"C:\Projects\APPSTSS\AppMovil\src\pages\home\home.html"*/,
             providers: [__WEBPACK_IMPORTED_MODULE_2__services_dataService__["a" /* DataService */]]
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* NavController */],

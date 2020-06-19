@@ -1,11 +1,11 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
   module.exports = [
     {
-      "id": "call-number.CallNumber",
-      "file": "plugins/call-number/www/CallNumber.js",
-      "pluginId": "call-number",
+      "id": "cordova-plugin-statusbar.statusbar",
+      "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
+      "pluginId": "cordova-plugin-statusbar",
       "clobbers": [
-        "call"
+        "window.StatusBar"
       ]
     },
     {
@@ -17,12 +17,43 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
-      "id": "cordova-plugin-background-mode.BackgroundMode",
-      "file": "plugins/cordova-plugin-background-mode/www/background-mode.js",
-      "pluginId": "cordova-plugin-background-mode",
+      "id": "cordova-plugin-splashscreen.SplashScreen",
+      "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
+      "pluginId": "cordova-plugin-splashscreen",
       "clobbers": [
-        "cordova.plugins.backgroundMode",
-        "plugin.backgroundMode"
+        "navigator.splashscreen"
+      ]
+    },
+    {
+      "id": "cordova-plugin-ionic-webview.IonicWebView",
+      "file": "plugins/cordova-plugin-ionic-webview/src/www/util.js",
+      "pluginId": "cordova-plugin-ionic-webview",
+      "clobbers": [
+        "Ionic.WebView"
+      ]
+    },
+    {
+      "id": "cordova-plugin-ionic-keyboard.keyboard",
+      "file": "plugins/cordova-plugin-ionic-keyboard/www/android/keyboard.js",
+      "pluginId": "cordova-plugin-ionic-keyboard",
+      "clobbers": [
+        "window.Keyboard"
+      ]
+    },
+    {
+      "id": "call-number.CallNumber",
+      "file": "plugins/call-number/www/CallNumber.js",
+      "pluginId": "call-number",
+      "clobbers": [
+        "call"
+      ]
+    },
+    {
+      "id": "cordova-sqlite-storage.SQLitePlugin",
+      "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
+      "pluginId": "cordova-sqlite-storage",
+      "clobbers": [
+        "SQLitePlugin"
       ]
     },
     {
@@ -58,35 +89,19 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
+      "id": "cordova-plugin-telerik-imagepicker.ImagePicker",
+      "file": "plugins/cordova-plugin-telerik-imagepicker/www/imagepicker.js",
+      "pluginId": "cordova-plugin-telerik-imagepicker",
+      "clobbers": [
+        "plugins.imagePicker"
+      ]
+    },
+    {
       "id": "cordova-plugin-chooser.Chooser",
       "file": "plugins/cordova-plugin-chooser/www/chooser.js",
       "pluginId": "cordova-plugin-chooser",
       "clobbers": [
         "chooser"
-      ]
-    },
-    {
-      "id": "cordova-plugin-filepath.FilePath",
-      "file": "plugins/cordova-plugin-filepath/www/FilePath.js",
-      "pluginId": "cordova-plugin-filepath",
-      "clobbers": [
-        "window.FilePath"
-      ]
-    },
-    {
-      "id": "cordova-plugin-ionic-keyboard.keyboard",
-      "file": "plugins/cordova-plugin-ionic-keyboard/www/android/keyboard.js",
-      "pluginId": "cordova-plugin-ionic-keyboard",
-      "clobbers": [
-        "window.Keyboard"
-      ]
-    },
-    {
-      "id": "cordova-plugin-ionic-webview.IonicWebView",
-      "file": "plugins/cordova-plugin-ionic-webview/src/www/util.js",
-      "pluginId": "cordova-plugin-ionic-webview",
-      "clobbers": [
-        "Ionic.WebView"
       ]
     },
     {
@@ -107,35 +122,20 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
-      "id": "cordova-plugin-splashscreen.SplashScreen",
-      "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
-      "pluginId": "cordova-plugin-splashscreen",
+      "id": "cordova-plugin-background-mode.BackgroundMode",
+      "file": "plugins/cordova-plugin-background-mode/www/background-mode.js",
+      "pluginId": "cordova-plugin-background-mode",
       "clobbers": [
-        "navigator.splashscreen"
+        "cordova.plugins.backgroundMode",
+        "plugin.backgroundMode"
       ]
     },
     {
-      "id": "cordova-plugin-statusbar.statusbar",
-      "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
-      "pluginId": "cordova-plugin-statusbar",
+      "id": "cordova-plugin-filepath.FilePath",
+      "file": "plugins/cordova-plugin-filepath/www/FilePath.js",
+      "pluginId": "cordova-plugin-filepath",
       "clobbers": [
-        "window.StatusBar"
-      ]
-    },
-    {
-      "id": "cordova-plugin-telerik-imagepicker.ImagePicker",
-      "file": "plugins/cordova-plugin-telerik-imagepicker/www/imagepicker.js",
-      "pluginId": "cordova-plugin-telerik-imagepicker",
-      "clobbers": [
-        "plugins.imagePicker"
-      ]
-    },
-    {
-      "id": "cordova-sqlite-storage.SQLitePlugin",
-      "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
-      "pluginId": "cordova-sqlite-storage",
-      "clobbers": [
-        "SQLitePlugin"
+        "window.FilePath"
       ]
     },
     {
@@ -355,20 +355,20 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     }
   ];
   module.exports.metadata = {
-    "call-number": "0.0.2",
-    "cordova-plugin-device": "2.0.3",
-    "cordova-plugin-background-mode": "0.7.3",
-    "cordova-plugin-camera": "4.1.0",
-    "cordova-plugin-chooser": "1.3.1",
-    "cordova-plugin-filepath": "1.5.8",
-    "cordova-plugin-ionic-keyboard": "2.2.0",
-    "cordova-plugin-ionic-webview": "4.2.1",
-    "cordova-plugin-network-information": "2.0.2",
-    "cordova-plugin-splashscreen": "5.0.3",
-    "cordova-plugin-statusbar": "2.4.3",
-    "cordova-plugin-telerik-imagepicker": "2.3.3",
     "cordova-plugin-whitelist": "1.3.4",
+    "cordova-plugin-statusbar": "2.4.3",
+    "cordova-plugin-device": "2.0.3",
+    "cordova-plugin-splashscreen": "5.0.4",
+    "cordova-plugin-ionic-webview": "4.2.1",
+    "cordova-plugin-ionic-keyboard": "2.2.0",
+    "call-number": "0.0.2",
     "cordova-sqlite-storage": "4.0.0",
+    "cordova-plugin-camera": "4.1.0",
+    "cordova-plugin-telerik-imagepicker": "2.3.3",
+    "cordova-plugin-chooser": "1.3.1",
+    "cordova-plugin-network-information": "2.0.2",
+    "cordova-plugin-background-mode": "0.7.3",
+    "cordova-plugin-filepath": "1.5.8",
     "cordova-plugin-networkinterface": "2.0.0",
     "cordova-plugin-file": "6.0.2",
     "cordova-plugin-badge": "0.8.8",

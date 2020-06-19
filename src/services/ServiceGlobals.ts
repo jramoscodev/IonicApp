@@ -24,6 +24,7 @@ import { InsertActaModel } from '../Models/InsertActaModel';
 
 
 
+
 @Injectable()
 export class ServiceGlobals {
 
@@ -148,7 +149,7 @@ export class ServiceGlobals {
   public async UpdateActa(request: InsertActaModel)
   {
     var data = new FormData();
-    
+    data.append("IdRegistroActa", "0")
     //add actas file
     let actas =  request.rutasActas as ListFiles[];
     for(let i =0; i<= actas.length - 1; i++)
@@ -167,14 +168,43 @@ export class ServiceGlobals {
 
       data.append(`filesAttch[${i}]`, new Blob([arry]), attch[i].name);
     }
+    //has payment FechaPago
+    if (request.ArregloPago != undefined || request.ArregloPago !=null){
+      if (request.ArregloPago.ArregloPago.length > 0){
+        let payment = request.ArregloPago.ArregloPago;
+        for (let i = 0; i <= request.ArregloPago.ArregloPago.length - 1; i++){
 
 
+          let setDate = (new Date(payment[i].FechaPago)).toUTCString();
+
+          data.append(`ArregloPago.ListaDetallePago[${i}].ValorPagar`, payment[i].ValorPagar);
+          data.append(`ArregloPago.ListaDetallePago[${i}].FechaPago`, setDate)
+          data.append(`ArregloPago.ListaDetallePago[${i}].IdPagoTesoreria`, "0")
+          data.append(`ArregloPago.ListaDetallePago[${i}].IdDetallePago`, "0")
+       }
+     }
+      data.append(`ArregloPago.IdTrabajador`,
+        request.ArregloPago.IdTrabajador == null ? "0":
+      request.ArregloPago.IdTrabajador.toString());
+      data.append(`ArregloPago.IdPatronoEmpleador`, request.ArregloPago.IdPatronoEmpleador.toString());
+      data.append(`ArregloPago.NombreEncargado`, request.ArregloPago.Nombre.toString());
+      data.append(`ArregloPago.ConceptoPago`, request.ArregloPago.ConceptoPago.toString());
+      data.append(`ArregloPago.NroExpedienteIntegral`, request.ArregloPago.NroExpedienteIntegral.toString());
+      data.append(`ArregloPago.TotalPagar`, request.ArregloPago.TotalPagar.toString());
+      data.append(`ArregloPago.CantidadPago`, request.ArregloPago.CantidadPago.toString());
+      data.append("ArregloPago.DescripcionActa",request.ArregloPago.DescripcionActa.toString())
+      data.append(`ArregloPago.IdSolicitudArregloPago`, "0");
+      
+    }
+    data.append("IdAccionSeguimientoFlujo", request.IdAccionSeguimiento);
     for (var key in request) {
-      if (key == 'rutasActas' || key =='rutasAttch') {continue;}
+      if (key == 'rutasActas' || key == 'rutasAttch' || key == 'ArregloPago') {continue;}
       data.append(`${key}`, request[key]);
     }
   
-
+    for (var pair of data.entries()) {
+      console.log(pair[0] + ', ' + pair[1]);
+    }
 
     return this.http.post(`${this._url.BaseUrl}/riesgoprofesional/insertarregistroactaappmovil`,data,{
       headers: new HttpHeaders().set('enctype', 'multipart/form-data').set('XAuthToken', localStorage.getItem('tokenSTS'))
