@@ -668,9 +668,12 @@ var Configuration = /** @class */ (function () {
         // public uriServer="http://201.220.133.218:8007/";
         // public uriServer="https://172.16.1.116:444/";
         // public uriServer = "https://192.168.0.10:45455/";
-        this.uriServer = "https://ecms-backend.conveyor.cloud/";
-        this.BaseUrl = "https://ecms-backend.conveyor.cloud/api";
+        // public uriServer = "https://ecms-backend.conveyor.cloud/";
+        // public BaseUrl = "https://ecms-backend.conveyor.cloud/api";
         //public BaseUrl = "https://192.168.0.10:45455/api";
+        //PRODUCION
+        this.uriServer = "https://201.220.133.207:443/";
+        this.BaseUrl = "https://201.220.133.207:443/api";
         this.ServerLocal_Security = this.uriServer + 'api/seguridad/';
         this.serverLocalFlujo = this.uriServer + "api/flujos/";
         this.serverCambio = this.uriServer + "api/";

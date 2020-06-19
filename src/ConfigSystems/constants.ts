@@ -11,6 +11,11 @@ export class Configuration {
   public uriServer = "https://ecms-backend.conveyor.cloud/";
   public BaseUrl = "https://ecms-backend.conveyor.cloud/api";
   //public BaseUrl = "https://192.168.0.10:45455/api";
+
+  
+  //PRODUCION
+ // public uriServer = "https://201.220.133.207:443/"
+ // public BaseUrl = "https://201.220.133.207:443/api";
   public ServerLocal_Security = this.uriServer+'api/seguridad/' ;
   public serverLocalFlujo=this.uriServer+ "api/flujos/";
   public serverCambio=this.uriServer+"api/"

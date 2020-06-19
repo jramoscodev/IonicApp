@@ -671,6 +671,9 @@ var Configuration = /** @class */ (function () {
         this.uriServer = "https://ecms-backend.conveyor.cloud/";
         this.BaseUrl = "https://ecms-backend.conveyor.cloud/api";
         //public BaseUrl = "https://192.168.0.10:45455/api";
+        //PRODUCION
+        // public uriServer = "https://201.220.133.207:443/"
+        // public BaseUrl = "https://201.220.133.207:443/api";
         this.ServerLocal_Security = this.uriServer + 'api/seguridad/';
         this.serverLocalFlujo = this.uriServer + "api/flujos/";
         this.serverCambio = this.uriServer + "api/";
@@ -2818,15 +2821,15 @@ var ModalFormaPagoComponent = /** @class */ (function () {
     };
     ModalFormaPagoComponent.prototype.Validate = function () {
         this.messageErrors = new Array();
-        if (this.model.ConceptoPago == undefined || this.model.ConceptoPago == null)
+        if (this.model.ConceptoPago == undefined || this.model.ConceptoPago == null || this.model.ConceptoPago.length == 0)
             this.messageErrors.push('Concepto Pago es requerido');
-        if (this.model.Nombre == undefined || this.model.Nombre == null)
+        if (this.model.Nombre == undefined || this.model.Nombre == null || this.model.Nombre.length == 0)
             this.messageErrors.push('Nombre Pago es requerido');
-        if (this.model.DescripcionActa == undefined || this.model.DescripcionActa == null)
+        if (this.model.DescripcionActa == undefined || this.model.DescripcionActa == null || this.model.DescripcionActa.length == 0)
             this.messageErrors.push('Descripcion Pago es requerido');
-        if (this.model.TotalPagar == undefined || this.model.TotalPagar == null)
+        if (this.model.TotalPagar == undefined || this.model.TotalPagar == null || this.model.TotalPagar == 0)
             this.messageErrors.push('Total Pago no valido');
-        if (this.model.CantidadPago == undefined || this.model.CantidadPago == null)
+        if (this.model.CantidadPago == undefined || this.model.CantidadPago == null || this.model.CantidadPago == 0)
             this.messageErrors.push('Numero de pagos no valido');
         return this.messageErrors.length > 0 ? false : true;
     };
@@ -2850,15 +2853,10 @@ var ModalFormaPagoComponent = /** @class */ (function () {
             //styleUrls:['modal-pago.scss'], 
             providers: [__WEBPACK_IMPORTED_MODULE_2__services_dataService__["a" /* DataService */], __WEBPACK_IMPORTED_MODULE_3__services_ServiceAlert__["a" /* ServiceAlert */], __WEBPACK_IMPORTED_MODULE_4__services_ServiceGlobals__["a" /* ServiceGlobals */], __WEBPACK_IMPORTED_MODULE_5__services_Messages__["a" /* Menssages */], __WEBPACK_IMPORTED_MODULE_7__angular_common__["CurrencyPipe"]]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["q" /* ViewController */],
-            __WEBPACK_IMPORTED_MODULE_2__services_dataService__["a" /* DataService */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* NavParams */],
-            __WEBPACK_IMPORTED_MODULE_3__services_ServiceAlert__["a" /* ServiceAlert */],
-            __WEBPACK_IMPORTED_MODULE_4__services_ServiceGlobals__["a" /* ServiceGlobals */],
-            __WEBPACK_IMPORTED_MODULE_5__services_Messages__["a" /* Menssages */],
-            __WEBPACK_IMPORTED_MODULE_7__angular_common__["CurrencyPipe"]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["q" /* ViewController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["q" /* ViewController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__services_dataService__["a" /* DataService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_dataService__["a" /* DataService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* NavParams */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__services_ServiceAlert__["a" /* ServiceAlert */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_ServiceAlert__["a" /* ServiceAlert */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__services_ServiceGlobals__["a" /* ServiceGlobals */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_ServiceGlobals__["a" /* ServiceGlobals */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_5__services_Messages__["a" /* Menssages */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__services_Messages__["a" /* Menssages */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_7__angular_common__["CurrencyPipe"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_7__angular_common__["CurrencyPipe"]) === "function" && _g || Object])
     ], ModalFormaPagoComponent);
     return ModalFormaPagoComponent;
+    var _a, _b, _c, _d, _e, _f, _g;
 }());
 
 //# sourceMappingURL=modal-forma-pago.js.map

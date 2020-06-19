@@ -541,11 +541,11 @@ export class ModalFormaPagoComponent {
     this.messageErrors = new Array<String>();
 
 
-    if (this.model.ConceptoPago == undefined || this.model.ConceptoPago == null) this.messageErrors.push('Concepto Pago es requerido');
-    if (this.model.Nombre == undefined || this.model.Nombre == null) this.messageErrors.push('Nombre Pago es requerido');
-    if (this.model.DescripcionActa == undefined || this.model.DescripcionActa == null) this.messageErrors.push('Descripcion Pago es requerido');
-    if (this.model.TotalPagar == undefined || this.model.TotalPagar == null) this.messageErrors.push('Total Pago no valido');
-    if (this.model.CantidadPago == undefined || this.model.CantidadPago == null) this.messageErrors.push('Numero de pagos no valido');
+    if (this.model.ConceptoPago == undefined || this.model.ConceptoPago == null || this.model.ConceptoPago.length == 0) this.messageErrors.push('Concepto Pago es requerido');
+    if (this.model.Nombre == undefined || this.model.Nombre == null || this.model.Nombre.length == 0) this.messageErrors.push('Nombre Pago es requerido');
+    if (this.model.DescripcionActa == undefined || this.model.DescripcionActa == null || this.model.DescripcionActa.length == 0) this.messageErrors.push('Descripcion Pago es requerido');
+    if (this.model.TotalPagar == undefined || this.model.TotalPagar == null || this.model.TotalPagar == 0) this.messageErrors.push('Total Pago no valido');
+    if (this.model.CantidadPago == undefined || this.model.CantidadPago == null || this.model.CantidadPago == 0) this.messageErrors.push('Numero de pagos no valido');
  
  
     return this.messageErrors.length > 0 ? false : true;
