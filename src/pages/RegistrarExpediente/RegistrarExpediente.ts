@@ -225,8 +225,10 @@ export class RegistrarExpedienteComponent implements OnInit {
     };
     let modal = this.myModal.create(ModalRegistrarComponent, dataMo);
     modal.onDidDismiss( data=>{
+
+      if(data == undefined) return;
       this.dataService.ReportExpediente=  this.dataService.ReportExpediente.filter(function(current){
-          if (current['NroExpedienteIntegral'] !== data['numExp']){
+          if (current['NroExpedienteIntegral'] !== data['numExp']) {
             return current
           }
         })

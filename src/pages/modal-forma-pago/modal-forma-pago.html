@@ -18,12 +18,12 @@
         <ion-item>
           <ion-label floating>
             <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>
-            <span class="text-danger">*</span> Número de Expediente Integral
+            <span class="text-danger">*</span> Número de Expediente Interno
           </ion-label>
           <ion-input type="text" 
                      class="text-primary-login" 
                      maxLength="25" id="NroExpedienteIntegral"
-                     [(ngModel)]="model.NroExpedienteIntegral"
+                     [(ngModel)]="model.NroExpedienteInterno"
                      name="NroExpedienteIntegral"    
                      [readonly]="true" ></ion-input>
         </ion-item>
@@ -93,6 +93,7 @@
                <ion-label floating class="labelFont">
                  <ion-icon name="ios-calendar-outline" item-start class="text-primary-login"></ion-icon>
                  <span class="text-danger">*</span> Nro. Pagos a Realizar
+                
                </ion-label>
                <ion-input type="tel" 
                           id="NumeroPago" class="numeros"
@@ -105,7 +106,7 @@
 
              <ion-item col-5>
 
-               <button ion-button icon-start block color="info" class="btnaddFee" [disabled]="!hasFee" tappable
+               <button ion-button icon-start block color="info" class="btnaddFee"  tappable
                  (click)="addFee()">
                  <ion-icon name="md-checkmark-circle-outline"></ion-icon>
                  Agregar
@@ -160,7 +161,7 @@
               </ion-col>
               <ion-col col-5>
                 <ion-item>
-                          <ion-input type="tel" 
+                          <ion-input type="tel"
                             name="ValorPagar" 
                             class="text-primary-login numeros"
                             (keypress)="onKeyPress($event, $event.target.value,i)"
@@ -172,20 +173,20 @@
           </ion-row>
         </ion-grid>
       </ion-col>
-     <ion-col *ngIf="messageErrorPayments.length > 0">
+     <ion-col col-12 *ngIf="messageErrorPayments.length > 0">
         <ion-row *ngFor="let item of messageErrorPayments">
             <span class="text-danger">*{{item}}</span>
         </ion-row>
     
      </ion-col>
-     <ion-col *ngIf="messageErrorFee.length > 0">
+     <ion-col col-12 *ngIf="messageErrorFee.length > 0">
        <ion-row *ngFor="let item of messageErrorFee">
           <span class="text-danger">*{{item}}</span>
        </ion-row>
 
      </ion-col>
 
-      <ion-col *ngIf="messageErrors.length > 0">
+      <ion-col col-12 *ngIf="messageErrors.length > 0">
         <ion-row *ngFor="let item of messageErrors">
           <span class="text-danger">*{{item}}</span>
         </ion-row>

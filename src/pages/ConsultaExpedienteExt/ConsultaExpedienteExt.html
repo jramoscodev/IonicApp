@@ -5,7 +5,7 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      <strong>Consulta de Expediente
+      <strong style="font-size: 4vw !important;">Consulta de Expediente
       </strong>
     </ion-title>
     <ion-buttons end>
@@ -24,21 +24,23 @@
 
     <ion-grid>
       <ion-row>
-        <ion-col col-6>
+        <!-- <ion-col col-6>
           <ion-item text-wrap>
-            <ion-label floating [ngClass]="lableFont">
-              <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>
-              Nro. Exp. Integral
-            </ion-label>
-            <ion-input type="text" class="text-primary-login sinespacio" maxLength="25" name="numeroExpedienteIntegral" id="numeroExpedienteIntegral" formControlName="numeroExpedienteIntegral" [(ngModel)]="dataService.dataExpedienteExt.numeroExpedienteIntegral"></ion-input>
-
-          </ion-item>
-        </ion-col>
-        <ion-col col-6>
-          <ion-item>
-            <ion-label floating>
+            <ion-label floating class="labelFont">
               <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>
               Nro. Exp. Interno
+            </ion-label>
+            <ion-input type="text" class="text-primary-login sinespacio" maxLength="25" name="numeroExpedienteIntegral"
+              id="numeroExpedienteIntegral" formControlName="numeroExpedienteIntegral"
+              [(ngModel)]="dataService.dataExpedienteExt.NroExpedienteInterno"></ion-input>
+
+          </ion-item>
+        </ion-col> -->
+        <ion-col col-12>
+          <ion-item>
+            <ion-label floating class="labelFont">
+              <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>
+              Número de Expediente Interno
             </ion-label>
             <ion-input type="text" class="text-primary-login sinespacio" maxLength="25" name="numeroExpedienteInterno" id="numeroExpedienteInterno" formControlName="numeroExpedienteInterno" [(ngModel)]="dataService.dataExpedienteExt.numeroExpedienteInterno"></ion-input>
 
@@ -46,7 +48,7 @@
         </ion-col>
         <ion-col col-12>
           <ion-item>
-            <ion-label floating>
+            <ion-label floating class="labelFont">
               <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>
               Nombre de  la empresa
             </ion-label>
@@ -56,7 +58,7 @@
         </ion-col>
         <ion-col col-6>
           <ion-item>
-            <ion-label floating>
+            <ion-label floating class="labelFont">
               <ion-icon name="md-calendar" item-start class="text-primary-login"></ion-icon>
               Fecha Desde
             </ion-label>
@@ -66,7 +68,7 @@
         </ion-col>
         <ion-col col-6>
           <ion-item>
-            <ion-label floating>
+            <ion-label floating class="labelFont">
               <ion-icon name="md-calendar" item-start class="text-primary-login" ></ion-icon>
               Fecha Hasta
             </ion-label>
@@ -82,7 +84,7 @@
 
   </form>
 
-
+<!-- 
   <div text-center *ngIf="dataService.ReportExpediente.length==0" >
     <h4 class="img">Sin registros para mostrar</h4>
   </div>
@@ -113,7 +115,39 @@
       </ion-item-sliding>
      
 
-    </ion-list>
+    </ion-list> -->
+
+    <div text-center *ngIf="dataService.ReportExpediente.length==0; else hasElement">
+      <h4 class="img">Sin registros para mostrar</h4>
+    </div>
+    <ng-template #hasElement>
+      <ion-list>
+        <ion-list-header>
+          <h2><strong>Resultados</strong> </h2>
+        </ion-list-header>
+        <ion-item-sliding *ngFor="let item of dataService.ReportExpediente">
+          <ion-item class="item item-block item-md">
+            <ion-icon name="md-document" color="primary" item-start></ion-icon>
+            <ion-label text-wrap col-9>
+              <h2>{{item.NroExpedienteInterno}}</h2>
+              <p>{{item.Actividad}}</p>
+            </ion-label>
+            <ion-label text-wrap class="wrap-dateTime" col-3>
+              {{item.FechaInicio}}
+            </ion-label>
+          </ion-item>
+          <ion-item-options side="right">
+            <button ion-button color="miTema" (click)="showModal(item)">
+              <ion-icon name="md-eye"></ion-icon>
+              Visualizar
+            </button>
+          </ion-item-options>
+
+        </ion-item-sliding>
+
+      </ion-list>
+
+    </ng-template>
 
   
   

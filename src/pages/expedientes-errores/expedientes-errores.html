@@ -1,0 +1,60 @@
+<!-- -->
+<ion-header>
+  <ion-navbar color="miTema">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      <strong>Expedientes con Error
+      </strong>
+    </ion-title>
+    <ion-buttons end>
+
+      <button ion-button tappable (click)="logout()">
+        <ion-icon name="log-out" style="zoom: 130%"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div text-center *ngIf="expedientesErroneos.length==0; else hasElement">
+    <h4 class="img">Sin registros para mostrar</h4>
+  </div>
+  <ng-template #hasElement>
+    <ion-list>
+       <ion-list-header>
+         <h2><strong>Expedientes Erroneos</strong> </h2>
+       </ion-list-header>
+       <ion-item-sliding *ngFor="let item of expedientesErroneos">
+         <ion-item class="item item-block item-md">
+            <ion-label text-wrap col-8>
+              <h2>{{item.NroExpedienteInterno}}</h2>
+              <p><span>Actas:{{item.rutasActas.length}},</span>
+                  <span>Adjuntos:{{item.rutasAttch.length}}</span>
+                </p>
+                <p><span>Tiene Arreglo Pago:{{item.TieneArregloPago == 0 ? 'No' : 'Si'}}</span></p>
+                <p><span>Tiene Infracciones:{{item.TieneInfraccion == 0 ? 'No' : 'Si'}}</span></p>
+            </ion-label>
+          <ion-label text-wrap col-3>
+            <p><span class="wrap-dateTime">{{item.createAt | date:'dd/MM/yyyy'}}</span></p>
+            <div *ngIf="item.TieneArregloPago == 0;else showButton">
+              <button ion-button color="miTema" [disabled]="true">
+                <ion-icon name="md-eye-off"></ion-icon>
+                ver
+              </button>
+            </div>
+            <ng-template #showButton>
+              <button ion-button color="miTema" (click)="showInfo(item)">
+                <ion-icon name="md-eye"></ion-icon>
+                ver
+              </button>
+            </ng-template>
+            
+          </ion-label>
+         </ion-item>
+       </ion-item-sliding>
+    </ion-list>
+  </ng-template>
+
+</ion-content>

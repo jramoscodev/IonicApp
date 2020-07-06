@@ -193,7 +193,7 @@
         "parents": {
           "/manifest/application": [
             {
-              "xml": "<application android:usesCleartextTraffic=\"true\" />",
+              "xml": "<application android:largeHeap=\"true\" />",
               "count": 3,
               "mode": "merge",
               "id": "config.xml",
@@ -208,7 +208,7 @@
               }
             },
             {
-              "xml": "<application android:largeHeap=\"true\" />",
+              "xml": "<application android:networkSecurityConfig=\"@xml/network_security_config\" />",
               "count": 2,
               "mode": "merge",
               "id": "config.xml",
@@ -223,7 +223,7 @@
               }
             },
             {
-              "xml": "<application android:networkSecurityConfig=\"@xml/network_security_config\" />",
+              "xml": "<application android:usesCleartextTraffic=\"true\" />",
               "count": 1,
               "mode": "merge",
               "id": "config.xml",
@@ -244,60 +244,60 @@
   },
   "installed_plugins": {
     "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "com.secretariaseguridad.app"
+      "PACKAGE_NAME": "com.centec.stss.app"
     },
     "cordova-plugin-statusbar": {
-      "PACKAGE_NAME": "com.secretariaseguridad.app"
+      "PACKAGE_NAME": "com.centec.stss.app"
     },
     "cordova-plugin-device": {
-      "PACKAGE_NAME": "com.secretariaseguridad.app"
+      "PACKAGE_NAME": "com.centec.stss.app"
     },
     "cordova-plugin-splashscreen": {
-      "PACKAGE_NAME": "com.secretariaseguridad.app"
+      "PACKAGE_NAME": "com.centec.stss.app"
     },
     "cordova-plugin-ionic-webview": {
       "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+",
-      "PACKAGE_NAME": "com.secretariaseguridad.app"
+      "PACKAGE_NAME": "com.centec.stss.app"
     },
     "cordova-plugin-ionic-keyboard": {
-      "PACKAGE_NAME": "com.secretariaseguridad.app"
+      "PACKAGE_NAME": "com.centec.stss.app"
     },
     "call-number": {
-      "PACKAGE_NAME": "com.secretariaseguridad.app"
+      "PACKAGE_NAME": "com.centec.stss.app"
     },
     "cordova-sqlite-storage": {
-      "PACKAGE_NAME": "com.secretariaseguridad.app"
+      "PACKAGE_NAME": "com.centec.stss.app"
     },
     "cordova-plugin-camera": {
       "ANDROID_SUPPORT_V4_VERSION": "27.+",
-      "PACKAGE_NAME": "com.secretariaseguridad.app"
+      "PACKAGE_NAME": "com.centec.stss.app"
     },
     "cordova-plugin-telerik-imagepicker": {
-      "PACKAGE_NAME": "com.secretariaseguridad.app"
+      "PACKAGE_NAME": "com.centec.stss.app"
     },
     "cordova-plugin-chooser": {
-      "PACKAGE_NAME": "com.secretariaseguridad.app"
+      "PACKAGE_NAME": "com.centec.stss.app"
     },
     "cordova-plugin-network-information": {
-      "PACKAGE_NAME": "com.secretariaseguridad.app"
+      "PACKAGE_NAME": "com.centec.stss.app"
     },
     "cordova-plugin-background-mode": {
-      "PACKAGE_NAME": "com.secretariaseguridad.app"
+      "PACKAGE_NAME": "com.centec.stss.app"
     },
     "cordova-plugin-filepath": {
-      "PACKAGE_NAME": "com.secretariaseguridad.app"
+      "PACKAGE_NAME": "com.centec.stss.app"
     },
     "cordova-plugin-networkinterface": {
-      "PACKAGE_NAME": "com.secretariaseguridad.app"
+      "PACKAGE_NAME": "com.centec.stss.app"
     },
     "cordova-plugin-file": {
-      "PACKAGE_NAME": "com.secretariaseguridad.app"
+      "PACKAGE_NAME": "com.centec.stss.app"
     },
     "cordova-plugin-badge": {
-      "PACKAGE_NAME": "com.secretariaseguridad.app"
+      "PACKAGE_NAME": "com.centec.stss.app"
     },
     "cordova-plugin-local-notification": {
-      "PACKAGE_NAME": "com.secretariaseguridad.app"
+      "PACKAGE_NAME": "com.centec.stss.app"
     }
   },
   "dependent_plugins": {},

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { ModalRegistrarComponent } from './modal-registrar';
 @NgModule({
-	declarations: [ModalRegistrarComponent],
+//	declarations: [ModalRegistrarComponent],
 	imports: [],
-	exports: [ModalRegistrarComponent]
+//	exports: [ModalRegistrarComponent]
 })
 export class ComponentsModule {}

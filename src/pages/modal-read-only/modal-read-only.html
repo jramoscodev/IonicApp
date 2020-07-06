@@ -1,0 +1,141 @@
+<ion-header>
+
+  <ion-navbar color="miTema">
+    <ion-title>
+      <strong>Arreglo de pago
+      </strong>
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">Cerrar</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-12>
+        <ion-item>
+          <ion-label floating>
+            <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon> Número de Expediente Interno
+          </ion-label>
+          <ion-input type="text" class="text-primary-login" maxLength="25" id="NroExpedienteIntegral"
+            [(ngModel)]="model.NroExpedienteInterno" name="NroExpedienteIntegral" [readonly]="true"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12>
+        <ion-item>
+          <ion-label floating>
+            <ion-icon name="ios-person-outline" item-start class="text-primary-login"></ion-icon> Nombre
+          </ion-label>
+          <ion-input type="text" class="text-primary-login" maxLength="25" id="Nombre"
+            [(ngModel)]="model.Nombre" name="Nombre" [readonly]="true"></ion-input>
+        </ion-item>
+      </ion-col>
+
+      <ion-col col-12>
+        <ion-item>
+          <ion-label floating>
+            <ion-icon name="ios-person-outline" item-start class="text-primary-login"></ion-icon> Concepto Pago
+          </ion-label>
+          <ion-input type="text" class="text-primary-login" maxLength="25" id="ConceptoPago"
+            [(ngModel)]="model.ConceptoPago"
+            name="ConceptoPago" [readonly]="true"></ion-input>
+        </ion-item>
+      </ion-col>
+
+      <ion-col col-12>
+        <ion-item>
+          <ion-label floating>
+            <ion-icon name="ios-calendar-outline" item-start class="text-primary-login"></ion-icon>
+             Descripción Acta
+          </ion-label>
+          <ion-input id="DescripcionActa" [(ngModel)]="model.DescripcionActa" [readonly]="true" name="DescripcionActa">
+          </ion-input>
+        </ion-item>
+      </ion-col>
+      
+       <ion-col col-12>
+         <ion-item>
+           <ion-label floating>
+             <ion-icon name="ios-cash-outline" item-start class="text-primary-login"></ion-icon>
+              Total a Pagar Lempiras
+           </ion-label>
+           <ion-input id="CantidadPago" [(ngModel)]="model.TotalPagar" type="tel" name="CantidadPago"
+             class="numeros CurrencyInput" [readonly]="true" >
+           </ion-input>
+         </ion-item>
+       </ion-col>
+
+       <ion-col col-12>
+         <ion-row>
+           <ion-item col-7>
+             <ion-label floating class="labelFont">
+               <ion-icon name="ios-calendar-outline" item-start class="text-primary-login"></ion-icon>
+                Nro. Pagos a Realizar
+
+             </ion-label>
+             <ion-input type="tel" id="NumeroPago" class="numeros" [(ngModel)]="model.CantidadPago"
+               [readonly]="true"
+               name="NumeroPago">
+             </ion-input>
+           </ion-item>
+
+           <ion-item col-5>
+
+           </ion-item>
+         </ion-row>
+       </ion-col>
+
+     
+         <ion-grid>
+           <ion-row>
+             <ion-col col-2>
+               <ion-item>
+                 <ion-label>
+                   <p >N°</p>
+                 </ion-label>
+               </ion-item>
+             </ion-col>
+             <ion-col col-5>
+               <ion-item text-center>
+                 <ion-label>
+                   <p>Fecha</p>
+                 </ion-label>
+               </ion-item>
+             </ion-col>
+             <ion-col col-5>
+               <ion-item text-center>
+                 <ion-label>
+                   <p> Valor en L.</p>
+                 </ion-label>
+               </ion-item>
+             </ion-col>
+           </ion-row>
+           <ion-row *ngFor="let item of model.ArregloPago; index as i">
+             <ion-col col-2>
+               <ion-item>
+                 <ion-label><span style="font-size: 11px;"> {{i + 1}}</span> </ion-label>
+               </ion-item>
+             </ion-col>
+             <ion-col col-5>
+               <ion-item class="item-coutas">
+                 <ion-datetime displayFormat="DD/MM/YYYY" pickerFormat="DD/MM/YYYY" [(ngModel)]="item.FechaPagoText"
+                   name="FechaPago" max="2050-12-31" disabled
+                   class="text-primary-login"></ion-datetime>
+               </ion-item>
+             </ion-col>
+             <ion-col col-4>
+               <ion-item>
+                 <ion-input type="tel" name="ValorPagar" class="text-primary-login numeros" [readonly]="true"
+                   [(ngModel)]="item.ValorPagar"></ion-input>
+               </ion-item>
+
+             </ion-col>
+           </ion-row>
+         </ion-grid>
+   
+
+    </ion-row>
+  </ion-grid>
+</ion-content>

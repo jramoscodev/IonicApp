@@ -40731,6 +40731,12 @@ h3 {
   color: black !important;
 }
 
+.beta {
+  position: fixed;
+  bottom: 0;
+  margin-left: 5em;
+}
+
 page-home {
   /*.home {
   ion-list {
@@ -40813,6 +40819,11 @@ page-home .imgFooter {
   font-size: 3vw !important;
 }
 
+.wrap-dateTime {
+  font-size: 2.3vw;
+  margin-top: 0;
+}
+
 .colorLetra {
   color: white;
 }
@@ -40844,6 +40855,11 @@ page-nosotros .labelFont {
 }
 
 page-nosotros .wrap-dateTime {
+  font-size: 2.3vw;
+  margin-top: 0;
+}
+
+.wrap-dateTime {
   font-size: 2.3vw;
   margin-top: 0;
 }
@@ -40923,6 +40939,19 @@ modal-details .embed-container iframe {
 
 .item-coutas {
   font-size: 1em !important;
+}
+
+.btnaddFee {
+  position: absolute;
+  bottom: 10px;
+}
+
+.labelFont {
+  font-size: 3.5vw !important;
+}
+
+.item-coutas {
+  font-size: 0.8em !important;
 }
 
 modal-details {

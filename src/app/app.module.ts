@@ -36,6 +36,9 @@ import { File } from '@ionic-native/file';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 
 import { TextMaskModule } from 'angular2-text-mask';
+import { DataService } from '../services/dataService';
+import { ExpedientesErroresPage } from '../pages/expedientes-errores/expedientes-errores';
+import { ModalReadOnlyComponent } from '../pages/modal-read-only/modal-read-only';
 
 @NgModule({
   declarations: [
@@ -43,13 +46,15 @@ import { TextMaskModule } from 'angular2-text-mask';
     HomePage,
     LoginPage,
     RecuperarCredencialesPage,
+    ExpedientesErroresPage,
     ConsultaExpedienteComponent,
     ConsultaExpedienteExtComponent,
     RegistrarExpedienteComponent,
     ModalDetailsComponent,
     ModalRegistrarComponent,
     ModalRestPassComponent,
-    ModalFormaPagoComponent
+    ModalFormaPagoComponent,
+    ModalReadOnlyComponent
   ],
   imports: [
     TextMaskModule,
@@ -72,19 +77,23 @@ import { TextMaskModule } from 'angular2-text-mask';
     MyApp,
     HomePage, 
     LoginPage,
+    ExpedientesErroresPage,
     RecuperarCredencialesPage,
     ConsultaExpedienteComponent,
     ConsultaExpedienteExtComponent,
     RegistrarExpedienteComponent,
+    
     ModalRegistrarComponent,
     ModalRestPassComponent,
-    ModalFormaPagoComponent
+    ModalFormaPagoComponent,
+    ModalReadOnlyComponent
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    { provide: ErrorHandler,  useClass: IonicErrorHandler},
     Configuration,
+    DataService,
     CallNumber,
     Camera,
     WebView,

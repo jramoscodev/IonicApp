@@ -54,6 +54,7 @@ export class ModalRegistrarComponent implements OnInit {
   dataToStorage: InsertActaModel[] = new Array();
   payment: ArregloPagoModel;
   files;
+  maxFiles:number = 5;
   public img;
 
   public listPathFile = [];
@@ -262,8 +263,13 @@ export class ModalRegistrarComponent implements OnInit {
     current.name = file['fileName'];
     current.path = file['path'];
     current.type = this.photo.getFileContent(type)
+    if(this.attchFiles.length >=this.maxFiles){
+      this._serviceAlert.presentConfirm('Número de archivos adjuntos excedidos');
+      this._serviceAlert.dismissLoading();
+      return;
+    }
+
     this.attchFiles.push(current);
-    //
   }
 
  
@@ -301,7 +307,7 @@ export class ModalRegistrarComponent implements OnInit {
   async presentFileActionSheet() {
 
     const actionSheet = this.actionSheetCtrl.create({
-      title: 'Adjuntar Archivo',
+      title: `Adjuntar Archivo (Máximo ${this.maxFiles} archivos)`,
       buttons: [
         {
           text: 'Galeria',
@@ -312,14 +318,14 @@ export class ModalRegistrarComponent implements OnInit {
           }
         },
         {
-          text: 'Video',
+          text: 'Video ( 1 min max.)',
           icon: 'videocam',
           handler: () => {
             this.chooseFile(FileType.Video)
           }
         },
         {
-          text: 'Audio',
+          text: 'Audio (1 min max.)',
           icon: 'musical-notes',
           handler: () => {
             this.chooseFile(FileType.Audio);
@@ -339,6 +345,11 @@ export class ModalRegistrarComponent implements OnInit {
         
       ]
     });
+    if (this.attchFiles.length >= this.maxFiles) {
+      this._serviceAlert.presentConfirm(`Máximo de archivos adjuntos permitidos ${this.maxFiles}`);
+      this._serviceAlert.dismissLoading();
+      return;
+    }
     await actionSheet.present();
 
   }
@@ -628,11 +639,11 @@ export class ModalRegistrarComponent implements OnInit {
   async Save(comp) {
 
 
-    if(this.hasInfraction && this.payment == undefined){
-      this._serviceAlert.presentConfirm('Debe agregar arreglo de pago');
-      return;
+    // if(this.hasInfraction && this.payment == undefined){
+    //   this._serviceAlert.presentConfirm('Debe agregar arreglo de pago');
+    //   return;
 
-    }
+    // }
 
     let insert = new InsertActaModel();
    
@@ -642,31 +653,38 @@ export class ModalRegistrarComponent implements OnInit {
    // insert.Tipo = 178;
     insert.FechaActa = comp.FechaActa;
     insert.TieneInfraccion= this.hasInfraction ? 1:0;
-    insert.TieneArregloPago = this.hasInfraction ? 1 : 0;
+    if(this.payment == undefined || this.payment == null ) {
+      insert.TieneArregloPago = 0;
+    } else { insert.TieneArregloPago = 1;}
+    
     //insert.Estado = 10;
     insert.rutasActas = this.actaFiles;
     insert.rutasAttch = this.attchFiles;
     insert.IdAccionSeguimiento= comp.ListaAcciones[0].IdAccionSeguimientoFlujo;
-    insert.ArregloPago = this.payment;
+    insert.ArregloPago = (this.payment == undefined ? null : this.payment);
     this._serviceAlert.showLoading()
    try{
      console.log('request:',insert)
      let result = await this.ServiceGlobal.UpdateActa(insert);
      console.log(result);
 
-     this._serviceAlert.presentConfirm('datos actualizados')
+     this._serviceAlert.presentConfirm('Datos actualizados')
      this._serviceAlert.dismissLoading();
      this.dismiss(insert.NroExpedienteIntegral)
    }catch(e){
      console.log('catch error',e);
      if (e.status == 0)
      {
-       this._serviceAlert.presentConfirm('No se puedo establecer conexion a internet, se almacenara la información para su procesamiento ');
+       this._serviceAlert.presentConfirm('No se puedo establecer conexión a internet, se almacenara la información para su procesamiento ');
        this.setToLocalStorage(insert);
        this._serviceAlert.dismissLoading();
        this.dismiss(insert.NroExpedienteIntegral)
       }else{
-       this._serviceAlert.presentConfirm('Error al actualizar los datos, verificque la informacion ingresada');
+       if (e.error.Status == this._mensajes.STATUS_VALIDATE || e.error.Status == this._mensajes.STATUS_NOT_FOUND || e.error.Status == this._mensajes.STATUS_TOKEN || e.error.Status == this._mensajes.STATUS_NOT_DATA) {
+         this._serviceAlert.presentConfirm(e.error.Message);
+       } else {
+         this._serviceAlert.presentConfirm(this._mensajes.ERROR_GENERICO);
+       }
        this._serviceAlert.dismissLoading();
      } 
    }
@@ -765,6 +783,7 @@ export class ModalRegistrarComponent implements OnInit {
   addPayment(e:any){
    // console.log(this.dataService.dataRegistrarExp);
     //this.mostrarModalFormaPago(this.dataService.dataRegistrarExp);
+    console.log(this.dataService.dataRegistrarExp)
     let payment = this.myModal.create(ModalFormaPagoComponent, { datapass: this.dataService.dataRegistrarExp});
     payment.onDidDismiss(data => {
       if(data['isSave']){
