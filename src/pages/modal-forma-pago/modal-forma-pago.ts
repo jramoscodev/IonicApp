@@ -433,11 +433,11 @@ export class ModalFormaPagoComponent {
       || this.model.CantidadPago ==0
       ){
 
-      this.messageErrors.push('Total Pago o Numero de pagos no se han completado')
+      this.messageErrors.push('Total Pago o Número de pagos no se han completado')
       return;
     }
 
-
+    var fixedSume = 0;
     this.messageErrors = this.messageErrors.filter(e => e != 'Total Pago o Numero de pagos no se han completado');
     //naive
     let nextPay = new Date();
@@ -453,13 +453,18 @@ export class ModalFormaPagoComponent {
       pago.ValorPagar = cuota;
       pago.CuotaNum = i+1; 
       this.listaPagos.push(pago);
+      fixedSume += cuota;
     }
 
     if(this.listaPagos.length > 0) 
     {
       this.messageErrors = this.messageErrors.filter(e => e != 'No hay pagos generados');
     }
-
+   
+    if (this.model.TotalPagar > Number.parseFloat(fixedSume.toFixed(2))){
+      let addCent = Number.parseFloat((this.model.TotalPagar - fixedSume).toFixed(2));
+      this.listaPagos[this.listaPagos.length - 1].ValorPagar += addCent
+    }
   }
 
   private itemDateMinDate(index:number) {
@@ -535,7 +540,7 @@ export class ModalFormaPagoComponent {
 
       if (Math.round(this.model.TotalPagar) > Math.round(sumTotal)) { this.messageErrorFee.push('Suma de pagos es menor al total a pagar'); }
 
-      if (this.hasEmptyValues()) { this.messageErrorFee.push('Valor del pago no puede ser vacio o cero'); }
+      if (this.hasEmptyValues()) { this.messageErrorFee.push('Valor del pago no puede ser vació o cero'); }
 
       console.log(this.messageErrorFee)
     } catch (e) {
