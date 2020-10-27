@@ -21,6 +21,9 @@ export class AuthenticationService {
 
           return result;
         },e=>{
+            if(e.status == 0){
+              throw "No se puede iniciar sesion, verifica tu conexión a internet";
+            }
             result.error = e.error;
             return result;
         });

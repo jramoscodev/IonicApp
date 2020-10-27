@@ -179,31 +179,35 @@ export class LoginPage implements OnInit {
     });
     console.log(body);
 
-    let result = await this.auth.logIn(body) as LoginResult;
-    console.log(result);
-    if(result.error !=undefined){
-      let messageError = result.error
-      if (messageError.Status == this._messsage.STATUS_NOT_FOUND || messageError.Status == this._messsage.STATUS_TOKEN || messageError.Status == this._messsage.STATUS_NOT_DATA || messageError.Status == this._messsage.STATUS_VALIDATE) {
-        this._serviceAlert.presentConfirm(messageError.Message);
-      } else {
-        //this._serviceAlert.presentConfirm(this._messsage.ERROR_GENERICO);
-        this._serviceAlert.presentConfirm(JSON.stringify(messageError));
+    try{
+      let result = await this.auth.logIn(body) as LoginResult;
+      console.log(result);
+      if (result.error != undefined) {
+        let messageError = result.error
+        if (messageError.Status == this._messsage.STATUS_NOT_FOUND || messageError.Status == this._messsage.STATUS_TOKEN || messageError.Status == this._messsage.STATUS_NOT_DATA || messageError.Status == this._messsage.STATUS_VALIDATE) {
+          this._serviceAlert.presentConfirm(messageError.Message);
+        } else {
+          //this._serviceAlert.presentConfirm(this._messsage.ERROR_GENERICO);
+          this._serviceAlert.presentConfirm(JSON.stringify(messageError));
+        }
       }
-    }
 
-    if(result.data !=null){
-       let data = result.data;
-      if (data.typo == undefined || data.typo == null|| data.typo == 0 )
-        this.events.publish('user:0');
-      else
-        this.events.publish('user:1');
+      if (result.data != null) {
+        let data = result.data;
+        if (data.typo == undefined || data.typo == null || data.typo == 0)
+          this.events.publish('user:0');
+        else
+          this.events.publish('user:1');
 
-      this.nav.setRoot(HomePage, {
-        Usuario: front.Usuario,
-        Contrasena: front.Contrasena,
-        cambioPass: data.changedPass
+        this.nav.setRoot(HomePage, {
+          Usuario: front.Usuario,
+          Contrasena: front.Contrasena,
+          cambioPass: data.changedPass
 
-      });
+        });
+      }
+    }catch(e){
+      this._serviceAlert.presentConfirm('No se puede iniciar sesión, verifica que tienes conexión a internet');
     }
 
     this._serviceAlert.dismissLoading();

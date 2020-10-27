@@ -1,6 +1,7 @@
 export class ArregloPagoModel
 {
     NroExpedienteIntegral:String;
+    NroExpedienteInterno:String;
     Nombre:String;
     ConceptoPago:String;
     DescripcionActa:String;

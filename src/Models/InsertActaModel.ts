@@ -15,4 +15,12 @@ export class InsertActaModel {
     rutasAttch:any[];
     IdAccionSeguimiento:any;
     ArregloPago: ArregloPagoModel;
+    createAt:Date;
+    hasError:any;
+    constructor(){
+        this.createAt = new Date();
+    }
+
+
+   
 }

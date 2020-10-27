@@ -20,7 +20,7 @@
 
   <ion-navbar color="miTema">
     <ion-title>
-      <strong>Registrar Info. de Expediente
+      <strong style="font-size: 4vw !important;">Registrar Info. de Expediente
       </strong>
     </ion-title>
     <ion-buttons end>
@@ -58,11 +58,11 @@
               <ion-label floating>
                 <ion-icon name="md-grid" item-start class="text-primary-login"></ion-icon>
                 <span class="text-danger">*</span>
-                Número de expediente integral
+                Número de expediente interno
               </ion-label>
               <ion-input type="text" class="text-primary-login" maxLength="25" id="NroExpedienteIntegral"
                 name="NroExpedienteIntegral" formControlName="NroExpedienteIntegral"
-                [(ngModel)]="dataService.dataRegistrarExp.NroExpedienteIntegral" [readonly]="true"></ion-input>
+                [(ngModel)]="dataService.dataRegistrarExp.NroExpedienteInterno" [readonly]="true"></ion-input>
 
             </ion-item>
           </ion-col>
@@ -140,7 +140,7 @@
 
           <ion-col col-12 *ngIf="hasInfraction">
               <ion-item *ngIf="hasPayment == undefined || hasPayment == null;else showPayment">
-                <ion-label col-9><span class="text-danger">*</span>Agregar arreglo de pago</ion-label>
+                <ion-label col-9><p>(Opcional)</p>Agregar arreglo de pago</ion-label>
                 <ion-label col-2>
                   <button ion-button icon-start icon-only [clear]="true" (click)="addPayment($event)">
                     <ion-icon name="add-circle"></ion-icon>

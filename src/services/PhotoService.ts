@@ -58,7 +58,7 @@ export class PhotoService {
 
       try{
           const options: ImagePickerOptions = {
-              maximumImagesCount: 2,
+              maximumImagesCount: 1,
               quality: 70,
               outputType: 0,
               height:80,

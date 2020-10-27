@@ -118,7 +118,7 @@ export class ServiceGlobals {
     return this.file.readAsArrayBuffer(finalUri, name).then(value =>{
       return value;
     }).catch(ex=>{
-      return null;
+       throw ex;
     })
   }
 
@@ -163,10 +163,14 @@ export class ServiceGlobals {
     //add attchment
     let attch = request.rutasAttch as ListFiles[];
     for (let i = 0; i <= attch.length - 1; i++) {
-      let arry = await this.readFiles(attch[i].path, attch[i].name);
-      if (arry == null) { continue; }
+      try{
+        let arry = await this.readFiles(attch[i].path, attch[i].name);
+        if (arry == null) { console.log('file null', attch[i].path ); continue; }
 
-      data.append(`filesAttch[${i}]`, new Blob([arry]), attch[i].name);
+        data.append(`filesAttch[${i}]`, new Blob([arry]), attch[i].name);
+      }catch(ex){
+        console.log(ex)
+      }
     }
     //has payment FechaPago
     if (request.ArregloPago != undefined || request.ArregloPago !=null){
@@ -205,10 +209,10 @@ export class ServiceGlobals {
     for (var pair of data.entries()) {
       console.log(pair[0] + ', ' + pair[1]);
     }
-
+    console.log('enviando peticion')
     return this.http.post(`${this._url.BaseUrl}/riesgoprofesional/insertarregistroactaappmovil`,data,{
       headers: new HttpHeaders().set('enctype', 'multipart/form-data').set('XAuthToken', localStorage.getItem('tokenSTS'))
-   }).toPromise();
+    }).toPromise();
    
     
  

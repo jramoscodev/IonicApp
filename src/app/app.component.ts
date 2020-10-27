@@ -35,9 +35,10 @@ import {
 import { InsertActaModel } from '../Models/InsertActaModel';
 import { ServiceGlobals } from '../services/ServiceGlobals';
 import { LocalNotifications } from '@ionic-native/local-notifications';
+import { ExpedientesErroresPage } from '../pages/expedientes-errores/expedientes-errores';
 
 
-
+declare var cordova:any;
 //declare var navigator: any;
 
 @Component({
@@ -56,7 +57,8 @@ export class MyApp {
     component: any,
     icon: String
   } > ;
-
+  hasErro:any;
+  countNotifications:any = 0;
   constructor(
     public platform: Platform,
     public menu: MenuController,
@@ -65,6 +67,7 @@ export class MyApp {
     private events: Events,
     private service: ServiceGlobals,
     private localNotifications: LocalNotifications) {
+   
     this.initializeApp();
     
     // set our app's pages
@@ -88,6 +91,11 @@ export class MyApp {
           title: 'Registrar Info. Expedientes',
           component: RegistrarExpedienteComponent,
           icon: 'ios-add-circle-outline'
+        },
+        {
+          title:'Errores',
+          component: ExpedientesErroresPage,
+          icon:'ios-warning-outline'
         },
       ]
     })
@@ -118,51 +126,61 @@ export class MyApp {
       
       this.platform.pause.subscribe( async ()=>{
         console.log('bk proccess')
+        cordova.plugins.backgroundMode.setDefaults({ silent: true });
+        cordova.plugins.backgroundMode.on('activate', function () {
+          cordova.plugins.backgroundMode.disableWebViewOptimizations();
+        });
+        cordova.plugins.backgroundMode.enable();
        
        this.timer= setInterval(async ()=>{
-          var hasAccess = await this.service.PingServer();
-          if(!this.isRunning && hasAccess){
-         
-            // //if(this.isRunning) return; //salir si ya se esta ejecutando 
-            console.log('internet y no se esta ejecutando ')
+        
+        if(this.isRunning){ return;} //prevent made ping
+
+         var hasAccess = await this.service.PingServer();
+         console.log('internet access', hasAccess);
+         console.log(`is run? ${this.isRunning}, has access to internet? ${hasAccess}`);
+         if(this.isRunning == false && hasAccess == true) { //entra a procesar
+          try{
             this.isRunning = true;
+            //get data from localStorage
             let data = JSON.parse(localStorage.getItem('background')) as InsertActaModel[];
+            //set error object
             let errorData: InsertActaModel[] = new Array<InsertActaModel>();
-            console.log(data);
-            if (data ==null) { return; }// salimos si no hay nada que procesar
-             let count = 0;
-             var tmp:any;
+            console.log('data en local storage', data);
+            if(data == null){this.isRunning =false;  return};
+            let tmp = new InsertActaModel;
             for (let item of data) {
               tmp = item;
               try {
-                 await this.service.UpdateActa(item);
-  
-                 count++;
-              } catch (e) { console.error(e); errorData.push(tmp); }
-            }//en loop elements
-            if(count > 0) {
-              //set notification
-              this.localNotifications.schedule({
-                id: 1,
-                text: `Expedientes actualizados ${count}`,
-                sound: this.platform.is('android') ? 'file://sound.mp3' : 'file://beep.caf',
-
-              });
-             }
-          
-
-             // check if array has elements
-            errorData.length > 0 ? localStorage.setItem('background', JSON.stringify(errorData)) : localStorage.removeItem('background');
-             console.log('setting is running to false')
-             this.isRunning = false;
-
-          }//end access to internet
-
-
-       },3000);
-
-       
-      
+                console.log('bk task', item)
+                await this.service.UpdateActa(item);
+                console.log('peticion hecha')
+                this.sendNotification(`Acta ${item.NroExpedienteInterno}`, 'Exitosa');
+              } catch (e) {
+                console.error(e);
+                if (e['error'] == undefined || e['error'] == null){
+                  tmp.hasError = 'Error al transmitir datos, consulte sitio web para mas información';
+                }else{
+                  tmp.hasError = e.error.Message;
+                }
+                
+                this.sendNotification(`Acta ${item.NroExpedienteInterno}`, tmp.hasError);
+                errorData.push(tmp);
+              }
+            }//end loop elements
+            localStorage.removeItem('background');
+            if (errorData.length > 0) {
+              let newsErrors = this.setErrorBackground(errorData);
+              localStorage.setItem('errorProcess', JSON.stringify(newsErrors));
+            }
+            console.log('setting is running to false');
+            this.isRunning = false;
+          }catch(ex){
+            this.isRunning = false;
+            console.error(ex);
+          }
+         }
+       }, 39000);     
         
       },err=>{ console.error('error',err); })
     });//end pause app
@@ -170,8 +188,6 @@ export class MyApp {
 
     this.platform.resume.subscribe(() =>{
      clearInterval(this.timer)
-       
-      
     }, err => { console.error(err) })
 
   }
@@ -183,4 +199,24 @@ export class MyApp {
     this.nav.setRoot(page.component);
   }
    
+  private sendNotification(titulo:any, message:any){
+    //set notification
+    this.countNotifications++;
+    this.localNotifications.schedule({
+      id: this.countNotifications,
+      text: message,
+      sound: this.platform.is('android') ? 'file://sound.mp3' : 'file://beep.caf',
+      title: titulo
+    });
+  }
+
+  private setErrorBackground(newErrors: InsertActaModel[]){
+    let errors = JSON.parse(localStorage.getItem('errorProcess')) as InsertActaModel[];
+    if(errors==null) return newErrors;
+
+    newErrors.forEach(function(item){
+      errors.push(item);
+    })
+    return errors;
+  }
 }

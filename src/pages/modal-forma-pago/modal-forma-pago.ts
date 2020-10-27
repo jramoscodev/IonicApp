@@ -60,6 +60,7 @@ export class ModalFormaPagoComponent {
     var data = this.navParams.get("datapass");
     this.model = new ArregloPagoModel(); 
     this.model.NroExpedienteIntegral = data['NroExpedienteIntegral'];
+    this.model.NroExpedienteInterno = data['NroExpedienteInterno'];
     this.model.IdPatronoEmpleador = data['IdPatronoEmpleador'];
     this.model.IdTrabajador = data['IdTrabajador'];
 
@@ -111,7 +112,7 @@ export class ModalFormaPagoComponent {
    
     this.ServiceGlobal.validationNumeros()
     this.ServiceGlobal.FormatCurrency()
-    this.loadFormaPago()
+   // this.loadFormaPago()
     this.messageErrorPayments = new Array<String>();
     this.messageErrorFee = new Array<String>();
     this.messageErrors = new Array<String>();
@@ -141,7 +142,7 @@ export class ModalFormaPagoComponent {
 
 
     const body = JSON.parse(JSON.stringify(this.navParams.get("datapass")));
-
+    console.log(this.navParams.get("datapass"))
     this.dataService.dataRegistrarPago = body;
     this.dataService.dataRegistrarPago['CantidadPago']=0;
     this.dataService.dataRegistrarPago['NumeroPago']=0;
@@ -378,6 +379,8 @@ export class ModalFormaPagoComponent {
       return;
     }
 
+
+
     this.model.ArregloPago = this.listaPagos;
     let data = { 'isSave': true,'data':this.model };
     console.log('save data in dismiss')
@@ -385,6 +388,7 @@ export class ModalFormaPagoComponent {
   }
 
   onKeyPress(e:any, value:any){
+    console.log(e)
     if (e.code == "Space") e.preventDefault();
     if (e.key == "." && (value == undefined || value =="")) e.preventDefault();
     if (e.key == "." && String(value).includes('.')) e.preventDefault();
@@ -399,6 +403,8 @@ export class ModalFormaPagoComponent {
     }
     
   }
+
+
   onFeeKeyPress(e: any, value: any){
     if (e.code == "Space") e.preventDefault();
     if (e.key == ".") e.preventDefault();
@@ -407,6 +413,7 @@ export class ModalFormaPagoComponent {
       e.preventDefault();
     }
     if (String(value).length > 1){ e.preventDefault();}
+    console.log(e)
     this.hasFee = true;
   }
 
@@ -417,13 +424,21 @@ export class ModalFormaPagoComponent {
 
 
   async addFee(){
-    console.log(this.model)
+    
+    this.messageErrorFee = new Array<String>();
+
     if(this.model.CantidadPago == undefined 
-      || this.model.CantidadPago == null
-      || this.model.TotalPagar == undefined || this.model.TotalPagar == null){
+      || this.model.TotalPagar == undefined 
+      || this.model.TotalPagar == 0
+      || this.model.CantidadPago ==0
+      ){
+
+      this.messageErrors.push('Total Pago o Numero de pagos no se han completado')
       return;
     }
 
+
+    this.messageErrors = this.messageErrors.filter(e => e != 'Total Pago o Numero de pagos no se han completado');
     //naive
     let nextPay = new Date();
     this.listaPagos = new Array<Pagos>();
@@ -438,6 +453,11 @@ export class ModalFormaPagoComponent {
       pago.ValorPagar = cuota;
       pago.CuotaNum = i+1; 
       this.listaPagos.push(pago);
+    }
+
+    if(this.listaPagos.length > 0) 
+    {
+      this.messageErrors = this.messageErrors.filter(e => e != 'No hay pagos generados');
     }
 
   }
@@ -470,8 +490,8 @@ export class ModalFormaPagoComponent {
      
      let beforeCurrent = this.listaPagos[i - 1].FechaPago;
      let afterCurrent = this.listaPagos[i + 1].FechaPago;
-     if (beforeCurrent >= currentDate) this.messageErrorPayments.push(`Fecha de Pago ${i + 1} debe ser mayor a cuota ${i}`);
-     if (currentDate > afterCurrent) this.messageErrorPayments.push(`Fecha de Pago ${i + 1} debe ser menor a cuota ${i + 2}`);
+     if (beforeCurrent >= currentDate) this.messageErrorPayments.push(`Fecha de Pago ${i + 1} debe ser mayor a pago ${i}`);
+     if (currentDate > afterCurrent) this.messageErrorPayments.push(`Fecha de Pago ${i + 1} debe ser menor a pago ${i + 2}`);
 
    }
     
@@ -497,22 +517,34 @@ export class ModalFormaPagoComponent {
   }
 
   onItemBlur(e:any){
+   this.validateSum()
+  }
+
+  private validateSum()
+  {
     this.messageErrorFee = new Array<String>();
-    var sumTotal = this.listaPagos.reduce(function (prev, cur) {
-      return prev + (cur.ValorPagar * 1);
-    }, 0);
-    console.log(sumTotal)
-    
-    if (Number.parseFloat(sumTotal.toFixed(2)) > this.model.TotalPagar){ this.messageErrorFee.push('Suma de Pagos es mayor a Pago Total');}
-    
-    if (this.model.TotalPagar > Number.parseFloat(sumTotal.toFixed(2))){ this.messageErrorFee.push('Suma de Pagos es menor a Pago Total');}
+    try {
+     
+     // var regexp = /^[0-9]+([,.][0-9]+)?$/g;
+      var sumTotal = this.listaPagos.reduce(function (prev, cur) {
+  
+        return prev + (cur.ValorPagar * 1);
+      }, 0);
 
-    if (this.hasEmptyVules()){ this.messageErrorFee.push('Pago no puede ser vacio o cero');}
+      if (Math.round(sumTotal) > Math.round(this.model.TotalPagar)) { this.messageErrorFee.push('Suma de pagos es mayor al total a pagar'); }
 
-    console.log(this.messageErrorFee)
+      if (Math.round(this.model.TotalPagar) > Math.round(sumTotal)) { this.messageErrorFee.push('Suma de pagos es menor al total a pagar'); }
+
+      if (this.hasEmptyValues()) { this.messageErrorFee.push('Valor del pago no puede ser vacio o cero'); }
+
+      console.log(this.messageErrorFee)
+    } catch (e) {
+      this.messageErrorFee.push('Valor ingresado no valido');
+    }
   }
   
-  private hasEmptyVules() {
+
+  private hasEmptyValues() {
     for(let i = 0; i<= this.listaPagos.length -1; i++){
       if (this.listaPagos[i].ValorPagar == null || this.listaPagos[i].ValorPagar == "")
        return true;
@@ -539,15 +571,25 @@ export class ModalFormaPagoComponent {
   private Validate()
   {
     this.messageErrors = new Array<String>();
-
+    this.validateSum()
 
     if (this.model.ConceptoPago == undefined || this.model.ConceptoPago == null || this.model.ConceptoPago.length == 0) this.messageErrors.push('Concepto Pago es requerido');
-    if (this.model.Nombre == undefined || this.model.Nombre == null || this.model.Nombre.length == 0) this.messageErrors.push('Nombre Pago es requerido');
-    if (this.model.DescripcionActa == undefined || this.model.DescripcionActa == null || this.model.DescripcionActa.length == 0) this.messageErrors.push('Descripcion Pago es requerido');
-    if (this.model.TotalPagar == undefined || this.model.TotalPagar == null || this.model.TotalPagar == 0) this.messageErrors.push('Total Pago no valido');
+    if (this.model.Nombre == undefined || this.model.Nombre == null || this.model.Nombre.length == 0) this.messageErrors.push('Nombre es requerido');
+    if (this.model.DescripcionActa == undefined || this.model.DescripcionActa == null || this.model.DescripcionActa.length == 0) this.messageErrors.push('Descripción de acta requerido');
+    if (this.model.TotalPagar == undefined || this.model.TotalPagar == null || this.model.TotalPagar == 0) this.messageErrors.push('Total a pagar no valido');
     if (this.model.CantidadPago == undefined || this.model.CantidadPago == null || this.model.CantidadPago == 0) this.messageErrors.push('Numero de pagos no valido');
  
- 
+    if(this.listaPagos == undefined || this.listaPagos.length == 0) {
+      this.messageErrors.push('No hay pagos generados');
+    }
+
+    if (this.messageErrorFee != undefined && this.messageErrorFee.length > 0){
+      return false;
+    }
+    if(this.messageErrorPayments !=undefined && this.messageErrorPayments.length > 0) {
+      return false;
+    }
+    
     return this.messageErrors.length > 0 ? false : true;
   }
 
@@ -555,11 +597,11 @@ export class ModalFormaPagoComponent {
 
     if(this.messageErrors !== undefined && this.messageErrors.length > 0) {
      
-      if (this.model.Nombre != undefined && this.model.Nombre.length > 0) this.messageErrors = this.messageErrors.filter(e => e != 'Nombre Pago es requerido');
-      if (this.model.DescripcionActa != undefined && this.model.DescripcionActa.length > 0) this.messageErrors = this.messageErrors.filter(e => e != 'Descripcion Pago es requerido');
+      if (this.model.Nombre != undefined && this.model.Nombre.length > 0) this.messageErrors = this.messageErrors.filter(e => e != 'Nombre es requerido');
+      if (this.model.DescripcionActa != undefined && this.model.DescripcionActa.length > 0) this.messageErrors = this.messageErrors.filter(e => e != 'Descripcion de acta requerido');
       if (this.model.ConceptoPago != undefined && this.model.ConceptoPago.length > 0) this.messageErrors = this.messageErrors.filter(e => e != 'Concepto Pago es requerido');
-      if (this.model.TotalPagar != undefined && this.model.TotalPagar > 0) this.messageErrors = this.messageErrors.filter(e => e != 'Total Pago no valido');
-      if (this.model.CantidadPago != undefined && this.model.CantidadPago > 0) this.messageErrors = this.messageErrors.filter(e => e != 'Numero de pagos no valido');
+      if (this.model.TotalPagar != undefined && this.model.TotalPagar > 0) this.messageErrors = this.messageErrors.filter(e => e != 'Total a pagar no valido');
+      if (this.model.CantidadPago != undefined && this.model.CantidadPago > 0){ this.messageErrors = this.messageErrors.filter(e => e != 'Numero de pagos no valido'); this.hasFee = true}
     }
   }
 
