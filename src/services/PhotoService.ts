@@ -21,12 +21,10 @@ export class PhotoService {
         
         try{
             const options: CameraOptions = {
-                quality: 70,
+                quality: 65,
                 destinationType: this.camera.DestinationType.FILE_URI,
                 sourceType: this.camera.PictureSourceType.CAMERA,
                 encodingType: this.camera.EncodingType.JPEG,
-                targetWidth: 80,
-                targetHeight: 80,
             }
             const tempImagePath = await this.camera.getPicture(options);
             const tempFilename = tempImagePath.substr(tempImagePath.lastIndexOf('/') + 1);
@@ -59,10 +57,8 @@ export class PhotoService {
       try{
           const options: ImagePickerOptions = {
               maximumImagesCount: 1,
-              quality: 70,
+              quality: 85,
               outputType: 0,
-              height:80,
-              width:80
           };
          let result = await this.imagePicker.getPictures(options);
         if (result.length == 0) return null;

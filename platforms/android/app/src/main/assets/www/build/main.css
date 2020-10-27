@@ -40776,6 +40776,10 @@ page-home .lableFont {
   font-size: 3vw !important;
 }
 
+page-home .btnVer {
+  font-size: 3vw !important;
+}
+
 page-home {
   /*.home {
   ion-list {
@@ -40824,6 +40828,10 @@ page-home .imgFooter {
   margin-top: 0;
 }
 
+.btnVer {
+  font-size: 3vw !important;
+}
+
 .colorLetra {
   color: white;
 }
@@ -40857,6 +40865,10 @@ page-nosotros .labelFont {
 page-nosotros .wrap-dateTime {
   font-size: 2.3vw;
   margin-top: 0;
+}
+
+page-nosotros .btnVer {
+  font-size: 3vw !important;
 }
 
 .wrap-dateTime {

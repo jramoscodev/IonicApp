@@ -14,8 +14,8 @@ export class Configuration {
 
   
   //PRODUCION
-  public uriServer = "https://201.220.133.207:443/"
-  public BaseUrl = "https://201.220.133.207:443/api";
+  public uriServer = "https://181.210.8.69:443/"
+  public BaseUrl = "https://181.210.8.69:443/api";
   public ServerLocal_Security = this.uriServer+'api/seguridad/' ;
   public serverLocalFlujo=this.uriServer+ "api/flujos/";
   public serverCambio=this.uriServer+"api/"
