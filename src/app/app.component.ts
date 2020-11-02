@@ -66,6 +66,7 @@ export class MyApp {
     public splashScreen: SplashScreen,
     private events: Events,
     private service: ServiceGlobals,
+
     private localNotifications: LocalNotifications) {
    
     this.initializeApp();
@@ -118,77 +119,77 @@ export class MyApp {
 
   initializeApp() {
     this.platform.ready().then(() => {
+     
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      // watch network for a connection
-      
-      this.platform.pause.subscribe( async ()=>{
+      cordova.plugins.backgroundMode.enable();
+      //on pause
+      this.platform.pause.subscribe(() => {
         console.log('bk proccess')
-        cordova.plugins.backgroundMode.setDefaults({ silent: true });
-        cordova.plugins.backgroundMode.on('activate', function () {
-          cordova.plugins.backgroundMode.disableWebViewOptimizations();
-        });
-        cordova.plugins.backgroundMode.enable();
-       
-       this.timer= setInterval(async ()=>{
-        
-        if(this.isRunning){ return;} //prevent made ping
-
-         var hasAccess = await this.service.PingServer();
-         console.log('internet access', hasAccess);
-         console.log(`is run? ${this.isRunning}, has access to internet? ${hasAccess}`);
-         if(this.isRunning == false && hasAccess == true) { //entra a procesar
-          try{
-            this.isRunning = true;
-            //get data from localStorage
-            let data = JSON.parse(localStorage.getItem('background')) as InsertActaModel[];
-            //set error object
-            let errorData: InsertActaModel[] = new Array<InsertActaModel>();
-            console.log('data en local storage', data);
-            if(data == null){this.isRunning =false;  return};
-            let tmp = new InsertActaModel;
-            for (let item of data) {
-              tmp = item;
-              try {
-                console.log('bk task', item)
-                await this.service.UpdateActa(item);
-                console.log('peticion hecha')
-                this.sendNotification(`Acta ${item.NroExpedienteInterno}`, 'Exitosa');
-              } catch (e) {
-                console.error(e);
-                if (e['error'] == undefined || e['error'] == null){
-                  tmp.hasError = 'Error al transmitir datos, consulte sitio web para mas información';
-                }else{
-                  tmp.hasError = e.error.Message;
+        this.timer= setInterval(async ()=> {
+          console.log('init setInterval')
+          if(this.isRunning){ return;} //prevent made ping
+  
+           var hasAccess = await this.service.PingServer();
+           console.log('internet access', hasAccess);
+           console.log(`is run? ${this.isRunning}, has access to internet? ${hasAccess}`);
+           if(this.isRunning == false && hasAccess == true) { //entra a procesar
+            try{
+              this.isRunning = true;
+              //get data from localStorage
+              let data = JSON.parse(localStorage.getItem('background')) as InsertActaModel[];
+              //set error object
+              let errorData: InsertActaModel[] = new Array<InsertActaModel>();
+              console.log('data en local storage', data);
+              if(data == null){this.isRunning =false;  return};
+              let tmp = new InsertActaModel;
+              for (let item of data) {
+                tmp = item;
+                try {
+                  console.log('bk task', item)
+                  await this.service.UpdateActa(item);
+                  console.log('peticion hecha')
+                  this.sendNotification(`Acta ${item.NroExpedienteInterno}`, 'Exitosa');
+                } catch (e) {
+                  console.error(e);
+                  if (e['error'] == undefined || e['error'] == null){
+                    tmp.hasError = 'Error al transmitir datos, consulte sitio web para más información';
+                  }else{
+                    if(e.error['Message'] == undefined || e.error['Message'] == null)
+                      tmp.hasError = 'Error al transmitir datos, consulte sitio web para más información';
+                    else
+                      tmp.hasError = e.error.Message;
+                  }
+                  
+                  this.sendNotification(`Acta ${item.NroExpedienteInterno}`, tmp.hasError);
+                  errorData.push(tmp);
                 }
-                
-                this.sendNotification(`Acta ${item.NroExpedienteInterno}`, tmp.hasError);
-                errorData.push(tmp);
+              }//end loop elements
+              localStorage.removeItem('background');
+              if (errorData.length > 0) {
+                let newsErrors = this.setErrorBackground(errorData);
+                localStorage.setItem('errorProcess', JSON.stringify(newsErrors));
               }
-            }//end loop elements
-            localStorage.removeItem('background');
-            if (errorData.length > 0) {
-              let newsErrors = this.setErrorBackground(errorData);
-              localStorage.setItem('errorProcess', JSON.stringify(newsErrors));
+              console.log('setting is running to false');
+              this.isRunning = false;
+            }catch(ex){
+              this.isRunning = false;
+              console.error(ex);
             }
-            console.log('setting is running to false');
-            this.isRunning = false;
-          }catch(ex){
-            this.isRunning = false;
-            console.error(ex);
-          }
-         }
-       }, 39000);     
-        
-      },err=>{ console.error('error',err); })
-    });//end pause app
+           }
+        },39000)
+      })
 
+      //on resume
+      this.platform.resume.subscribe(()=>{
+        clearInterval(this.timer)
+      }, err => { console.error(err) });
 
-    this.platform.resume.subscribe(() =>{
-     clearInterval(this.timer)
-    }, err => { console.error(err) })
+    }).catch(ex => {
+      console.log("error en Init ready",ex)
+    })
 
   }
 
@@ -206,7 +207,10 @@ export class MyApp {
       id: this.countNotifications,
       text: message,
       sound: this.platform.is('android') ? 'file://sound.mp3' : 'file://beep.caf',
-      title: titulo
+      title: titulo,
+      foreground:true,
+      priority:1,
+      vibrate:true
     });
   }
 

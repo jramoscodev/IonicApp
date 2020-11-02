@@ -113,11 +113,13 @@ export class ServiceGlobals {
   private async readFiles(uri:string,name:string)
   {
     
+     
     let finalUri = uri.substr(0, uri.lastIndexOf('/') + 1);
 
     return this.file.readAsArrayBuffer(finalUri, name).then(value =>{
       return value;
     }).catch(ex=>{
+       console.log("Error en el readAsArray", ex)
        throw ex;
     })
   }
@@ -164,6 +166,7 @@ export class ServiceGlobals {
     let attch = request.rutasAttch as ListFiles[];
     for (let i = 0; i <= attch.length - 1; i++) {
       try{
+        console.log(`path file: ${attch[i].path}`)
         let arry = await this.readFiles(attch[i].path, attch[i].name);
         if (arry == null) { console.log('file null', attch[i].path ); continue; }
 

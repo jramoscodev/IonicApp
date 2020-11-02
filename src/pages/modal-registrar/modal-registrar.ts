@@ -196,6 +196,14 @@ export class ModalRegistrarComponent implements OnInit {
 
   }
 
+  deleteAttch2(e:any, item: ListFiles) {
+    let index = this.attchFiles.indexOf(item);
+    if (index !== -1) {
+      this.attchFiles.splice(index, 1);
+    }
+
+  }
+
   async chooseFromGallery()
   {
     let gallery = await this.photo.openGallery();
@@ -675,7 +683,7 @@ export class ModalRegistrarComponent implements OnInit {
      console.log('catch error',e);
      if (e.status == 0)
      {
-       this._serviceAlert.presentConfirm('No se puedo establecer conexión a internet, se almacenara la información para su procesamiento ');
+       this._serviceAlert.presentConfirm('No se puede establecer conexión a internet, se almacenará la información para su procesamiento ');
        this.setToLocalStorage(insert);
        this._serviceAlert.dismissLoading();
        this.dismiss(insert.NroExpedienteIntegral)

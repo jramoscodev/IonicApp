@@ -125,21 +125,15 @@
         <ion-list-header>
           <h2><strong>Resultados</strong> </h2>
         </ion-list-header>
-        <ion-item-sliding *ngFor="let item of dataService.ReportExpediente">
-          <ion-item class="item item-block item-md">
-            <ion-label text-wrap col-8>
-              <h2>{{item.NroExpedienteInterno}}</h2>
-              <h5>{{item.Actividad}}</h5>
-              <p style="padding-top: 4px;">{{item.FechaInicio}}</p>
-            </ion-label>
-           
-           <ion-label>
-              <button ion-button color="miTema" class="btnVer"  (click)="showModal(item)">
-                <ion-icon name="md-eye"></ion-icon>&nbsp;Visualizar
-              </button>
-           </ion-label>
-          </ion-item>
-        </ion-item-sliding>
+        
+          
+          <button ion-item *ngFor="let item of dataService.ReportExpediente"  (click)="showModal(item)">
+            <h2>{{item.NroExpedienteInterno}}</h2>
+            <h5>{{item.Actividad}}</h5>
+            <p style="padding-top: 4px;">{{item.FechaInicio}} </p>
+            <p clear item-end style="color: #0645AD; margin-bottom: 10px;">Visualizar</p>
+          </button>
+    
 
       </ion-list>
 

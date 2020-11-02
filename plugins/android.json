@@ -19,10 +19,6 @@
     "cordova-plugin-splashscreen": {
       "PACKAGE_NAME": "com.centec.stss.app"
     },
-    "cordova-plugin-ionic-webview": {
-      "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+",
-      "PACKAGE_NAME": "com.centec.stss.app"
-    },
     "cordova-plugin-ionic-keyboard": {
       "PACKAGE_NAME": "com.centec.stss.app"
     },
@@ -37,6 +33,7 @@
       "PACKAGE_NAME": "com.centec.stss.app"
     },
     "cordova-plugin-telerik-imagepicker": {
+      "ANDROID_SUPPORT_V7_VERSION": "27.+",
       "PACKAGE_NAME": "com.centec.stss.app"
     },
     "cordova-plugin-chooser": {
@@ -58,6 +55,12 @@
       "PACKAGE_NAME": "com.centec.stss.app"
     },
     "cordova-plugin-local-notification": {
+      "PACKAGE_NAME": "com.centec.stss.app"
+    },
+    "cordova-plugin-transport-security": {
+      "PACKAGE_NAME": "com.centec.stss.app"
+    },
+    "cordova-plugin-ionic-webview": {
       "PACKAGE_NAME": "com.centec.stss.app"
     }
   },

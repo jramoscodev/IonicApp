@@ -41146,6 +41146,10 @@ modal-details .inputfile-5 + label svg {
   fill: #f1e5e6;
 }
 
+modal-details tr.border_bottom td {
+  border-bottom: 1px solid black;
+}
+
 modal-details .inputfile-6 + label {
   color: #d3394c;
 }

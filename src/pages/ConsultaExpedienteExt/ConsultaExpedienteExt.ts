@@ -176,6 +176,7 @@ export class ConsultaExpedienteExtComponent implements OnInit {
 
 
   showModal(datafront) {
+    console.log('entra en metodo show')
     var dataMo = {
       datapass: datafront
     };

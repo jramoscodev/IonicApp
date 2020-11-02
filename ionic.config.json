@@ -6,8 +6,9 @@
   "type": "ionic-angular",
   "proxies": [
     {
-      "path": "/api/seguridad/iniciosesion",
-      "proxyUrl": "https://localhost:44306/api/seguridad/iniciosesion"
+      "path": "/",
+      "proxyUrl": "https://181.210.8.69:443/",
+      "rejectUnauthorized": false
       
     }
   ]

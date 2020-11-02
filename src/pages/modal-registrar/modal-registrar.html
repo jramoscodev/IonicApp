@@ -193,7 +193,23 @@
 
           <ion-col col-12>
 
-            <ion-list>
+<!--iOS UI-->
+          <table style="margin: 0 auto;">
+          <tr *ngFor="let item of actaFiles?.reverse()" >
+              <td width="75%"><h4>{{item.name}}</h4></td>
+              <td width="20%"> 
+                <button ion-button clear color="danger"  (click)="delete(item)">
+                  <ion-icon name="trash"></ion-icon>
+                </button>
+              </td>
+            </tr>
+          </table>
+
+<!--end iOS UI-->
+
+<!--UI para Android descomentar para compilar para Android y comentar la parte de arriba donde dice iOS  -->
+
+            <!-- <ion-list>
               <ion-item-sliding *ngFor="let item of actaFiles?.reverse() ">
                 <ion-item>
                   <ion-label text-wrap col-10>
@@ -214,7 +230,7 @@
 
 
               </ion-item-sliding>
-            </ion-list>
+            </ion-list> -->
 
           </ion-col>
 
@@ -238,29 +254,19 @@
 
 
           <ion-col col-12>
-
-            <ion-list>
-              <ion-item-sliding *ngFor="let attch of attchFiles?.reverse() ">
-                <ion-item>
-                  <ion-label text-wrap col-10>
-                    {{attch.name}}
-                  </ion-label>
-                  <ion-label col-2>
-                    <button ion-button icon-only [clear]="true" color="danger" (click)="deleteAttch(attch)">
-                      <ion-icon name="trash"></ion-icon>
-                    </button>
-                  </ion-label>
-                </ion-item>
-                <ion-item-options side="right">
-
-                  <button ion-button color="danger" (click)="deleteAttch(attch)">
-                    <ion-icon name="trash"></ion-icon> Eliminar
-                  </button>
-                </ion-item-options>
-
-
-              </ion-item-sliding>
-            </ion-list>
+<!--UI iOS-->
+              
+                <table style="margin: 0 auto;">
+                  <tr *ngFor="let attch of attchFiles?.reverse()">
+                      <td width="75%"><h4>{{attch.name}}</h4></td>
+                      <td width="20%"> 
+                        <button ion-button clear color="danger"  (click)="deleteAttch(attch)">
+                          <ion-icon name="trash"></ion-icon>
+                        </button>
+                      </td>
+                    </tr>
+                </table>
+<!--End-->       
 
           </ion-col>
           

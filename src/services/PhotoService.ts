@@ -4,7 +4,7 @@ import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker';
 import { FilePath } from '@ionic-native/file-path';
 import { Chooser, ChooserResult } from '@ionic-native/chooser';
 import { Platform } from 'ionic-angular';
-
+import { File, IWriteOptions } from '@ionic-native/file';
 
 
 @Injectable()
@@ -13,7 +13,8 @@ export class PhotoService {
                 private imagePicker: ImagePicker, 
                 private filePath: FilePath,
                 private chooser :Chooser,
-                private platform:Platform
+                private platform:Platform,
+                private file: File
                ) { }
 
     async takePicture() {
@@ -28,10 +29,7 @@ export class PhotoService {
             }
             const tempImagePath = await this.camera.getPicture(options);
             const tempFilename = tempImagePath.substr(tempImagePath.lastIndexOf('/') + 1);
-            //  const tempBaseFilesystemPath = tempImagePath.substr(0, tempImagePath.lastIndexOf('/') + 1);
-
-
-            let result = { path: tempImagePath, fileName: tempFilename }
+             let result = { path: tempImagePath, fileName: tempFilename }
             return result;
         }catch(e)
         {
@@ -55,12 +53,12 @@ export class PhotoService {
     {
 
       try{
-          const options: ImagePickerOptions = {
-              maximumImagesCount: 1,
-              quality: 85,
-              outputType: 0,
-          };
-         let result = await this.imagePicker.getPictures(options);
+        const options: ImagePickerOptions = {
+            maximumImagesCount: 1,
+            quality: 85,
+            outputType: 0,
+        };
+        let result = await this.imagePicker.getPictures(options);
         if (result.length == 0) return null;
         let response : FilesResponsePhoto[] = new Array();
         for (let i = 0; i <= result.length -1; i++)
@@ -88,12 +86,17 @@ export class PhotoService {
         let checkExt = fileName.split('.')[1];
         if(checkExt.toLowerCase() !== 'pdf') return null;
         let pathPdf : string;
-        if(this.platform.is('android'))
+        if(this.platform.is('android')){
           pathPdf= await  this.filePath.resolveNativePath(result.uri);
-        else
-          pathPdf = result.uri;
-        let response = { path: pathPdf , fileName: fileName }
-        console.log('file dir', response);
+        }else{
+          let appFolder =  this.file.cacheDirectory;
+          console.log("app directory",appFolder);
+          let dataFile = new Blob([result.data]);
+          this.writeFileIos(appFolder,result.name,dataFile);
+          pathPdf = appFolder,result.name;
+        }
+        let response = { path: pathPdf , fileName: fileName };
+        console.log('pdf dir', response);
         return response;
        }catch(e){
            return { error: e };
@@ -110,18 +113,46 @@ export class PhotoService {
             if (result == undefined) return null;
 
             let fileName = result.name;
-           let pathPdf:string; 
-           if(this.platform.is('android'))
-              pathPdf = await this.filePath.resolveNativePath(result.uri);
-            else
-              pathPdf = result.uri
-            let response = { path: pathPdf, fileName: fileName }
-            console.log(response)
+           let pathFile:string; 
+
+           if(this.platform.is('android')){
+            pathFile= await  this.filePath.resolveNativePath(result.uri);
+          }else{
+            let appFolder =  this.file.cacheDirectory ;
+            console.log("app directory",appFolder)
+            let dataFile = new Blob([result.data]);
+            this.writeFileIos(appFolder,result.name,dataFile);
+            pathFile = appFolder,result.name;
+          }
+            let response = { path: pathFile , fileName: fileName }
+             console.log('file dir', response);
             return response;
         } catch (e) {
             return { error: e };
         }
     }
+
+
+    private writeFileIos(pathDir:string,fileName:string,data:Blob){
+        console.log("path: -------- ",pathDir)
+      /*  if(!this.file.checkDir(this.file.applicationStorageDirectory,"documents"))
+        {
+            this.file.createDir(this.file.applicationStorageDirectory,"documents",true);
+            console.log("directorio documents creado")
+        }*/
+       
+
+        let options : IWriteOptions = {
+            replace:true
+        }
+        this.file.writeFile(pathDir,fileName,data,options).then(()=>{
+            console.log("escritura exitosa")
+        }).catch(ex=>{
+            console.log("Error escribiendo archivo", ex)
+            throw ex;
+         })
+    }
+
 
     private getContentType(type: FileType)
     {
@@ -131,7 +162,7 @@ export class PhotoService {
                 content ='.mp3,audio/*'
                 break;
             case FileType.Video:
-                content = 'video/*'
+                content = 'video/*,.mov'
                 
                 break;
             case FileType.Image:
