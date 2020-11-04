@@ -465,6 +465,11 @@ export class ModalFormaPagoComponent {
       let addCent = Number.parseFloat((this.model.TotalPagar - fixedSume).toFixed(2));
       this.listaPagos[this.listaPagos.length - 1].ValorPagar += addCent
     }
+    if (fixedSume > this.model.TotalPagar ) {
+      let addCent = fixedSume - this.model.TotalPagar;
+      let fixCuota = (this.listaPagos[this.listaPagos.length - 1].ValorPagar - addCent).toFixed(2);
+      this.listaPagos[this.listaPagos.length - 1].ValorPagar = Number.parseFloat(fixCuota)
+    }
   }
 
   private itemDateMinDate(index:number) {
