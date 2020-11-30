@@ -158,10 +158,13 @@ export class MyApp {
                 this.sendNotification(`Acta ${item.NroExpedienteInterno}`, 'Exitosa');
               } catch (e) {
                 console.error(e);
-                if (e['error'] == undefined || e['error'] == null){
-                  tmp.hasError = 'Error al transmitir datos, consulte sitio web para mas información';
-                }else{
-                  tmp.hasError = e.error.Message;
+                if (e['error'] == undefined || e['error'] == null) {
+                  tmp.hasError = 'Error al transmitir datos, consulte sitio web para más información';
+                } else {
+                  if (e.error['Message'] == undefined || e.error['Message'] == null)
+                    tmp.hasError = 'Error al transmitir datos, consulte sitio web para más información';
+                  else
+                    tmp.hasError = e.error.Message;
                 }
                 
                 this.sendNotification(`Acta ${item.NroExpedienteInterno}`, tmp.hasError);
