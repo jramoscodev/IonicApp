@@ -157,9 +157,7 @@ export class RegistrarExpedienteComponent implements OnInit {
 
     this._serviceAlert.showLoading();
 
-
     let urlSend = this.dataService._uriFlujoEspecial + 'nroExpedienteIntegral=' + datafront.numeroExpedienteIntegral + '&nroExpedienteInterno=' + datafront.numeroExpedienteInterno + '&nombreRazon=' + datafront.nombreEmpresa + '&fechaDesde=' + datafront.fechaDesde + "&fechaHasta=" + datafront.fechaHasta + "&estado=62&IdFlujo=3&idEstadoFlujo=35&idAccionFlujo=3";
-
 
     this.serviceGlobal.GetApi(urlSend, 1)
       .then(data => {

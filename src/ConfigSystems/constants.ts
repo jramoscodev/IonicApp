@@ -14,8 +14,8 @@ export class Configuration {
 
   
   //PRODUCION
-  public uriServer = "https://casos.trabajo.gob.hn:444";
-  public BaseUrl = "https://casos.trabajo.gob.hn:444/api/";
+  public uriServer = "https://casos.trabajo.gob.hn:444/";
+  public BaseUrl = "https://casos.trabajo.gob.hn:444/api";
   public ServerLocal_Security = this.uriServer+'api/seguridad/' ;
   public serverLocalFlujo=this.uriServer+ "api/flujos/";
   public serverCambio=this.uriServer+"api/"

@@ -46,7 +46,6 @@ export class ServiceGlobals {
 
 
   public GetApi(url, param): any {
-
     let uriServece = "";
     if (param == 1)
       uriServece = this.api_flujo
@@ -60,6 +59,7 @@ export class ServiceGlobals {
         .subscribe(res => {
           resolve(res);
         }, (err) => {
+          console.log(err)
           reject(err);
         });
     });
