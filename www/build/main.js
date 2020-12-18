@@ -679,12 +679,12 @@ var Configuration = /** @class */ (function () {
         // public uriServer="http://201.220.133.218:8007/";
         // public uriServer="https://172.16.1.116:444/";
         //public uriServer = "https://192.168.0.10:45455/";
-        this.uriServer = "https://ecms-backend.conveyor.cloud/";
-        this.BaseUrl = "https://ecms-backend.conveyor.cloud/api";
+        //public uriServer = "https://ecms-backend.conveyor.cloud/";
+        //public BaseUrl = "https://ecms-backend.conveyor.cloud/api";
         //public BaseUrl = "https://192.168.0.10:45455/api";
         //PRODUCION
-        //public uriServer = "https://181.210.8.69:443/";
-        //public BaseUrl = "https://181.210.8.69:443/api";
+        this.uriServer = "https://casos.trabajo.gob.hn:444/";
+        this.BaseUrl = "https://casos.trabajo.gob.hn:444/api";
         this.ServerLocal_Security = this.uriServer + 'api/seguridad/';
         this.serverLocalFlujo = this.uriServer + "api/flujos/";
         this.serverCambio = this.uriServer + "api/";
@@ -2746,7 +2746,7 @@ var ModalFormaPagoComponent = /** @class */ (function () {
     };
     ModalFormaPagoComponent.prototype.addFee = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var fixedSume, nextPay, cuota, i, pago, addCent;
+            var fixedSume, nextPay, cuota, i, pago, addCent, addCent, fixCuota;
             return __generator(this, function (_a) {
                 this.messageErrorFee = new Array();
                 if (this.model.CantidadPago == undefined
@@ -2778,6 +2778,11 @@ var ModalFormaPagoComponent = /** @class */ (function () {
                 if (this.model.TotalPagar > Number.parseFloat(fixedSume.toFixed(2))) {
                     addCent = Number.parseFloat((this.model.TotalPagar - fixedSume).toFixed(2));
                     this.listaPagos[this.listaPagos.length - 1].ValorPagar += addCent;
+                }
+                if (fixedSume > this.model.TotalPagar) {
+                    addCent = fixedSume - this.model.TotalPagar;
+                    fixCuota = (this.listaPagos[this.listaPagos.length - 1].ValorPagar - addCent).toFixed(2);
+                    this.listaPagos[this.listaPagos.length - 1].ValorPagar = Number.parseFloat(fixCuota);
                 }
                 return [2 /*return*/];
             });
@@ -3005,7 +3010,7 @@ var ExpedientesErroresPage = /** @class */ (function () {
     };
     ExpedientesErroresPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-expedientes-errores',template:/*ion-inline-start:"/Users/centec/Documents/IonicApp/IonicApp/src/pages/expedientes-errores/expedientes-errores.html"*/'<!-- -->\n<ion-header>\n  <ion-navbar color="miTema">\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      <strong>Expedientes con Error\n      </strong>\n    </ion-title>\n    <ion-buttons end>\n\n      <button ion-button tappable (click)="logout()">\n        <ion-icon name="log-out" style="zoom: 130%"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <div text-center *ngIf="expedientesErroneos.length==0; else hasElement">\n    <h4 class="img">Sin registros para mostrar</h4>\n  </div>\n  <ng-template #hasElement>\n    <ion-list>\n       <ion-list-header>\n         <h2><strong>Expedientes Erroneos</strong> </h2>\n       </ion-list-header>\n       <ion-item-sliding *ngFor="let item of expedientesErroneos">\n         <ion-item class="item item-block item-md">\n            <ion-label text-wrap col-8>\n              <h2>{{item.NroExpedienteInterno}}</h2>\n              <p><span>Actas:{{item.rutasActas.length}},</span>\n                  <span>Adjuntos:{{item.rutasAttch.length}}</span>\n                </p>\n                <p><span>Tiene Arreglo Pago:{{item.TieneArregloPago == 0 ? \'No\' : \'Si\'}}</span></p>\n                <p><span>Tiene Infracciones:{{item.TieneInfraccion == 0 ? \'No\' : \'Si\'}}</span></p>\n            </ion-label>\n          <ion-label text-wrap col-3>\n            <p><span class="wrap-dateTime">{{item.createAt | date:\'dd/MM/yyyy\'}}</span></p>\n            <div *ngIf="item.TieneArregloPago == 0;else showButton">\n              <button ion-button color="miTema" [disabled]="true">\n                <ion-icon name="md-eye-off"></ion-icon>\n                ver\n              </button>\n            </div>\n            <ng-template #showButton>\n              <button ion-button color="miTema" (click)="showInfo(item)">\n                <ion-icon name="md-eye"></ion-icon>\n                ver\n              </button>\n            </ng-template>\n            \n          </ion-label>\n         </ion-item>\n       </ion-item-sliding>\n    </ion-list>\n  </ng-template>\n\n</ion-content>\n'/*ion-inline-end:"/Users/centec/Documents/IonicApp/IonicApp/src/pages/expedientes-errores/expedientes-errores.html"*/,
+            selector: 'page-expedientes-errores',template:/*ion-inline-start:"/Users/centec/Documents/IonicApp/IonicApp/src/pages/expedientes-errores/expedientes-errores.html"*/'<!-- -->\n<ion-header>\n  <ion-navbar color="miTema">\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      <strong>Expedientes con Error\n      </strong>\n    </ion-title>\n    <ion-buttons end>\n\n      <button ion-button tappable (click)="logout()">\n        <ion-icon name="log-out" style="zoom: 130%"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <div text-center *ngIf="expedientesErroneos.length==0; else hasElement">\n    <h4 class="img">Sin registros para mostrar</h4>\n  </div>\n  <ng-template #hasElement>\n    <h2><strong>Expedientes Erroneos</strong> </h2>\n    <hr/>\n    <table style="margin: 0 auto;">\n      <tr *ngFor="let item of expedientesErroneos" >\n          <td width="85%">\n            <h4>{{item.NroExpedienteInterno}}</h4>\n            <p><span>Actas:{{item.rutasActas.length}},</span>\n              <span>Adjuntos:{{item.rutasAttch.length}}</span>\n            </p>\n            <p><span>Tiene Arreglo Pago:{{item.TieneArregloPago == 0 ? \'No\' : \'Si\'}}</span></p>\n            <p><span>Tiene Infracciones:{{item.TieneInfraccion == 0 ? \'No\' : \'Si\'}}</span></p>\n          \n          </td>\n          <td width="15%"> \n            <p><span class="wrap-dateTime">{{item.createAt | date:\'dd/MM/yyyy\'}}</span></p>\n            <div *ngIf="item.TieneArregloPago == 0;else showButton">\n              <button ion-button color="miTema" [disabled]="true">\n                <ion-icon name="md-eye-off"></ion-icon>\n                &nbsp;ver pagos\n              </button>\n            </div>\n            <ng-template #showButton>\n              <button ion-button color="miTema" (click)="showInfo(item)">\n                <ion-icon name="md-eye"></ion-icon>\n                &nbsp;ver pagos\n              </button>\n            </ng-template>\n          </td>\n        </tr>\n      </table>\n  </ng-template>\n\n</ion-content>\n'/*ion-inline-end:"/Users/centec/Documents/IonicApp/IonicApp/src/pages/expedientes-errores/expedientes-errores.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* NavParams */],

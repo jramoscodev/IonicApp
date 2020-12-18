@@ -1,6 +1,6 @@
 webpackJsonp([0],{
 
-/***/ 161:
+/***/ 162:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -87,7 +87,7 @@ var ModalDetailsComponent = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 172:
+/***/ 173:
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
@@ -100,11 +100,11 @@ function webpackEmptyAsyncContext(req) {
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
 module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 172;
+webpackEmptyAsyncContext.id = 173;
 
 /***/ }),
 
-/***/ 216:
+/***/ 217:
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
@@ -117,7 +117,7 @@ function webpackEmptyAsyncContext(req) {
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
 module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 216;
+webpackEmptyAsyncContext.id = 217;
 
 /***/ }),
 
@@ -179,16 +179,16 @@ var DataService = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ServiceGlobals; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_map__ = __webpack_require__(263);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_map__ = __webpack_require__(264);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_map__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Rx__ = __webpack_require__(426);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_Rx__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ConfigSystems_constants__ = __webpack_require__(354);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_common_http__ = __webpack_require__(257);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ConfigSystems_constants__ = __webpack_require__(355);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_common_http__ = __webpack_require__(258);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_storage__ = __webpack_require__(159);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_jquery__ = __webpack_require__(160);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_file__ = __webpack_require__(356);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_native_file__ = __webpack_require__(161);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -315,6 +315,7 @@ var ServiceGlobals = /** @class */ (function () {
                 return [2 /*return*/, this.file.readAsArrayBuffer(finalUri, name).then(function (value) {
                         return value;
                     }).catch(function (ex) {
+                        console.log("Error en el readAsArray", ex);
                         throw ex;
                     })];
             });
@@ -658,7 +659,7 @@ var ServiceGlobals = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 354:
+/***/ 355:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1106,7 +1107,7 @@ var ModalRestPassComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_dataService__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_ServiceGlobals__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__login_login__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modal_details_modal_details__ = __webpack_require__(161);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modal_details_modal_details__ = __webpack_require__(162);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_forms__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_ServiceAlert__ = __webpack_require__(43);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_Messages__ = __webpack_require__(42);
@@ -1249,7 +1250,7 @@ var ConsultaExpedienteComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_dataService__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_ServiceGlobals__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__login_login__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modal_details_modal_details__ = __webpack_require__(161);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modal_details_modal_details__ = __webpack_require__(162);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_forms__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_ServiceAlert__ = __webpack_require__(43);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_Messages__ = __webpack_require__(42);
@@ -3094,7 +3095,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angular_svg_round_progressbar__ = __webpack_require__(418);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angular_svg_round_progressbar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_angular_svg_round_progressbar__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_common_http__ = __webpack_require__(257);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_common_http__ = __webpack_require__(258);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_call_number_ngx__ = __webpack_require__(419);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_component__ = __webpack_require__(425);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_home_home__ = __webpack_require__(83);
@@ -3102,8 +3103,8 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_RecuperarCredenciales_RecuperarCredenciales__ = __webpack_require__(357);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_ConsultaExpediente_ConsultaExpediente__ = __webpack_require__(360);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_RegistrarExpediente_RegistrarExpediente__ = __webpack_require__(362);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__ConfigSystems_constants__ = __webpack_require__(354);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__pages_modal_details_modal_details__ = __webpack_require__(161);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__ConfigSystems_constants__ = __webpack_require__(355);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__pages_modal_details_modal_details__ = __webpack_require__(162);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pages_ConsultaExpedienteExt_ConsultaExpedienteExt__ = __webpack_require__(361);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__pages_modal_registrar_modal_registrar__ = __webpack_require__(363);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pages_modal_rest_pass_modal_rest_pass__ = __webpack_require__(359);
@@ -3121,7 +3122,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__ionic_native_network__ = __webpack_require__(713);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__services_BackgroundTask__ = __webpack_require__(714);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__ionic_native_network_interface__ = __webpack_require__(715);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__ionic_native_file__ = __webpack_require__(356);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__ionic_native_file__ = __webpack_require__(161);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__ionic_native_local_notifications__ = __webpack_require__(372);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_33_angular2_text_mask__ = __webpack_require__(716);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_33_angular2_text_mask___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_33_angular2_text_mask__);
@@ -3437,117 +3438,112 @@ var MyApp = /** @class */ (function () {
             // Here you can do any higher level native things you might need.
             _this.statusBar.styleDefault();
             _this.splashScreen.hide();
-            // watch network for a connection
-            _this.platform.pause.subscribe(function () { return __awaiter(_this, void 0, void 0, function () {
-                var _this = this;
-                return __generator(this, function (_a) {
-                    console.log('bk proccess');
-                    /*cordova.plugins.backgroundMode.setDefaults({ silent: true });
-                    cordova.plugins.backgroundMode.on('activate', function () {
-                      cordova.plugins.backgroundMode.disableWebViewOptimizations();
-                    });*/
-                    cordova.plugins.backgroundMode.enable();
-                    this.timer = setInterval(function () { return __awaiter(_this, void 0, void 0, function () {
-                        var hasAccess, data, errorData, tmp, data_1, data_1_1, item, e_1, e_2_1, newsErrors, ex_1, e_2, _a;
-                        return __generator(this, function (_b) {
-                            switch (_b.label) {
-                                case 0:
-                                    console.log('init setInterval');
-                                    if (this.isRunning) {
-                                        return [2 /*return*/];
-                                    } //prevent made ping
-                                    return [4 /*yield*/, this.service.PingServer()];
-                                case 1:
-                                    hasAccess = _b.sent();
-                                    console.log('internet access', hasAccess);
-                                    console.log("is run? " + this.isRunning + ", has access to internet? " + hasAccess);
-                                    if (!(this.isRunning == false && hasAccess == true)) return [3 /*break*/, 14];
-                                    _b.label = 2;
-                                case 2:
-                                    _b.trys.push([2, 13, , 14]);
-                                    this.isRunning = true;
-                                    data = JSON.parse(localStorage.getItem('background'));
-                                    errorData = new Array();
-                                    console.log('data en local storage', data);
-                                    if (data == null) {
-                                        this.isRunning = false;
-                                        return [2 /*return*/];
-                                    }
-                                    ;
-                                    tmp = new __WEBPACK_IMPORTED_MODULE_9__Models_InsertActaModel__["a" /* InsertActaModel */];
-                                    _b.label = 3;
-                                case 3:
-                                    _b.trys.push([3, 10, 11, 12]);
-                                    data_1 = __values(data), data_1_1 = data_1.next();
-                                    _b.label = 4;
-                                case 4:
-                                    if (!!data_1_1.done) return [3 /*break*/, 9];
-                                    item = data_1_1.value;
-                                    tmp = item;
-                                    _b.label = 5;
-                                case 5:
-                                    _b.trys.push([5, 7, , 8]);
-                                    console.log('bk task', item);
-                                    return [4 /*yield*/, this.service.UpdateActa(item)];
-                                case 6:
-                                    _b.sent();
-                                    console.log('peticion hecha');
-                                    this.sendNotification("Acta " + item.NroExpedienteInterno, 'Exitosa');
-                                    return [3 /*break*/, 8];
-                                case 7:
-                                    e_1 = _b.sent();
-                                    console.error(e_1);
-                                    if (e_1['error'] == undefined || e_1['error'] == null) {
+            cordova.plugins.backgroundMode.enable();
+            //on pause
+            _this.platform.pause.subscribe(function () {
+                console.log('bk proccess');
+                _this.timer = setInterval(function () { return __awaiter(_this, void 0, void 0, function () {
+                    var hasAccess, data, errorData, tmp, data_1, data_1_1, item, e_1, e_2_1, newsErrors, ex_1, e_2, _a;
+                    return __generator(this, function (_b) {
+                        switch (_b.label) {
+                            case 0:
+                                console.log('init setInterval');
+                                if (this.isRunning) {
+                                    return [2 /*return*/];
+                                } //prevent made ping
+                                return [4 /*yield*/, this.service.PingServer()];
+                            case 1:
+                                hasAccess = _b.sent();
+                                console.log('internet access', hasAccess);
+                                console.log("is run? " + this.isRunning + ", has access to internet? " + hasAccess);
+                                if (!(this.isRunning == false && hasAccess == true)) return [3 /*break*/, 14];
+                                _b.label = 2;
+                            case 2:
+                                _b.trys.push([2, 13, , 14]);
+                                this.isRunning = true;
+                                data = JSON.parse(localStorage.getItem('background'));
+                                errorData = new Array();
+                                console.log('data en local storage', data);
+                                if (data == null) {
+                                    this.isRunning = false;
+                                    return [2 /*return*/];
+                                }
+                                ;
+                                tmp = new __WEBPACK_IMPORTED_MODULE_9__Models_InsertActaModel__["a" /* InsertActaModel */];
+                                _b.label = 3;
+                            case 3:
+                                _b.trys.push([3, 10, 11, 12]);
+                                data_1 = __values(data), data_1_1 = data_1.next();
+                                _b.label = 4;
+                            case 4:
+                                if (!!data_1_1.done) return [3 /*break*/, 9];
+                                item = data_1_1.value;
+                                tmp = item;
+                                _b.label = 5;
+                            case 5:
+                                _b.trys.push([5, 7, , 8]);
+                                console.log('bk task', item);
+                                return [4 /*yield*/, this.service.UpdateActa(item)];
+                            case 6:
+                                _b.sent();
+                                console.log('peticion hecha');
+                                this.sendNotification("Acta " + item.NroExpedienteInterno, 'Exitosa');
+                                return [3 /*break*/, 8];
+                            case 7:
+                                e_1 = _b.sent();
+                                console.error(e_1);
+                                if (e_1['error'] == undefined || e_1['error'] == null) {
+                                    tmp.hasError = 'Error al transmitir datos, consulte sitio web para más información';
+                                }
+                                else {
+                                    if (e_1.error['Message'] == undefined || e_1.error['Message'] == null)
                                         tmp.hasError = 'Error al transmitir datos, consulte sitio web para más información';
-                                    }
-                                    else {
-                                        if (e_1.error['Message'] == undefined || e_1.error['Message'] == null)
-                                            tmp.hasError = 'Error al transmitir datos, consulte sitio web para más información';
-                                        else
-                                            tmp.hasError = e_1.error.Message;
-                                    }
-                                    this.sendNotification("Acta " + item.NroExpedienteInterno, tmp.hasError);
-                                    errorData.push(tmp);
-                                    return [3 /*break*/, 8];
-                                case 8:
-                                    data_1_1 = data_1.next();
-                                    return [3 /*break*/, 4];
-                                case 9: return [3 /*break*/, 12];
-                                case 10:
-                                    e_2_1 = _b.sent();
-                                    e_2 = { error: e_2_1 };
-                                    return [3 /*break*/, 12];
-                                case 11:
-                                    try {
-                                        if (data_1_1 && !data_1_1.done && (_a = data_1.return)) _a.call(data_1);
-                                    }
-                                    finally { if (e_2) throw e_2.error; }
-                                    return [7 /*endfinally*/];
-                                case 12:
-                                    localStorage.removeItem('background');
-                                    if (errorData.length > 0) {
-                                        newsErrors = this.setErrorBackground(errorData);
-                                        localStorage.setItem('errorProcess', JSON.stringify(newsErrors));
-                                    }
-                                    console.log('setting is running to false');
-                                    this.isRunning = false;
-                                    return [3 /*break*/, 14];
-                                case 13:
-                                    ex_1 = _b.sent();
-                                    this.isRunning = false;
-                                    console.error(ex_1);
-                                    return [3 /*break*/, 14];
-                                case 14: return [2 /*return*/];
-                            }
-                        });
-                    }); }, 39000);
-                    return [2 /*return*/];
-                });
-            }); }, function (err) { console.error('error', err); });
-        }); //end pause app
-        this.platform.resume.subscribe(function () {
-            clearInterval(_this.timer);
-        }, function (err) { console.error(err); });
+                                    else
+                                        tmp.hasError = e_1.error.Message;
+                                }
+                                this.sendNotification("Acta " + item.NroExpedienteInterno, tmp.hasError);
+                                errorData.push(tmp);
+                                return [3 /*break*/, 8];
+                            case 8:
+                                data_1_1 = data_1.next();
+                                return [3 /*break*/, 4];
+                            case 9: return [3 /*break*/, 12];
+                            case 10:
+                                e_2_1 = _b.sent();
+                                e_2 = { error: e_2_1 };
+                                return [3 /*break*/, 12];
+                            case 11:
+                                try {
+                                    if (data_1_1 && !data_1_1.done && (_a = data_1.return)) _a.call(data_1);
+                                }
+                                finally { if (e_2) throw e_2.error; }
+                                return [7 /*endfinally*/];
+                            case 12:
+                                localStorage.removeItem('background');
+                                if (errorData.length > 0) {
+                                    newsErrors = this.setErrorBackground(errorData);
+                                    localStorage.setItem('errorProcess', JSON.stringify(newsErrors));
+                                }
+                                console.log('setting is running to false');
+                                this.isRunning = false;
+                                return [3 /*break*/, 14];
+                            case 13:
+                                ex_1 = _b.sent();
+                                this.isRunning = false;
+                                console.error(ex_1);
+                                return [3 /*break*/, 14];
+                            case 14: return [2 /*return*/];
+                        }
+                    });
+                }); }, 39000);
+            });
+            //on resume
+            _this.platform.resume.subscribe(function () {
+                clearInterval(_this.timer);
+            }, function (err) { console.error(err); });
+        }).catch(function (ex) {
+            console.log("error en Init ready", ex);
+        });
     };
     MyApp.prototype.openPage = function (page) {
         // close the menu when clicking a link from the menu
@@ -3562,7 +3558,10 @@ var MyApp = /** @class */ (function () {
             id: this.countNotifications,
             text: message,
             sound: this.platform.is('android') ? 'file://sound.mp3' : 'file://beep.caf',
-            title: titulo
+            title: titulo,
+            foreground: true,
+            priority: 1,
+            vibrate: true
         });
     };
     MyApp.prototype.setErrorBackground = function (newErrors) {
@@ -4041,6 +4040,7 @@ var PagoTesoreria = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_file_path__ = __webpack_require__(367);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_chooser__ = __webpack_require__(368);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ionic_angular__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_file__ = __webpack_require__(161);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4091,13 +4091,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 
 
 
+
 var PhotoService = /** @class */ (function () {
-    function PhotoService(camera, imagePicker, filePath, chooser, platform) {
+    function PhotoService(camera, imagePicker, filePath, chooser, platform, file) {
         this.camera = camera;
         this.imagePicker = imagePicker;
         this.filePath = filePath;
         this.chooser = chooser;
         this.platform = platform;
+        this.file = file;
     }
     PhotoService.prototype.takePicture = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -4165,7 +4167,7 @@ var PhotoService = /** @class */ (function () {
     };
     PhotoService.prototype.openDirectory = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var result, fileName, checkExt, pathPdf, response, e_2;
+            var result, fileName, checkExt, pathPdf, appFolder, dataFile, response, e_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -4186,11 +4188,15 @@ var PhotoService = /** @class */ (function () {
                         pathPdf = _a.sent();
                         return [3 /*break*/, 4];
                     case 3:
-                        pathPdf = result.uri;
+                        appFolder = this.file.cacheDirectory;
+                        console.log("app directory", appFolder);
+                        dataFile = new Blob([result.data]);
+                        this.writeFileIos(appFolder, result.name, dataFile);
+                        pathPdf = appFolder, result.name;
                         _a.label = 4;
                     case 4:
                         response = { path: pathPdf, fileName: fileName };
-                        console.log('file dir', response);
+                        console.log('pdf dir', response);
                         return [2 /*return*/, response];
                     case 5:
                         e_2 = _a.sent();
@@ -4202,7 +4208,7 @@ var PhotoService = /** @class */ (function () {
     };
     PhotoService.prototype.openFileType = function (type) {
         return __awaiter(this, void 0, void 0, function () {
-            var content, result, fileName, pathPdf, response, e_3;
+            var content, result, fileName, pathFile, appFolder, dataFile, response, e_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -4216,18 +4222,22 @@ var PhotoService = /** @class */ (function () {
                         if (result == undefined)
                             return [2 /*return*/, null];
                         fileName = result.name;
-                        pathPdf = void 0;
+                        pathFile = void 0;
                         if (!this.platform.is('android')) return [3 /*break*/, 4];
                         return [4 /*yield*/, this.filePath.resolveNativePath(result.uri)];
                     case 3:
-                        pathPdf = _a.sent();
+                        pathFile = _a.sent();
                         return [3 /*break*/, 5];
                     case 4:
-                        pathPdf = result.uri;
+                        appFolder = this.file.cacheDirectory;
+                        console.log("app directory", appFolder);
+                        dataFile = new Blob([result.data]);
+                        this.writeFileIos(appFolder, result.name, dataFile);
+                        pathFile = appFolder, result.name;
                         _a.label = 5;
                     case 5:
-                        response = { path: pathPdf, fileName: fileName };
-                        console.log(response);
+                        response = { path: pathFile, fileName: fileName };
+                        console.log('file dir', response);
                         return [2 /*return*/, response];
                     case 6:
                         e_3 = _a.sent();
@@ -4237,6 +4247,23 @@ var PhotoService = /** @class */ (function () {
             });
         });
     };
+    PhotoService.prototype.writeFileIos = function (pathDir, fileName, data) {
+        console.log("path: -------- ", pathDir);
+        /*  if(!this.file.checkDir(this.file.applicationStorageDirectory,"documents"))
+          {
+              this.file.createDir(this.file.applicationStorageDirectory,"documents",true);
+              console.log("directorio documents creado")
+          }*/
+        var options = {
+            replace: true
+        };
+        this.file.writeFile(pathDir, fileName, data, options).then(function () {
+            console.log("escritura exitosa");
+        }).catch(function (ex) {
+            console.log("Error escribiendo archivo", ex);
+            throw ex;
+        });
+    };
     PhotoService.prototype.getContentType = function (type) {
         var content = 'image/jpg';
         switch (type) {
@@ -4244,7 +4271,7 @@ var PhotoService = /** @class */ (function () {
                 content = '.mp3,audio/*';
                 break;
             case FileType.Video:
-                content = 'video/*';
+                content = 'video/*,.mov';
                 break;
             case FileType.Image:
                 content = 'image/jpg';
@@ -4285,7 +4312,8 @@ var PhotoService = /** @class */ (function () {
             __WEBPACK_IMPORTED_MODULE_2__ionic_native_image_picker__["a" /* ImagePicker */],
             __WEBPACK_IMPORTED_MODULE_3__ionic_native_file_path__["a" /* FilePath */],
             __WEBPACK_IMPORTED_MODULE_4__ionic_native_chooser__["a" /* Chooser */],
-            __WEBPACK_IMPORTED_MODULE_5_ionic_angular__["n" /* Platform */]])
+            __WEBPACK_IMPORTED_MODULE_5_ionic_angular__["n" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_6__ionic_native_file__["a" /* File */]])
     ], PhotoService);
     return PhotoService;
 }());

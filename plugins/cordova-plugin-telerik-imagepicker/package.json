@@ -1,8 +1,8 @@
 {
   "_from": "cordova-plugin-telerik-imagepicker@^2.3.3",
-  "_id": "cordova-plugin-telerik-imagepicker@2.3.5",
+  "_id": "cordova-plugin-telerik-imagepicker@2.3.6",
   "_inBundle": false,
-  "_integrity": "sha512-1MTM6t4hV0S/AFSn4+qzcgxaU+f9F8BSOQraUhZKq/4d8jwZzFnyOgYAozkda/LR0lAVvEC+1cyxnA7DB1GZRg==",
+  "_integrity": "sha512-guf+BHB7O3g1ll3++d+aOvTGHXwBmqdxBFJTCKKMIGqazlf+Sq3Bsd1tRRswPRxy1MZRlJIe6Arz4pdCCmOigA==",
   "_location": "/cordova-plugin-telerik-imagepicker",
   "_phantomChildren": {},
   "_requested": {
@@ -18,8 +18,8 @@
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/cordova-plugin-telerik-imagepicker/-/cordova-plugin-telerik-imagepicker-2.3.5.tgz",
-  "_shasum": "0fb8b571d18253daf281f7ec0d639221db0eb233",
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-telerik-imagepicker/-/cordova-plugin-telerik-imagepicker-2.3.6.tgz",
+  "_shasum": "37e2a29200efec9228a716334a99e044df89167a",
   "_spec": "cordova-plugin-telerik-imagepicker@^2.3.3",
   "_where": "/Users/centec/Documents/IonicApp/IonicApp",
   "bugs": {
@@ -54,5 +54,5 @@
     "type": "git",
     "url": "git+https://github.com/Telerik-Verified-Plugins/ImagePicker.git"
   },
-  "version": "2.3.5"
+  "version": "2.3.6"
 }
